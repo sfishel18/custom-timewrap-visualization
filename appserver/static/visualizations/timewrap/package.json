@@ -1,0 +1,49 @@
+{
+  "name": "timewrap",
+  "version": "0.0.1",
+  "description": "A custom visualization for Splunk that compares a single metric over multiple time periods",
+  "main": "visualization.js",
+  "scripts": {
+    "build": "node ./node_modules/webpack/bin/webpack.js",
+    "devbuild": "node ./node_modules/webpack/bin/webpack.js --progress",
+    "watch": "node ./node_modules/webpack/bin/webpack.js -d --watch --progress",
+    "lint": "node ./node_modules/eslint/bin/eslint.js . || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sfishel18/custom-timewrap-visualization.git"
+  },
+  "author": "Simon Fishel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sfishel18/custom-timewrap-visualization/issues"
+  },
+  "homepage": "https://github.com/sfishel18/custom-timewrap-visualization#readme",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "chai": "^3.5.0",
+    "eslint": "^3.3.1",
+    "eslint-config-airbnb": "^10.0.1",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^2.2.0",
+    "eslint-plugin-react": "^6.1.2",
+    "karma": "^1.2.0",
+    "karma-mocha": "^1.1.1",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-webpack": "^1.8.0",
+    "mocha": "^3.0.2",
+    "webpack": "^1.13.2"
+  },
+  "dependencies": {
+    "lodash": "^4.15.0",
+    "moment": "^2.14.1",
+    "react": "^15.3.1",
+    "react-addons-transition-group": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "recharts": "^0.13.4"
+  }
+}

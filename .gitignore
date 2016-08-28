@@ -1,3 +1,9 @@
+# Built visualization files
+visualization.js
+
+# Source maps
+*.js.map
+
 # Logs
 logs
 *.log
