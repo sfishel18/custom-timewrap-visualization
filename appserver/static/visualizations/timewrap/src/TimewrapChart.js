@@ -8,7 +8,7 @@ import {
     CartesianGrid,
     Legend,
 } from 'recharts';
-import wrapData from './wrap-data';
+import { processData, computeSeriesNames } from './format-data';
 
 const wrapTimeSeries = timeSeries => {
     return {

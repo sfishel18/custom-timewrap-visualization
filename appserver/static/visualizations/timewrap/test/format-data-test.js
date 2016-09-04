@@ -16,7 +16,10 @@ import {
     partitionTimeSeries,
     decorateWithData,
     fillNulls,
-} from '../src/wrap-data';
+    decorateWithLabels,
+    processData,
+    computeSeriesNames,
+} from '../src/format-data';
 import generateTimeSeries from './generate-time-series';
 
 const normalizeDateToString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
@@ -62,7 +65,18 @@ const assertNullFilledPartitionsEqual = (actual, expected, message) => {
     );
 };
 
-suite('The wrap-data utility package', () => {
+const createLabeledPartitions = (timeSeries, granularity) =>
+    decorateWithLabels(createNullFilledPartitions(timeSeries, granularity), granularity);
+
+const assertPartitionLabelsEqual = (actual, expected, message) => {
+    assert.deepEqual(
+        actual.map(p => p.map(d => d.label)),
+        expected,
+        message
+    );
+};
+
+suite('The format-data utility package', () => {
     suite('#computePointSpan', () => {
         test('two points, one minute apart', () => {
             const timeSeries = generateTimeSeries('1981-08-18 00:00:00', 2, 60);
@@ -329,6 +343,144 @@ suite('The wrap-data utility package', () => {
                 ['1981-08-24 00:00:00', null, null],
             ];
             assertNullFilledPartitionsEqual(partitions, expected);
+        });
+        test('3 weeks 4 days of data, 1 day increments, week granularity', () => {
+            const timeSeries = generateTimeSeries('1981-08-18 00:00:00', 25, 1, 'day');
+            const partitions = createNullFilledPartitions(timeSeries, WEEK);
+            const expected = [
+                [null, null, '1981-08-18 00:00:00',
+                    '1981-08-19 00:00:00', '1981-08-20 00:00:00', '1981-08-21 00:00:00',
+                    '1981-08-22 00:00:00'],
+                ['1981-08-23 00:00:00', '1981-08-24 00:00:00', '1981-08-25 00:00:00',
+                    '1981-08-26 00:00:00', '1981-08-27 00:00:00', '1981-08-28 00:00:00',
+                    '1981-08-29 00:00:00'],
+                ['1981-08-30 00:00:00', '1981-08-31 00:00:00', '1981-09-01 00:00:00',
+                    '1981-09-02 00:00:00', '1981-09-03 00:00:00', '1981-09-04 00:00:00',
+                    '1981-09-05 00:00:00'],
+                ['1981-09-06 00:00:00', '1981-09-07 00:00:00', '1981-09-08 00:00:00',
+                    '1981-09-09 00:00:00', '1981-09-10 00:00:00', '1981-09-11 00:00:00',
+                    null],
+            ];
+            assertNullFilledPartitionsEqual(partitions, expected);
+        });
+        test('~6 months of data, 1 week increments, month granularity', () => {
+            const timeSeries = generateTimeSeries('1981-08-18 00:00:00', 24, 7, 'day');
+            const partitions = createNullFilledPartitions(timeSeries, MONTH);
+            const expected = [
+                [null, null, null, null, null,
+                    null, null, null, null, null,
+                    null, null, null, null, null,
+                    null, null, '1981-08-18 00:00:00', null, null,
+                    null, null, null, null, '1981-08-25 00:00:00',
+                    null, null, null, null, null,
+                    null],
+                ['1981-09-01 00:00:00', null, null, null, null,
+                    null, null, '1981-09-08 00:00:00', null, null,
+                    null, null, null, null, '1981-09-15 00:00:00',
+                    null, null, null, null, null,
+                    null, '1981-09-22 00:00:00', null, null, null,
+                    null, null, null, '1981-09-29 00:00:00', null],
+                [null, null, null, null, null,
+                    '1981-10-06 00:00:00', null, null, null, null,
+                    null, null, '1981-10-13 00:00:00', null, null,
+                    null, null, null, null, '1981-10-20 00:00:00',
+                    null, null, null, null, null,
+                    null, '1981-10-27 00:00:00', null, null, null,
+                    null],
+                [null, null, '1981-11-03 00:00:00', null, null,
+                    null, null, null, null, '1981-11-10 00:00:00',
+                    null, null, null, null, null,
+                    null, '1981-11-17 00:00:00', null, null, null,
+                    null, null, null, '1981-11-24 00:00:00', null,
+                    null, null, null, null, null],
+                ['1981-12-01 00:00:00', null, null, null, null,
+                    null, null, '1981-12-08 00:00:00', null, null,
+                    null, null, null, null, '1981-12-15 00:00:00',
+                    null, null, null, null, null,
+                    null, '1981-12-22 00:00:00', null, null, null,
+                    null, null, null, '1981-12-29 00:00:00', null,
+                    null],
+                [null, null, null, null, '1982-01-05 00:00:00',
+                    null, null, null, null, null,
+                    null, '1982-01-12 00:00:00', null, null, null,
+                    null, null, null, '1982-01-19 00:00:00', null,
+                    null, null, null, null, null,
+                    '1982-01-26 00:00:00', null, null, null, null,
+                    null],
+            ];
+            assertNullFilledPartitionsEqual(partitions, expected);
+        });
+        test('21 months of data, 1 month increments, three month granularity', () => {
+            const timeSeries = generateTimeSeries('1981-08-01 00:00:00', 21, 1, 'month');
+            const partitions = createNullFilledPartitions(timeSeries, THREE_MONTH);
+            const expected = [
+                [null, '1981-08-01 00:00:00', '1981-09-01 00:00:00'],
+                ['1981-10-01 00:00:00', '1981-11-01 00:00:00', '1981-12-01 00:00:00'],
+                ['1982-01-01 00:00:00', '1982-02-01 00:00:00', '1982-03-01 00:00:00'],
+                ['1982-04-01 00:00:00', '1982-05-01 00:00:00', '1982-06-01 00:00:00'],
+                ['1982-07-01 00:00:00', '1982-08-01 00:00:00', '1982-09-01 00:00:00'],
+                ['1982-10-01 00:00:00', '1982-11-01 00:00:00', '1982-12-01 00:00:00'],
+                ['1983-01-01 00:00:00', '1983-02-01 00:00:00', '1983-03-01 00:00:00'],
+                ['1983-04-01 00:00:00', null, null],
+            ];
+            assertNullFilledPartitionsEqual(partitions, expected);
+        });
+        test('5 years of data, 4 month increments, year granularity', () => {
+            const timeSeries = generateTimeSeries('1981-09-01 00:00:00', 15, 4, 'month');
+            const partitions = createNullFilledPartitions(timeSeries, YEAR);
+            const expected = [
+                [null, null, '1981-09-01 00:00:00'],
+                ['1982-01-01 00:00:00', '1982-05-01 00:00:00', '1982-09-01 00:00:00'],
+                ['1983-01-01 00:00:00', '1983-05-01 00:00:00', '1983-09-01 00:00:00'],
+                ['1984-01-01 00:00:00', '1984-05-01 00:00:00', '1984-09-01 00:00:00'],
+                ['1985-01-01 00:00:00', '1985-05-01 00:00:00', '1985-09-01 00:00:00'],
+                ['1986-01-01 00:00:00', '1986-05-01 00:00:00', null],
+            ];
+            assertNullFilledPartitionsEqual(partitions, expected);
+        });
+    });
+
+    suite('#decorateWithLabels', () => {
+        test('4 hours of data, 15 minute increments, hour granularity', () => {
+            const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+            const partitions = createLabeledPartitions(timeSeries, HOUR);
+            const expected = [
+                [':00', ':15', ':30', ':45'],
+                [':00', ':15', ':30', ':45'],
+                [':00', ':15', ':30', ':45'],
+                [':00', ':15', ':30', ':45'],
+                [':00', ':15', ':30', ':45'],
+            ];
+            assertPartitionLabelsEqual(partitions, expected);
+        });
+    });
+
+    suite('#computeSeriesNames', () => {
+        test('4 hours of data, 15 minute increments, hour granularity', () => {
+            const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+            const partitions = processData(timeSeries, range(timeSeries.length), 'count');
+            assert.deepEqual(
+                computeSeriesNames(partitions),
+                ['11:00 PM - 12:00 AM', '12:00 AM - 1:00 AM', '1:00 AM - 2:00 AM',
+                    '2:00 AM - 3:00 AM', '3:00 AM - 4:00 AM']
+            );
+        });
+        test('1 week of data, 8 hour increments, day granularity', () => {
+            const timeSeries = generateTimeSeries('1981-08-17 08:00:00', 21, 8 * 60 * 60);
+            const partitions = processData(timeSeries, range(timeSeries.length), 'count');
+            assert.deepEqual(
+                computeSeriesNames(partitions),
+                ['Aug 17th', 'Aug 18th', 'Aug 19th', 'Aug 20th', 'Aug 21st', 'Aug 22nd',
+                    'Aug 23rd', 'Aug 24th']
+            );
+        });
+        test('3 weeks 4 days of data, 1 day increments, week granularity', () => {
+            const timeSeries = generateTimeSeries('1981-08-18 00:00:00', 25, 1, 'day');
+            const partitions = processData(timeSeries, range(timeSeries.length), 'count');
+            assert.deepEqual(
+                computeSeriesNames(partitions),
+                ['Aug 16th - 23rd', 'Aug 23rd - 30th', 'Aug 30th - Sep 6th', 'Sep 6th - 13th']
+            );
         });
     });
 });
