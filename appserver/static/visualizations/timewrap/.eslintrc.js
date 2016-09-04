@@ -1,8 +1,6 @@
 module.exports = {
     extends: 'airbnb',
-    plugins: [
-        'react'
-    ],
+    plugins: ['react'],
     rules: {
         // Set the required indent to 4 spaces
         indent: ['error', 4],

@@ -403,7 +403,7 @@
       "dependencies": {
         "core-js": {
           "version": "2.4.1",
-          "from": "core-js@>=2.4.0 <3.0.0",
+          "from": "core-js@^2.4.0",
           "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.4.1.tgz"
         }
       }
@@ -475,6 +475,18 @@
       "from": "batch-processor@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/batch-processor/-/batch-processor-1.0.0.tgz"
     },
+    "bcrypt-pbkdf": {
+      "version": "1.0.0",
+      "from": "bcrypt-pbkdf@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.0.tgz",
+      "dependencies": {
+        "tweetnacl": {
+          "version": "0.14.3",
+          "from": "tweetnacl@>=0.14.3 <0.15.0",
+          "resolved": "https://registry.npmjs.org/tweetnacl/-/tweetnacl-0.14.3.tgz"
+        }
+      }
+    },
     "benchmark": {
       "version": "1.0.0",
       "from": "benchmark@1.0.0",
@@ -506,9 +518,9 @@
       "resolved": "https://registry.npmjs.org/blob/-/blob-0.0.4.tgz"
     },
     "bluebird": {
-      "version": "3.4.3",
+      "version": "3.4.5",
       "from": "bluebird@>=3.1.1 <4.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/bluebird/-/bluebird-3.4.3.tgz"
+      "resolved": "https://registry.npmjs.org/bluebird/-/bluebird-3.4.5.tgz"
     },
     "body-parser": {
       "version": "1.15.2",
@@ -2700,9 +2712,9 @@
       "resolved": "https://registry.npmjs.org/private/-/private-0.1.6.tgz"
     },
     "process": {
-      "version": "0.11.8",
+      "version": "0.11.9",
       "from": "process@>=0.11.0 <0.12.0",
-      "resolved": "https://registry.npmjs.org/process/-/process-0.11.8.tgz"
+      "resolved": "https://registry.npmjs.org/process/-/process-0.11.9.tgz"
     },
     "process-nextick-args": {
       "version": "1.0.7",
@@ -3074,9 +3086,9 @@
       "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
     },
     "sshpk": {
-      "version": "1.9.2",
+      "version": "1.10.0",
       "from": "sshpk@>=1.7.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/sshpk/-/sshpk-1.9.2.tgz",
+      "resolved": "https://registry.npmjs.org/sshpk/-/sshpk-1.10.0.tgz",
       "dependencies": {
         "assert-plus": {
           "version": "1.0.0",
