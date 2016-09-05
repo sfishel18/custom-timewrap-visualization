@@ -6,7 +6,8 @@ module.exports = {
         indent: ['error', 4],
         // Do not require a newline at the end of every file
         'eol-last': 'off',
-        'react/jsx-indent': 'off',
+        'react/jsx-indent': ['error', 4],
+        'react/jsx-indent-props': ['error', 4],
         'react/jsx-filename-extension': 'off'
     },
     env: {

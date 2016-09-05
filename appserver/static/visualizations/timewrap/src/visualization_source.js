@@ -14,6 +14,7 @@ const COLORS = [
     '#ffff00',
     '#ff0000',
     '#00ff00',
+    '#ff00ff',
 ];
 
 export default SplunkVisualizationBase.extend({

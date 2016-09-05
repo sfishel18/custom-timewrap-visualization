@@ -13,7 +13,18 @@ module.exports = function karmaConfig(config) {
         ],
         files: [{ pattern: 'test/**/*-test.js', watched: false }],
         preprocessors: { 'test/**/*-test.js': ['webpack'] },
-        webpack: _.pick(webpackConfig, 'resolve', 'module'),
+        webpack: Object.assign(
+            _.pick(webpackConfig, 'resolve', 'module'),
+            {
+                // https://github.com/airbnb/enzyme/blob/master/docs/guides/webpack.md
+                externals: {
+                    cheerio: 'window',
+                    'react/addons': true,
+                    'react/lib/ExecutionEnvironment': true,
+                    'react/lib/ReactContext': true,
+                },
+            }
+        ),
         webpackMiddleware: { stats: 'errors-only' },
         reporters: ['mocha'],
         mochaReporter: { showDiff: true },
