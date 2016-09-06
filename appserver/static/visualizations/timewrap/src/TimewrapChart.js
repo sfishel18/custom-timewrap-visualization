@@ -33,6 +33,7 @@ const TimewrapChart = props => {
         align: 'right',
         layout: 'vertical',
         verticalAlign: 'middle',
+        wrapperStyle: { right: -5 },
     };
 
     return (<ResponsiveContainer>
