@@ -22,7 +22,7 @@
     "acorn": {
       "version": "3.3.0",
       "from": "acorn@>=3.3.0 <4.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/acorn/-/acorn-3.3.0.tgz"
+      "resolved": "https://registry.npmjs.org/acorn/-/acorn-3.3.0.tgz"
     },
     "acorn-jsx": {
       "version": "3.0.1",
@@ -137,12 +137,12 @@
     "async": {
       "version": "2.0.1",
       "from": "async@>=2.0.1 <3.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/async/-/async-2.0.1.tgz"
+      "resolved": "https://registry.npmjs.org/async/-/async-2.0.1.tgz"
     },
     "async-each": {
       "version": "1.0.1",
       "from": "async-each@>=1.0.0 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/async-each/-/async-each-1.0.1.tgz"
+      "resolved": "https://registry.npmjs.org/async-each/-/async-each-1.0.1.tgz"
     },
     "aws-sign2": {
       "version": "0.6.0",
@@ -169,12 +169,12 @@
     "babel-core": {
       "version": "6.14.0",
       "from": "babel-core@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-core/-/babel-core-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-core/-/babel-core-6.14.0.tgz"
     },
     "babel-generator": {
       "version": "6.14.0",
       "from": "babel-generator@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-generator/-/babel-generator-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-generator/-/babel-generator-6.14.0.tgz"
     },
     "babel-helper-builder-react-jsx": {
       "version": "6.9.0",
@@ -219,7 +219,7 @@
     "babel-helper-replace-supers": {
       "version": "6.14.0",
       "from": "babel-helper-replace-supers@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-helper-replace-supers/-/babel-helper-replace-supers-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-helper-replace-supers/-/babel-helper-replace-supers-6.14.0.tgz"
     },
     "babel-helpers": {
       "version": "6.8.0",
@@ -239,17 +239,17 @@
     "babel-plugin-syntax-async-functions": {
       "version": "6.13.0",
       "from": "babel-plugin-syntax-async-functions@>=6.8.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-6.13.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-6.13.0.tgz"
     },
     "babel-plugin-syntax-flow": {
       "version": "6.13.0",
       "from": "babel-plugin-syntax-flow@>=6.3.13 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-syntax-flow/-/babel-plugin-syntax-flow-6.13.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-syntax-flow/-/babel-plugin-syntax-flow-6.13.0.tgz"
     },
     "babel-plugin-syntax-jsx": {
       "version": "6.13.0",
       "from": "babel-plugin-syntax-jsx@>=6.3.13 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.13.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.13.0.tgz"
     },
     "babel-plugin-transform-es2015-arrow-functions": {
       "version": "6.8.0",
@@ -264,12 +264,12 @@
     "babel-plugin-transform-es2015-block-scoping": {
       "version": "6.14.0",
       "from": "babel-plugin-transform-es2015-block-scoping@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-es2015-block-scoping/-/babel-plugin-transform-es2015-block-scoping-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-es2015-block-scoping/-/babel-plugin-transform-es2015-block-scoping-6.14.0.tgz"
     },
     "babel-plugin-transform-es2015-classes": {
       "version": "6.14.0",
       "from": "babel-plugin-transform-es2015-classes@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-es2015-classes/-/babel-plugin-transform-es2015-classes-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-es2015-classes/-/babel-plugin-transform-es2015-classes-6.14.0.tgz"
     },
     "babel-plugin-transform-es2015-computed-properties": {
       "version": "6.8.0",
@@ -304,22 +304,22 @@
     "babel-plugin-transform-es2015-modules-amd": {
       "version": "6.8.0",
       "from": "babel-plugin-transform-es2015-modules-amd@>=6.8.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-es2015-modules-amd/-/babel-plugin-transform-es2015-modules-amd-6.8.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-amd/-/babel-plugin-transform-es2015-modules-amd-6.8.0.tgz"
     },
     "babel-plugin-transform-es2015-modules-commonjs": {
       "version": "6.14.0",
       "from": "babel-plugin-transform-es2015-modules-commonjs@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-6.14.0.tgz"
     },
     "babel-plugin-transform-es2015-modules-systemjs": {
       "version": "6.14.0",
       "from": "babel-plugin-transform-es2015-modules-systemjs@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-es2015-modules-systemjs/-/babel-plugin-transform-es2015-modules-systemjs-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-systemjs/-/babel-plugin-transform-es2015-modules-systemjs-6.14.0.tgz"
     },
     "babel-plugin-transform-es2015-modules-umd": {
       "version": "6.12.0",
       "from": "babel-plugin-transform-es2015-modules-umd@>=6.12.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-es2015-modules-umd/-/babel-plugin-transform-es2015-modules-umd-6.12.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-es2015-modules-umd/-/babel-plugin-transform-es2015-modules-umd-6.12.0.tgz"
     },
     "babel-plugin-transform-es2015-object-super": {
       "version": "6.8.0",
@@ -329,7 +329,7 @@
     "babel-plugin-transform-es2015-parameters": {
       "version": "6.11.4",
       "from": "babel-plugin-transform-es2015-parameters@>=6.9.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-es2015-parameters/-/babel-plugin-transform-es2015-parameters-6.11.4.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-es2015-parameters/-/babel-plugin-transform-es2015-parameters-6.11.4.tgz"
     },
     "babel-plugin-transform-es2015-shorthand-properties": {
       "version": "6.8.0",
@@ -364,7 +364,7 @@
     "babel-plugin-transform-flow-strip-types": {
       "version": "6.14.0",
       "from": "babel-plugin-transform-flow-strip-types@>=6.3.13 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-flow-strip-types/-/babel-plugin-transform-flow-strip-types-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-flow-strip-types/-/babel-plugin-transform-flow-strip-types-6.14.0.tgz"
     },
     "babel-plugin-transform-react-display-name": {
       "version": "6.8.0",
@@ -389,17 +389,17 @@
     "babel-plugin-transform-regenerator": {
       "version": "6.14.0",
       "from": "babel-plugin-transform-regenerator@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-6.14.0.tgz"
     },
     "babel-plugin-transform-strict-mode": {
       "version": "6.11.3",
       "from": "babel-plugin-transform-strict-mode@>=6.8.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-plugin-transform-strict-mode/-/babel-plugin-transform-strict-mode-6.11.3.tgz"
+      "resolved": "https://registry.npmjs.org/babel-plugin-transform-strict-mode/-/babel-plugin-transform-strict-mode-6.11.3.tgz"
     },
     "babel-register": {
       "version": "6.14.0",
       "from": "babel-register@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-register/-/babel-register-6.14.0.tgz",
+      "resolved": "https://registry.npmjs.org/babel-register/-/babel-register-6.14.0.tgz",
       "dependencies": {
         "core-js": {
           "version": "2.4.1",
@@ -411,7 +411,7 @@
     "babel-runtime": {
       "version": "6.11.6",
       "from": "babel-runtime@>=6.9.1 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-runtime/-/babel-runtime-6.11.6.tgz",
+      "resolved": "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.11.6.tgz",
       "dependencies": {
         "core-js": {
           "version": "2.4.1",
@@ -423,22 +423,22 @@
     "babel-template": {
       "version": "6.14.0",
       "from": "babel-template@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-template/-/babel-template-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-template/-/babel-template-6.14.0.tgz"
     },
     "babel-traverse": {
       "version": "6.14.0",
       "from": "babel-traverse@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-traverse/-/babel-traverse-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-traverse/-/babel-traverse-6.14.0.tgz"
     },
     "babel-types": {
       "version": "6.14.0",
       "from": "babel-types@>=6.14.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babel-types/-/babel-types-6.14.0.tgz"
+      "resolved": "https://registry.npmjs.org/babel-types/-/babel-types-6.14.0.tgz"
     },
     "babylon": {
       "version": "6.9.1",
       "from": "babylon@>=6.9.0 <7.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/babylon/-/babylon-6.9.1.tgz"
+      "resolved": "https://registry.npmjs.org/babylon/-/babylon-6.9.1.tgz"
     },
     "backo2": {
       "version": "1.0.2",
@@ -463,7 +463,7 @@
     "base64-js": {
       "version": "1.1.2",
       "from": "base64-js@>=1.0.2 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/base64-js/-/base64-js-1.1.2.tgz"
+      "resolved": "https://registry.npmjs.org/base64-js/-/base64-js-1.1.2.tgz"
     },
     "base64id": {
       "version": "0.1.0",
@@ -555,7 +555,7 @@
     "buffer": {
       "version": "4.9.1",
       "from": "buffer@>=4.9.0 <5.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/buffer/-/buffer-4.9.1.tgz"
+      "resolved": "https://registry.npmjs.org/buffer/-/buffer-4.9.1.tgz"
     },
     "builtin-modules": {
       "version": "1.1.1",
@@ -610,7 +610,7 @@
     "circular-json": {
       "version": "0.3.1",
       "from": "circular-json@>=0.3.0 <0.4.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/circular-json/-/circular-json-0.3.1.tgz"
+      "resolved": "https://registry.npmjs.org/circular-json/-/circular-json-0.3.1.tgz"
     },
     "classnames": {
       "version": "2.2.5",
@@ -687,7 +687,7 @@
     "concat-map": {
       "version": "0.0.1",
       "from": "concat-map@0.0.1",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/concat-map/-/concat-map-0.0.1.tgz"
+      "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
     },
     "concat-stream": {
       "version": "1.5.1",
@@ -707,7 +707,7 @@
     "constants-browserify": {
       "version": "0.0.1",
       "from": "constants-browserify@0.0.1",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/constants-browserify/-/constants-browserify-0.0.1.tgz"
+      "resolved": "https://registry.npmjs.org/constants-browserify/-/constants-browserify-0.0.1.tgz"
     },
     "contains-path": {
       "version": "0.1.0",
@@ -722,12 +722,12 @@
     "convert-source-map": {
       "version": "1.3.0",
       "from": "convert-source-map@>=1.1.0 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/convert-source-map/-/convert-source-map-1.3.0.tgz"
+      "resolved": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.3.0.tgz"
     },
     "core-js": {
       "version": "1.2.7",
       "from": "core-js@>=1.0.0 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/core-js/-/core-js-1.2.7.tgz"
+      "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz"
     },
     "core-util-is": {
       "version": "1.0.2",
@@ -856,7 +856,7 @@
     "del": {
       "version": "2.2.2",
       "from": "del@>=2.0.2 <3.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/del/-/del-2.2.2.tgz"
+      "resolved": "https://registry.npmjs.org/del/-/del-2.2.2.tgz"
     },
     "delayed-stream": {
       "version": "1.0.0",
@@ -886,7 +886,7 @@
     "doctrine": {
       "version": "1.3.0",
       "from": "doctrine@>=1.2.2 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/doctrine/-/doctrine-1.3.0.tgz"
+      "resolved": "https://registry.npmjs.org/doctrine/-/doctrine-1.3.0.tgz"
     },
     "dom-serialize": {
       "version": "2.2.1",
@@ -946,7 +946,7 @@
         "isarray": {
           "version": "0.0.1",
           "from": "isarray@0.0.1",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/isarray/-/isarray-0.0.1.tgz"
+          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
         }
       }
     },
@@ -1030,17 +1030,17 @@
     "eslint-import-resolver-node": {
       "version": "0.2.3",
       "from": "eslint-import-resolver-node@>=0.2.0 <0.3.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/eslint-import-resolver-node/-/eslint-import-resolver-node-0.2.3.tgz"
+      "resolved": "https://registry.npmjs.org/eslint-import-resolver-node/-/eslint-import-resolver-node-0.2.3.tgz"
     },
     "espree": {
       "version": "3.1.7",
       "from": "espree@>=3.1.6 <4.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/espree/-/espree-3.1.7.tgz"
+      "resolved": "https://registry.npmjs.org/espree/-/espree-3.1.7.tgz"
     },
     "esprima": {
       "version": "2.7.3",
       "from": "esprima@>=2.6.0 <3.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/esprima/-/esprima-2.7.3.tgz"
+      "resolved": "https://registry.npmjs.org/esprima/-/esprima-2.7.3.tgz"
     },
     "esrecurse": {
       "version": "4.1.0",
@@ -1139,12 +1139,12 @@
         "concat-stream": {
           "version": "1.5.0",
           "from": "concat-stream@1.5.0",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/concat-stream/-/concat-stream-1.5.0.tgz"
+          "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-1.5.0.tgz"
         },
         "debug": {
           "version": "0.7.4",
           "from": "debug@0.7.4",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/debug/-/debug-0.7.4.tgz"
+          "resolved": "https://registry.npmjs.org/debug/-/debug-0.7.4.tgz"
         },
         "minimist": {
           "version": "0.0.8",
@@ -1154,7 +1154,7 @@
         "mkdirp": {
           "version": "0.5.0",
           "from": "mkdirp@0.5.0",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/mkdirp/-/mkdirp-0.5.0.tgz"
+          "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.0.tgz"
         }
       }
     },
@@ -1171,7 +1171,7 @@
     "fbjs": {
       "version": "0.8.4",
       "from": "fbjs@>=0.8.4 <0.9.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/fbjs/-/fbjs-0.8.4.tgz"
+      "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.8.4.tgz"
     },
     "fd-slicer": {
       "version": "1.0.1",
@@ -1218,7 +1218,7 @@
     "flat-cache": {
       "version": "1.2.1",
       "from": "flat-cache@>=1.2.1 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/flat-cache/-/flat-cache-1.2.1.tgz"
+      "resolved": "https://registry.npmjs.org/flat-cache/-/flat-cache-1.2.1.tgz"
     },
     "for-in": {
       "version": "0.1.5",
@@ -1912,7 +1912,7 @@
     "graceful-fs": {
       "version": "4.1.6",
       "from": "graceful-fs@>=4.1.2 <5.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/graceful-fs/-/graceful-fs-4.1.6.tgz"
+      "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.6.tgz"
     },
     "graceful-readlink": {
       "version": "1.0.1",
@@ -1942,7 +1942,7 @@
         "isarray": {
           "version": "0.0.1",
           "from": "isarray@0.0.1",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/isarray/-/isarray-0.0.1.tgz"
+          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
         }
       }
     },
@@ -1999,7 +1999,7 @@
     "https-browserify": {
       "version": "0.0.0",
       "from": "https-browserify@0.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/https-browserify/-/https-browserify-0.0.0.tgz"
+      "resolved": "https://registry.npmjs.org/https-browserify/-/https-browserify-0.0.0.tgz"
     },
     "iconv-lite": {
       "version": "0.4.13",
@@ -2014,7 +2014,7 @@
     "ignore": {
       "version": "3.1.5",
       "from": "ignore@>=3.1.5 <4.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/ignore/-/ignore-3.1.5.tgz"
+      "resolved": "https://registry.npmjs.org/ignore/-/ignore-3.1.5.tgz"
     },
     "immutable": {
       "version": "3.8.1",
@@ -2029,7 +2029,7 @@
     "indexof": {
       "version": "0.0.1",
       "from": "indexof@0.0.1",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/indexof/-/indexof-0.0.1.tgz"
+      "resolved": "https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz"
     },
     "inflight": {
       "version": "1.0.5",
@@ -2064,7 +2064,7 @@
     "is-buffer": {
       "version": "1.1.4",
       "from": "is-buffer@>=1.0.2 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/is-buffer/-/is-buffer-1.1.4.tgz"
+      "resolved": "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.4.tgz"
     },
     "is-dotfile": {
       "version": "1.0.2",
@@ -2214,7 +2214,7 @@
     "json-schema": {
       "version": "0.2.2",
       "from": "json-schema@0.2.2",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/json-schema/-/json-schema-0.2.2.tgz"
+      "resolved": "https://registry.npmjs.org/json-schema/-/json-schema-0.2.2.tgz"
     },
     "json-stable-stringify": {
       "version": "1.0.1",
@@ -2249,7 +2249,7 @@
     "jsonpointer": {
       "version": "2.0.0",
       "from": "jsonpointer@2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/jsonpointer/-/jsonpointer-2.0.0.tgz"
+      "resolved": "https://registry.npmjs.org/jsonpointer/-/jsonpointer-2.0.0.tgz"
     },
     "jsprim": {
       "version": "1.3.0",
@@ -2331,7 +2331,7 @@
     "lodash.cond": {
       "version": "4.5.2",
       "from": "lodash.cond@>=4.3.0 <5.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/lodash.cond/-/lodash.cond-4.5.2.tgz"
+      "resolved": "https://registry.npmjs.org/lodash.cond/-/lodash.cond-4.5.2.tgz"
     },
     "lodash.create": {
       "version": "3.1.1",
@@ -2341,17 +2341,17 @@
     "lodash.endswith": {
       "version": "4.2.1",
       "from": "lodash.endswith@>=4.0.1 <5.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/lodash.endswith/-/lodash.endswith-4.2.1.tgz"
+      "resolved": "https://registry.npmjs.org/lodash.endswith/-/lodash.endswith-4.2.1.tgz"
     },
     "lodash.find": {
       "version": "4.6.0",
       "from": "lodash.find@>=4.3.0 <5.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/lodash.find/-/lodash.find-4.6.0.tgz"
+      "resolved": "https://registry.npmjs.org/lodash.find/-/lodash.find-4.6.0.tgz"
     },
     "lodash.findindex": {
       "version": "4.6.0",
       "from": "lodash.findindex@>=4.3.0 <5.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/lodash.findindex/-/lodash.findindex-4.6.0.tgz"
+      "resolved": "https://registry.npmjs.org/lodash.findindex/-/lodash.findindex-4.6.0.tgz"
     },
     "lodash.isarguments": {
       "version": "3.1.0",
@@ -2376,7 +2376,7 @@
         "isarray": {
           "version": "0.0.1",
           "from": "isarray@0.0.1",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/isarray/-/isarray-0.0.1.tgz"
+          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
         },
         "readable-stream": {
           "version": "1.0.34",
@@ -2485,17 +2485,17 @@
     "node-fetch": {
       "version": "1.6.0",
       "from": "node-fetch@>=1.0.1 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/node-fetch/-/node-fetch-1.6.0.tgz"
+      "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-1.6.0.tgz"
     },
     "node-libs-browser": {
       "version": "0.6.0",
       "from": "node-libs-browser@>=0.6.0 <0.7.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/node-libs-browser/-/node-libs-browser-0.6.0.tgz",
+      "resolved": "https://registry.npmjs.org/node-libs-browser/-/node-libs-browser-0.6.0.tgz",
       "dependencies": {
         "isarray": {
           "version": "0.0.1",
           "from": "isarray@0.0.1",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/isarray/-/isarray-0.0.1.tgz"
+          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
         },
         "readable-stream": {
           "version": "1.1.14",
@@ -2629,7 +2629,7 @@
     "path-browserify": {
       "version": "0.0.0",
       "from": "path-browserify@0.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/path-browserify/-/path-browserify-0.0.0.tgz"
+      "resolved": "https://registry.npmjs.org/path-browserify/-/path-browserify-0.0.0.tgz"
     },
     "path-exists": {
       "version": "1.0.0",
@@ -2664,7 +2664,7 @@
     "phantomjs-prebuilt": {
       "version": "2.1.12",
       "from": "phantomjs-prebuilt@>=2.1.7 <3.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/phantomjs-prebuilt/-/phantomjs-prebuilt-2.1.12.tgz"
+      "resolved": "https://registry.npmjs.org/phantomjs-prebuilt/-/phantomjs-prebuilt-2.1.12.tgz"
     },
     "pify": {
       "version": "2.3.0",
@@ -2784,7 +2784,7 @@
     "react": {
       "version": "15.3.1",
       "from": "react@>=15.3.1 <16.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/react/-/react-15.3.1.tgz"
+      "resolved": "https://registry.npmjs.org/react/-/react-15.3.1.tgz"
     },
     "react-addons-transition-group": {
       "version": "15.3.1",
@@ -2799,7 +2799,7 @@
     "react-dom": {
       "version": "15.3.1",
       "from": "react-dom@>=15.3.1 <16.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/react-dom/-/react-dom-15.3.1.tgz"
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.3.1.tgz"
     },
     "react-smooth": {
       "version": "0.1.11",
@@ -2943,7 +2943,7 @@
     "ripemd160": {
       "version": "0.2.0",
       "from": "ripemd160@0.2.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/ripemd160/-/ripemd160-0.2.0.tgz"
+      "resolved": "https://registry.npmjs.org/ripemd160/-/ripemd160-0.2.0.tgz"
     },
     "run-async": {
       "version": "0.1.0",
@@ -2993,7 +2993,7 @@
     "slice-ansi": {
       "version": "0.0.4",
       "from": "slice-ansi@0.0.4",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/slice-ansi/-/slice-ansi-0.0.4.tgz"
+      "resolved": "https://registry.npmjs.org/slice-ansi/-/slice-ansi-0.0.4.tgz"
     },
     "sntp": {
       "version": "1.0.9",
@@ -3013,7 +3013,7 @@
         "isarray": {
           "version": "0.0.1",
           "from": "isarray@0.0.1",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/isarray/-/isarray-0.0.1.tgz"
+          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
         },
         "socket.io-parser": {
           "version": "2.2.2",
@@ -3023,7 +3023,7 @@
             "debug": {
               "version": "0.7.4",
               "from": "debug@0.7.4",
-              "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/debug/-/debug-0.7.4.tgz"
+              "resolved": "https://registry.npmjs.org/debug/-/debug-0.7.4.tgz"
             }
           }
         }
@@ -3049,7 +3049,7 @@
         "isarray": {
           "version": "0.0.1",
           "from": "isarray@0.0.1",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/isarray/-/isarray-0.0.1.tgz"
+          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
         },
         "json3": {
           "version": "3.3.2",
@@ -3110,7 +3110,7 @@
         "isarray": {
           "version": "0.0.1",
           "from": "isarray@0.0.1",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/isarray/-/isarray-0.0.1.tgz"
+          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
         },
         "readable-stream": {
           "version": "1.1.14",
@@ -3127,7 +3127,7 @@
     "string-width": {
       "version": "1.0.2",
       "from": "string-width@>=1.0.1 <2.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/string-width/-/string-width-1.0.2.tgz"
+      "resolved": "https://registry.npmjs.org/string-width/-/string-width-1.0.2.tgz"
     },
     "stringstream": {
       "version": "0.0.5",
@@ -3212,7 +3212,7 @@
     "tty-browserify": {
       "version": "0.0.0",
       "from": "tty-browserify@0.0.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/tty-browserify/-/tty-browserify-0.0.0.tgz"
+      "resolved": "https://registry.npmjs.org/tty-browserify/-/tty-browserify-0.0.0.tgz"
     },
     "tunnel-agent": {
       "version": "0.4.3",
@@ -3289,7 +3289,7 @@
         "punycode": {
           "version": "1.3.2",
           "from": "punycode@1.3.2",
-          "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/punycode/-/punycode-1.3.2.tgz"
+          "resolved": "https://registry.npmjs.org/punycode/-/punycode-1.3.2.tgz"
         }
       }
     },
@@ -3380,7 +3380,7 @@
     "window-size": {
       "version": "0.1.0",
       "from": "window-size@0.1.0",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/window-size/-/window-size-0.1.0.tgz"
+      "resolved": "https://registry.npmjs.org/window-size/-/window-size-0.1.0.tgz"
     },
     "wordwrap": {
       "version": "1.0.0",
@@ -3425,7 +3425,7 @@
     "yauzl": {
       "version": "2.4.1",
       "from": "yauzl@2.4.1",
-      "resolved": "https://repo.splunk.com/artifactory/api/npm/npm/yauzl/-/yauzl-2.4.1.tgz"
+      "resolved": "https://registry.npmjs.org/yauzl/-/yauzl-2.4.1.tgz"
     },
     "yeast": {
       "version": "0.1.2",
