@@ -7,7 +7,11 @@
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "devbuild": "node ./node_modules/webpack/bin/webpack.js --progress",
     "watch": "node ./node_modules/webpack/bin/webpack.js -d --watch --progress",
-    "lint": "node ./node_modules/eslint/bin/eslint.js . || true"
+    "lint:ci": "node ./node_modules/eslint/bin/eslint.js .",
+    "lint": "npm run lint:ci || true",
+    "karma": "node ./node_modules/karma/bin/karma start",
+    "karma:ci": "npm run karma -- --single-run",
+    "test": "npm run lint:ci && npm run karma:ci"
   },
   "repository": {
     "type": "git",

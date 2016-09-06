@@ -6,7 +6,7 @@ import React from 'react';
 import TimewrapChart from '../src/TimewrapChart';
 import generateTimeSeries from './generate-time-series';
 
-suite.only('TimewrapChart', () => {
+suite('TimewrapChart', () => {
     test('renders empty with no data', () => {
         const wrapper = shallow(
             <TimewrapChart timeSeries={[]} dataSeries={[]} dataFields={[]} colors={[]} />
