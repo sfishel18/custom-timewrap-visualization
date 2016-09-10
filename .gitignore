@@ -1,5 +1,6 @@
 # Built visualization files
 visualization.js
+visualization.css
 
 # Source maps
 *.js.map

@@ -36,6 +36,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.0",
     "eslint-plugin-mocha": "^4.5.1",
     "eslint-plugin-react": "^6.1.2",
+    "extract-text-webpack-plugin": "^1.0.1",
     "karma": "^1.2.0",
     "karma-mocha": "^1.1.1",
     "karma-mocha-reporter": "^2.1.0",
