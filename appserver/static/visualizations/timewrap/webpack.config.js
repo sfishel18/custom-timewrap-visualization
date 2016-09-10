@@ -1,3 +1,4 @@
+/* eslint "import/no-extraneous-dependencies": ["error", {"devDependencies": true}] */
 const path = require('path');
 
 module.exports = {
