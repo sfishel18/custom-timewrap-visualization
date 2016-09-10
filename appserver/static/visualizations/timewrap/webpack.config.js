@@ -1,5 +1,7 @@
 /* eslint "import/no-extraneous-dependencies": ["error", {"devDependencies": true}] */
 const path = require('path');
+const postcssImport = require('postcss-import');
+const selectorNamespace = require('postcss-selector-namespace');
 
 module.exports = {
     entry: 'visualization_source',
@@ -28,6 +30,13 @@ module.exports = {
                     plugins: ['babel-plugin-add-module-exports'],
                 },
             },
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader!postcss-loader',
+            },
         ],
+    },
+    postcss() {
+        return [postcssImport, selectorNamespace({ namespace: '.custom-timewrap-visualization' })];
     },
 };

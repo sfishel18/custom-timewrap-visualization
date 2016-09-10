@@ -1,0 +1,11 @@
+@import 'react-vis/main.css';
+
+:--namespace { height: 100%; }
+
+.rv-discrete-color-legend-item { padding: 0; }
+
+.rv-discrete-color-legend.vertical {
+    position: relative;
+    transform: translateY(-50%);
+    top: 50%;
+}
