@@ -1,5 +1,4 @@
-/* eslint import/no-extraneous-dependencies: "off" */
-
+/* eslint "import/no-extraneous-dependencies": ["error", {"devDependencies": true}] */
 const path = require('path');
 const postcssImport = require('postcss-import');
 const selectorNamespace = require('postcss-selector-namespace');
