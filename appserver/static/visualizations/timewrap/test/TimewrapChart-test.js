@@ -1,7 +1,8 @@
 import { assert } from 'chai';
 import { shallow } from 'enzyme';
 import range from 'lodash/range';
-import { XYPlot, LineSeries, DiscreteColorLegend } from 'react-vis';
+import pick from 'lodash/pick';
+import { XYPlot, LineMarkSeries, DiscreteColorLegend, Hint } from 'react-vis';
 import React from 'react';
 import TimewrapChart from '../src/TimewrapChart';
 import generateTimeSeries from './generate-time-series';
@@ -61,11 +62,11 @@ suite('TimewrapChart', () => {
                 { x: ':45', y: undefined },
             ],
         ];
-        const lines = xyPlot.find(LineSeries);
+        const lines = xyPlot.find(LineMarkSeries);
         assert.equal(lines.length, expectedData.length, 'correct number of Line nodes');
         expectedData.forEach((name, i) => {
             assert.deepEqual(
-                lines.at(i).prop('data'),
+                lines.at(i).prop('data').map(point => pick(point, 'x', 'y')),
                 expectedData[i],
                 `line #${i + 1} has correct data`
             );
@@ -81,5 +82,43 @@ suite('TimewrapChart', () => {
         ];
         const legend = wrapper.find(DiscreteColorLegend);
         assert.deepEqual(legend.prop('items'), expectedLegendItems, 'legend items are correct');
+    });
+    test('shows hints correctly', () => {
+        const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+        const wrapper = shallow(
+            <TimewrapChart
+                timeSeries={timeSeries}
+                dataSeries={[range(timeSeries.length)]}
+                dataFields={['count']}
+                colors={colors}
+                width={600}
+                height={400}
+            />
+        );
+
+        assert.equal(wrapper.find(Hint).length, 0, 'no hint present initially');
+
+        const secondSeries = wrapper.find(LineMarkSeries).at(1);
+
+        // simulating a mouse over on the third point in the second series
+        secondSeries.prop('onValueMouseOver')({ seriesIndex: 1, pointIndex: 2 });
+        assert.deepEqual(wrapper.state('hintCoordinates'), [1, 2]);
+        // forcing the state transition from above to go through
+        wrapper.setState({ hintCoordinates: [1, 2] });
+        const hint = wrapper.find(Hint);
+        assert.equal(hint.length, 1, 'one hint present');
+        assert.deepEqual(
+            pick(hint.at(0).prop('value'), 'x', 'y'),
+            { x: ':30', y: 5 },
+            'correct value passed to hint'
+        );
+
+        // simulating a mouse out on the third point in the second series
+        secondSeries.prop('onValueMouseOut')();
+        assert.equal(wrapper.state('hintCoordinates'), null);
+        // forcing the state transition from above to go through
+        wrapper.setState({ hintCoordinates: null });
+        assert.equal(wrapper.find(Hint).length, 0, 'no hint present');
     });
 });

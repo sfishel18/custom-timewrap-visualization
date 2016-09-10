@@ -4,6 +4,7 @@ visualization.css
 
 # Source maps
 *.js.map
+*.css.map
 
 # Logs
 logs
