@@ -48,8 +48,9 @@
     "lodash": "^4.15.0",
     "moment": "^2.14.1",
     "react": "^15.3.1",
+    "react-addons-shallow-compare": "^15.3.1",
     "react-addons-transition-group": "^15.3.1",
     "react-dom": "^15.3.1",
-    "recharts": "^0.13.4"
+    "react-vis": "^0.6.1"
   }
 }

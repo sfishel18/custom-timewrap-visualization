@@ -1,57 +1,47 @@
 import React, { PropTypes } from 'react';
 import {
-    ResponsiveContainer,
-    LineChart,
-    Line,
+    XYPlot,
+    HorizontalGridLines,
+    LineSeries,
     XAxis,
     YAxis,
-    CartesianGrid,
-    Legend,
-} from 'recharts';
+    DiscreteColorLegend,
+} from 'react-vis';
 import { processData, computeSeriesNames } from './format-data';
 
+const LEGEND_WIDTH = 150;
+
 const TimewrapChart = props => {
-    const { timeSeries, dataSeries, dataFields, colors } = props;
+    const { timeSeries, dataSeries, dataFields, colors, width, height } = props;
     if (!timeSeries || timeSeries.length === 0) {
         return null;
     }
     const rawData = processData(timeSeries, dataSeries[0], dataFields[0]);
     const seriesNames = computeSeriesNames(rawData);
-    const data = rawData[0].map(({ label }) => ({ label }));
-    rawData.forEach((group, i) => {
-        group.forEach((point, j) => {
-            if ({}.hasOwnProperty.call(point, 'fieldValue')) {
-                data[j][seriesNames[i]] = point.fieldValue;
-            }
-        });
-    });
-    const lineProps = {
-        isAnimationActive: false,
-        dot: true,
-    };
-    const legendProps = {
-        align: 'right',
-        layout: 'vertical',
-        verticalAlign: 'middle',
-        wrapperStyle: { right: -5 },
-    };
+    const data = rawData.map(partition =>
+        partition.map(point => ({
+            y: point.fieldValue,
+            x: point.label,
+        }))
+    );
+    const legendItems = seriesNames.map((name, i) => ({
+        title: name,
+        color: colors[i % colors.length],
+    }));
 
-    return (<ResponsiveContainer>
-        <LineChart data={data} >
-            <XAxis dataKey="label" />
-            <YAxis />
-            <CartesianGrid vertical={false} />
-            <Legend {...legendProps} />
-            {seriesNames.map((seriesName, i) =>
-                <Line
-                    key={seriesName}
-                    dataKey={seriesName}
-                    stroke={colors[i % colors.length]}
-                    {...lineProps}
-                />
-            )}
-        </LineChart>
-    </ResponsiveContainer>);
+    return (<div>
+        <div style={{ float: 'left' }}>
+            <XYPlot width={width - LEGEND_WIDTH} height={height} xType="ordinal">
+                <HorizontalGridLines />
+                <XAxis />
+                <YAxis />
+                {data.map((seriesData, i) =>
+                    <LineSeries key={i} data={seriesData} color={colors[i % colors.length]} />
+                )}
+            </XYPlot>
+        </div>
+        <DiscreteColorLegend items={legendItems} width={LEGEND_WIDTH} height={height} />
+    </div>);
 };
 
 TimewrapChart.propTypes = {
@@ -59,6 +49,8 @@ TimewrapChart.propTypes = {
     dataSeries: PropTypes.array,
     dataFields: PropTypes.array,
     colors: PropTypes.array,
+    width: PropTypes.number,
+    height: PropTypes.number,
 };
 
 export default TimewrapChart;

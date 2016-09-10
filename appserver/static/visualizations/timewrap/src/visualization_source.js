@@ -51,9 +51,19 @@ export default SplunkVisualizationBase.extend({
             config[key.replace(propertyNamespace, '')] = rawConfig[key];
         });
         ReactDom.render(
-            <TimewrapChart {...config} {...data} colors={COLORS} />,
+            <TimewrapChart
+                width={this.el.clientWidth}
+                height={this.el.clientHeight}
+                {...config}
+                {...data}
+                colors={COLORS}
+            />,
             this.el
         );
+    },
+
+    reflow() {
+        this.invalidateUpdateView();
     },
 
     remove() {
