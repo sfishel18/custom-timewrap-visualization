@@ -2,6 +2,9 @@
 const path = require('path');
 const postcssImport = require('postcss-import');
 const selectorNamespace = require('postcss-selector-namespace');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const extractCss = new ExtractTextPlugin('visualization.css');
 
 module.exports = {
     entry: 'visualization_source',
@@ -32,10 +35,11 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader!postcss-loader',
+                loader: extractCss.extract(['css', 'postcss']),
             },
         ],
     },
+    plugins: [extractCss],
     postcss() {
         return [postcssImport, selectorNamespace({ namespace: '.custom-timewrap-visualization' })];
     },

@@ -14,7 +14,7 @@ module.exports = function karmaConfig(config) {
         files: [{ pattern: 'test/**/*-test.js', watched: false }],
         preprocessors: { 'test/**/*-test.js': ['webpack'] },
         webpack: Object.assign(
-            _.pick(webpackConfig, 'resolve', 'module', 'postcss'),
+            _.pick(webpackConfig, 'resolve', 'module', 'plugins', 'postcss'),
             {
                 // https://github.com/airbnb/enzyme/blob/master/docs/guides/webpack.md
                 externals: {
