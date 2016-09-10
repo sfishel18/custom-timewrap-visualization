@@ -8,6 +8,7 @@ import {
     DiscreteColorLegend,
 } from 'react-vis';
 import { processData, computeSeriesNames } from './format-data';
+import './TimewrapChart.css';
 
 const LEGEND_WIDTH = 150;
 
@@ -29,7 +30,7 @@ const TimewrapChart = props => {
         color: colors[i % colors.length],
     }));
 
-    return (<div>
+    return (<div className="custom-timewrap-visualization">
         <div style={{ float: 'left' }}>
             <XYPlot width={width - LEGEND_WIDTH} height={height} xType="ordinal">
                 <HorizontalGridLines />
@@ -40,7 +41,7 @@ const TimewrapChart = props => {
                 )}
             </XYPlot>
         </div>
-        <DiscreteColorLegend items={legendItems} width={LEGEND_WIDTH} height={height} />
+        <DiscreteColorLegend items={legendItems} width={LEGEND_WIDTH} />
     </div>);
 };
 
