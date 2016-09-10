@@ -29,10 +29,14 @@ suite('TimewrapChart', () => {
         );
         const xyPlot = wrapper.find(XYPlot);
         assert.equal(xyPlot.length, 1, 'one XYPlot node');
+        assert.deepEqual(
+            xyPlot.prop('xDomain'),
+            [':00', ':15', ':30', ':45'],
+            'x-axis domain is correct'
+        );
 
         const expectedData = [
             [
-                { x: ':00', y: undefined },
                 { x: ':15', y: 0 },
                 { x: ':30', y: 1 },
                 { x: ':45', y: 2 },
@@ -57,9 +61,6 @@ suite('TimewrapChart', () => {
             ],
             [
                 { x: ':00', y: 15 },
-                { x: ':15', y: undefined },
-                { x: ':30', y: undefined },
-                { x: ':45', y: undefined },
             ],
         ];
         const lines = xyPlot.find(LineMarkSeries);
@@ -120,5 +121,32 @@ suite('TimewrapChart', () => {
         // forcing the state transition from above to go through
         wrapper.setState({ hintCoordinates: null });
         assert.equal(wrapper.find(Hint).length, 0, 'no hint present');
+    });
+    test('shows hint correctly for incomplete series', () => {
+        const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+        const wrapper = shallow(
+            <TimewrapChart
+                timeSeries={timeSeries}
+                dataSeries={[range(timeSeries.length)]}
+                dataFields={['count']}
+                colors={colors}
+                width={600}
+                height={400}
+            />
+        );
+        const lastSeries = wrapper.find(LineMarkSeries).at(4);
+        // simulating a mouse over on the first point in the last series
+        lastSeries.prop('onValueMouseOver')({ seriesIndex: 4, pointIndex: 0 });
+        assert.deepEqual(wrapper.state('hintCoordinates'), [4, 0]);
+        // forcing the state transition from above to go through
+        wrapper.setState({ hintCoordinates: [4, 0] });
+        const hint = wrapper.find(Hint);
+        assert.equal(hint.length, 1, 'one hint present');
+        assert.deepEqual(
+            pick(hint.at(0).prop('value'), 'x', 'y'),
+            { x: ':00', y: 15 },
+            'correct value passed to hint'
+        );
     });
 });

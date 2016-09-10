@@ -8,10 +8,21 @@ import {
     DiscreteColorLegend,
     Hint,
 } from 'react-vis';
+import property from 'lodash/property';
+import isUndefined from 'lodash/isUndefined';
 import { processData, computeSeriesNames } from './format-data';
 import './TimewrapChart.css';
 
 const LEGEND_WIDTH = 150;
+
+const dataPointToVizValue = (point, seriesIndex, pointIndex) => ({
+    x: point.label,
+    y: point.fieldValue,
+    date: point.date,
+    fieldName: point.fieldName,
+    seriesIndex,
+    pointIndex,
+});
 
 class TimewrapChart extends Component {
 
@@ -68,15 +79,10 @@ class TimewrapChart extends Component {
         if (data.length === 0) {
             return null;
         }
+        const xAxisLabels = data[0].map(property('label'));
         const seriesData = data.map((partition, i) =>
-            partition.map((point, j) => ({
-                x: point.label,
-                y: point.fieldValue,
-                date: point.date,
-                fieldName: point.fieldName,
-                seriesIndex: i,
-                pointIndex: j,
-            }))
+            partition.map((point, j) => dataPointToVizValue(point, i, j))
+            .filter(point => !isUndefined(point.y))
         );
         const legendItems = seriesNames.map((name, i) => ({
             title: name,
@@ -84,12 +90,19 @@ class TimewrapChart extends Component {
         }));
         let hintValue = null;
         if (hintCoordinates) {
-            hintValue = seriesData[hintCoordinates[0]][hintCoordinates[1]];
+            const [hintSeriesIndex, hintPointIndex] = hintCoordinates;
+            const hintDataPoint = data[hintSeriesIndex][hintPointIndex];
+            hintValue = dataPointToVizValue(hintDataPoint, hintSeriesIndex, hintPointIndex);
         }
 
         return (<div className="custom-timewrap-visualization">
             <div style={{ float: 'left' }}>
-                <XYPlot width={width - LEGEND_WIDTH} height={height} xType="ordinal">
+                <XYPlot
+                    width={width - LEGEND_WIDTH}
+                    height={height}
+                    xType="ordinal"
+                    xDomain={xAxisLabels}
+                >
                     <HorizontalGridLines />
                     <XAxis />
                     <YAxis />
