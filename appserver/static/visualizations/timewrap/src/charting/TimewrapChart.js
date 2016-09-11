@@ -31,6 +31,7 @@ class TimewrapChart extends Component {
         super();
         this.onValueMouseOver = this.onValueMouseOver.bind(this);
         this.onValueMouseOut = this.onValueMouseOut.bind(this);
+        this.onValueClick = this.onValueClick.bind(this);
         this.state = { data: [], seriesNames: [], hintCoordinates: null };
     }
 
@@ -48,6 +49,15 @@ class TimewrapChart extends Component {
 
     onValueMouseOut() {
         this.setState({ hintCoordinates: null });
+    }
+
+    onValueClick(value, info) {
+        const { seriesIndex, pointIndex } = value;
+        const { date, fieldName, fieldValue } = this.state.data[seriesIndex][pointIndex];
+        this.props.onPointSelect(
+            { date: date.toDate(), [fieldName]: fieldValue },
+            info.event
+        );
     }
 
     setStateFromProps(props) {
@@ -102,6 +112,7 @@ class TimewrapChart extends Component {
                             size={3}
                             onValueMouseOver={this.onValueMouseOver}
                             onValueMouseOut={this.onValueMouseOut}
+                            onValueClick={this.onValueClick}
                         />
                     )}
                     {hintValue ?
@@ -124,6 +135,11 @@ TimewrapChart.propTypes = {
     colors: PropTypes.array,
     width: PropTypes.number,
     height: PropTypes.number,
+    onPointSelect: PropTypes.func,
+};
+
+TimewrapChart.defaultProps = {
+    onPointSelect: () => {},
 };
 
 export default TimewrapChart;
