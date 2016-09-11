@@ -10,7 +10,8 @@ import {
 } from 'react-vis';
 import property from 'lodash/property';
 import isUndefined from 'lodash/isUndefined';
-import { processData, computeSeriesNames } from './format-data';
+import Tooltip from './Tooltip';
+import { processData, computeSeriesNames } from '../format-data';
 import './TimewrapChart.css';
 
 const LEGEND_WIDTH = 150;
@@ -60,19 +61,6 @@ class TimewrapChart extends Component {
         this.setState({ data, seriesNames });
     }
 
-    renderHint(value) {
-        const { date, fieldName, y } = value;
-        return (<Hint value={value}>
-            <div className="timewrap-tooltip">
-                <div>{date.format('MMM Do, YYYY h:mm A')}</div>
-                <div>
-                    <span>{fieldName}:</span>
-                    <span style={{ float: 'right' }}>{y}</span>
-                </div>
-            </div>
-        </Hint>);
-    }
-
     render() {
         const { colors, width, height } = this.props;
         const { data, seriesNames, hintCoordinates } = this.state;
@@ -116,7 +104,12 @@ class TimewrapChart extends Component {
                             onValueMouseOut={this.onValueMouseOut}
                         />
                     )}
-                    {hintValue ? this.renderHint(hintValue) : null}
+                    {hintValue ?
+                        <Hint value={hintValue}>
+                            <Tooltip value={hintValue} />
+                        </Hint> :
+                        null
+                    }
                 </XYPlot>
             </div>
             <DiscreteColorLegend items={legendItems} width={LEGEND_WIDTH} />

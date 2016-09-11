@@ -4,8 +4,8 @@ import range from 'lodash/range';
 import pick from 'lodash/pick';
 import { XYPlot, LineMarkSeries, DiscreteColorLegend, Hint } from 'react-vis';
 import React from 'react';
-import TimewrapChart from '../src/TimewrapChart';
-import generateTimeSeries from './generate-time-series';
+import TimewrapChart from '../../src/charting/TimewrapChart';
+import generateTimeSeries from '../generate-time-series';
 
 suite('TimewrapChart', () => {
     test('renders empty with no data', () => {
