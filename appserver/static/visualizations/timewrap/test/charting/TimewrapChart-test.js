@@ -1,5 +1,6 @@
 import { assert } from 'chai';
 import { shallow } from 'enzyme';
+import moment from 'moment';
 import range from 'lodash/range';
 import pick from 'lodash/pick';
 import { XYPlot, LineMarkSeries, DiscreteColorLegend, Hint } from 'react-vis';
@@ -147,6 +148,37 @@ suite('TimewrapChart', () => {
             pick(hint.at(0).prop('value'), 'x', 'y'),
             { x: ':00', y: 15 },
             'correct value passed to hint'
+        );
+    });
+    test('onPointSelect callback', () => {
+        const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+        let selectionInfo = null;
+        const onPointSelect = (info) => {
+            selectionInfo = info;
+        };
+        const wrapper = shallow(
+            <TimewrapChart
+                timeSeries={timeSeries}
+                dataSeries={[range(timeSeries.length)]}
+                dataFields={['count']}
+                colors={colors}
+                width={600}
+                height={400}
+                onPointSelect={onPointSelect}
+            />
+        );
+
+        assert.equal(selectionInfo, null, 'onPointSelect not called on initial render');
+
+        const secondSeries = wrapper.find(LineMarkSeries).at(1);
+        // simulating a click on the second point of the second series
+        secondSeries.prop('onValueClick')({ seriesIndex: 1, pointIndex: 2 }, {});
+        assert.equal(selectionInfo.count, 5, 'field name/value of selection is correct');
+        assert.equal(
+            moment(selectionInfo.date).format('YYYY-MM-DD HH:mm:ss'),
+            '1981-08-19 00:30:00',
+            'date of selection is correct'
         );
     });
 });

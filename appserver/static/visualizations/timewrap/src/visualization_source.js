@@ -5,6 +5,7 @@ import SplunkVisualizationBase from 'vizapi/SplunkVisualizationBase';
 import moment from 'moment';
 import React from 'react';
 import ReactDom from 'react-dom';
+import findIndex from 'lodash/findIndex';
 import TimewrapChart from './charting/TimewrapChart';
 
 const parseTimestamp = timestamp => moment(timestamp).toDate();
@@ -18,6 +19,10 @@ const COLORS = [
 ];
 
 export default SplunkVisualizationBase.extend({
+
+    initialize() {
+        this.onPointSelect = this.onPointSelect.bind(this);
+    },
 
     getInitialDataParams() {
         return ({
@@ -41,6 +46,11 @@ export default SplunkVisualizationBase.extend({
             data.dataSeries.push(rawData.columns[i + 1].map(parseFloat));
         });
 
+        const spanFieldIndex = rawData.fields.findIndex(field => field.name === '_span');
+        if (spanFieldIndex > -1) {
+            data.spanSeries = rawData.columns[spanFieldIndex].map(parseFloat);
+        }
+
         return data;
     },
 
@@ -57,9 +67,23 @@ export default SplunkVisualizationBase.extend({
                 {...config}
                 {...data}
                 colors={COLORS}
+                onPointSelect={this.onPointSelect}
             />,
             this.el
         );
+    },
+
+    onPointSelect(pointInfo, event) {
+        const data = this.getCurrentData();
+        const matchingIndex = findIndex(data.timeSeries, date =>
+            moment(date).isSame(pointInfo.date)
+        );
+        const epochDateSeconds = pointInfo.date.getTime() / 1000;
+        const span = data.spanSeries[matchingIndex];
+        this.drilldown({
+            earliest: epochDateSeconds,
+            latest: epochDateSeconds + span,
+        }, event);
     },
 
     reflow() {
