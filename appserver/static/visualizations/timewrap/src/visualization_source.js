@@ -5,7 +5,7 @@ import SplunkVisualizationBase from 'vizapi/SplunkVisualizationBase';
 import moment from 'moment';
 import React from 'react';
 import ReactDom from 'react-dom';
-import TimewrapChart from './TimewrapChart';
+import TimewrapChart from './charting/TimewrapChart';
 
 const parseTimestamp = timestamp => moment(timestamp).toDate();
 
