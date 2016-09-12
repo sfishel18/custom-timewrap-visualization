@@ -9,6 +9,7 @@
     "watch": "node ./node_modules/webpack/bin/webpack.js -d --watch --progress",
     "lint": "node ./node_modules/eslint/bin/eslint.js .",
     "karma": "node ./node_modules/karma/bin/karma start",
+    "vrt": "node ./node_modules/webpack/bin/webpack.js --config vrt/webpack.config.js && node ./node_modules/mocha/bin/mocha -u tdd vrt/runner.js",
     "test": "npm run lint -s && npm run karma -s -- --single-run"
   },
   "repository": {
@@ -43,10 +44,13 @@
     "karma-phantomjs-launcher": "^1.0.1",
     "karma-webpack": "^1.8.0",
     "mocha": "^3.0.2",
+    "node-resemble-js": "^0.1.1",
     "postcss-import": "^8.1.2",
     "postcss-loader": "^0.13.0",
     "postcss-selector-namespace": "^1.2.4",
     "react-addons-test-utils": "^15.3.1",
+    "rimraf": "^2.5.4",
+    "selenium-webdriver": "^3.0.0-beta-2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2"
   },
