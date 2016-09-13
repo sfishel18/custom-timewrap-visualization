@@ -12,7 +12,7 @@
     "vrt:webpack": "node ./node_modules/webpack/bin/webpack.js --config vrt/webpack.config.js",
     "vrt:mocha": "node ./node_modules/mocha/bin/mocha -u tdd vrt/runner.js",
     "vrt": "npm run vrt:webpack && npm run vrt:mocha",
-    "test": "npm run lint -s && npm run karma -s -- --single-run"
+    "test": "npm run lint -s && npm run karma -s -- --single-run && npm run vrt -s"
   },
   "repository": {
     "type": "git",
