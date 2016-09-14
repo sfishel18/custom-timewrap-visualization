@@ -11,10 +11,8 @@ env:
         - VIZ_HOME="$(pwd)/appserver/static/visualizations/timewrap"
 before_install:
     - cd $VIZ_HOME
-    - echo $VIZ_HOME
     - docker pull selenium/standalone-chrome:2.53.0
     - docker run --name selenium -d -p 4444:4444 -v $VIZ_HOME/vrt:/vrt selenium/standalone-chrome
-    - docker inspect selenium
 install:
     - npm install
 script:
