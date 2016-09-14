@@ -11,6 +11,16 @@ const rimraf = require('rimraf');
 const BASELINES_DIR = path.resolve(__dirname, 'baselines');
 const FAILURES_DIR = path.resolve(__dirname, 'failures');
 
+const createBrowser = function (browserName) {
+    return new webdriver.Builder()
+        .usingServer('http://localhost:4444/wd/hub')
+        .withCapabilities({ browserName }).build();
+};
+
+const createFileUrl = function (filename) {
+    return `file:///vrt/${filename}`;
+};
+
 const assertScreenshotMatch = function (filename) {
     return function (screenshotData) {
         const baselinePath = path.resolve(BASELINES_DIR, `${filename}.png`);
@@ -54,12 +64,9 @@ suite('Visual Regression Tests', () => {
         }
         fs.mkdirSync(FAILURES_DIR);
 
-        this.browser = new webdriver.Builder()
-            .withCapabilities({
-                browserName: 'chrome',
-            }).build();
+        this.browser = createBrowser('chrome');
 
-        return this.browser.get(`file://${path.resolve(__dirname, 'index.html')}`);
+        return this.browser.get(createFileUrl('index.html'));
     });
 
     suiteTeardown(function () {
