@@ -8,7 +8,7 @@ services:
     - docker
 env:
     global:
-        - VIZ_HOME=$(pwd)/appserver/static/visualizations/timewrap
+        - VIZ_HOME="$(pwd)/appserver/static/visualizations/timewrap"
 before_install:
     - cd $VIZ_HOME
     - echo $VIZ_HOME
