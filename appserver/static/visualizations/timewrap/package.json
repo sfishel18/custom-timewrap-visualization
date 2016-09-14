@@ -9,9 +9,13 @@
     "watch": "node ./node_modules/webpack/bin/webpack.js -d --watch --progress",
     "lint": "node ./node_modules/eslint/bin/eslint.js .",
     "karma": "node ./node_modules/karma/bin/karma start",
+    "vrt:docker:pull": "docker pull selenium/standalone-chrome:2.53.0",
+    "vrt:docker:run": "docker run --name selenium -d -p 4444:4444 -v $(pwd)/vrt:/vrt selenium/standalone-chrome",
+    "vrt:docker": "npm run vrt:docker:pull && npm run vrt:docker:run",
     "vrt:webpack": "node ./node_modules/webpack/bin/webpack.js --config vrt/webpack.config.js",
     "vrt:mocha": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd vrt/runner.js",
-    "vrt": "npm run vrt:webpack && npm run vrt:mocha",
+    "vrt:teardown": "docker stop selenium && docker rm selenium",
+    "vrt": "npm run vrt:docker && npm run vrt:webpack && npm run vrt:mocha && npm run vrt:teardown",
     "test": "npm run lint -s && npm run karma -s -- --single-run && npm run vrt -s"
   },
   "repository": {
