@@ -172,7 +172,7 @@ export const decorateWithLabels = (partitions, granularity) => {
         break;
     case YEAR:
     default:
-        nameFn = date => date.format('YYYY');
+        nameFn = date => date.format('MMMM');
     }
 
     return partitions.map(group =>

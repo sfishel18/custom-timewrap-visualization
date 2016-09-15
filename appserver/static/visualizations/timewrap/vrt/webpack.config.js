@@ -1,25 +1,21 @@
 /* eslint "import/no-extraneous-dependencies": ["error", {"devDependencies": true}] */
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const sharedConfig = require('./webpack/shared-config');
+const sharedConfig = require('../webpack/shared-config');
 
-const extractCss = new ExtractTextPlugin('visualization.css');
+const extractCss = new ExtractTextPlugin('main.css');
 
 module.exports = {
-    entry: 'visualization_source',
+    entry: path.join(__dirname, 'harness', 'main.js'),
     resolve: {
         root: [
-            path.join(__dirname, 'src'),
+            path.join(__dirname, '..', 'src'),
         ],
     },
     output: {
-        filename: 'visualization.js',
-        libraryTarget: 'amd',
+        filename: '[name].js',
+        path: path.join(__dirname, 'build'),
     },
-    externals: [
-        'vizapi/SplunkVisualizationBase',
-        'vizapi/SplunkVisualizationUtils',
-    ],
     module: {
         loaders: [
             sharedConfig.BABEL_LOADER,

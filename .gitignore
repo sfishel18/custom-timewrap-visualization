@@ -6,6 +6,10 @@ visualization.css
 *.js.map
 *.css.map
 
+# Visual regression testing output
+**/vrt/build/
+**/vrt/failures/
+
 # Logs
 logs
 *.log
@@ -43,3 +47,6 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# OSX artifacts
+.DS_Store
