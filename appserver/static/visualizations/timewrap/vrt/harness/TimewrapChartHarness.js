@@ -1,3 +1,4 @@
+/* eslint "import/no-extraneous-dependencies": ["error", {"devDependencies": true}] */
 import React from 'react';
 import ReactDom from 'react-dom';
 import TimewrapChart from '../../src/charting/TimewrapChart';
@@ -13,6 +14,10 @@ export default class TimewrapChartHarness {
         return generateTimeSeries(...args);
     }
 
+    static get TOOLTIP_SELECTOR() {
+        return '.timewrap-tooltip';
+    }
+
     constructor(el) {
         this.el = el;
     }
@@ -25,7 +30,7 @@ export default class TimewrapChartHarness {
         width = DEFAULT_WIDTH,
         height = DEFAULT_HEIGHT,
     }) {
-        ReactDom.render(
+        this.reactTree = ReactDom.render(
             <TimewrapChart
                 timeSeries={timeSeries}
                 dataSeries={dataSeries}
@@ -36,6 +41,14 @@ export default class TimewrapChartHarness {
             />,
             this.el
         );
+    }
+
+    simulateHover(seriesIndex, pointIndex) {
+        this.reactTree.onValueMouseOver({ seriesIndex, pointIndex });
+    }
+
+    simulateHoverEnd() {
+        this.reactTree.onValueMouseOut();
     }
 
 }
