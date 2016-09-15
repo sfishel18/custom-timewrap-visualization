@@ -14,10 +14,6 @@ export default class TimewrapChartHarness {
         return generateTimeSeries(...args);
     }
 
-    static get TOOLTIP_SELECTOR() {
-        return '.timewrap-tooltip';
-    }
-
     constructor(el) {
         this.el = el;
     }
