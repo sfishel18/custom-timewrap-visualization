@@ -1,28 +1,24 @@
-/* eslint-env mocha, node */
-/* eslint "import/no-extraneous-dependencies": ["error", {"devDependencies": true}] */
-/* eslint func-names: "off" */
-const assert = require('chai').assert;
-const webdriver = require('selenium-webdriver');
-const resemble = require('node-resemble-js');
 const path = require('path');
+const webdriver = require('selenium-webdriver');
+const assert = require('chai').assert;
+const resemble = require('node-resemble-js');
 const fs = require('fs');
 const rimraf = require('rimraf');
 
-const BASELINES_DIR = path.resolve(__dirname, 'baselines');
-const FAILURES_DIR = path.resolve(__dirname, 'failures');
+const BASELINES_DIR = path.resolve(__dirname, '..', 'baselines');
+const FAILURES_DIR = path.resolve(__dirname, '..', 'failures');
 
-const createBrowser = function (browserName) {
-    return new webdriver.Builder()
+const INDEX_PAGE_URL = 'file:///vrt/index.html';
+
+const DIFF_THRESHOLD = 0;
+
+const createBrowser = browserName =>
+    new webdriver.Builder()
         .usingServer('http://localhost:4444/wd/hub')
         .withCapabilities({ browserName }).build();
-};
 
-const createFileUrl = function (filename) {
-    return `file:///vrt/${filename}`;
-};
-
-const assertScreenshotMatch = function (filename) {
-    return function (screenshotData) {
+const assertScreenshotMatch = filename =>
+    screenshotData => {
         const baselinePath = path.resolve(BASELINES_DIR, `${filename}.png`);
         if (!fs.existsSync(baselinePath)) {
             fs.writeFileSync(
@@ -38,7 +34,8 @@ const assertScreenshotMatch = function (filename) {
                 .compareTo(new Buffer(screenshotData, 'base64'))
                 .ignoreAntialiasing()
                 .onComplete(data => {
-                    if (Number(data.misMatchPercentage) === 0) {
+                    const misMatchPercentage = Number(data.misMatchPercentage);
+                    if (misMatchPercentage <= DIFF_THRESHOLD) {
                         assert.ok(true);
                     } else {
                         fs.writeFileSync(
@@ -49,31 +46,30 @@ const assertScreenshotMatch = function (filename) {
                         data.getDiffImage().pack().pipe(
                             fs.createWriteStream(path.resolve(FAILURES_DIR, `${filename}.diff.png`))
                         );
-                        assert.ok(false, 'screenshot mismatch');
+                        assert.isAtMost(
+                            misMatchPercentage,
+                            DIFF_THRESHOLD,
+                            'screenshot mismatch above threshold'
+                        );
                     }
                     resolve();
                 });
         });
     };
+
+const suiteSetup = () => {
+    if (fs.existsSync(FAILURES_DIR)) {
+        rimraf.sync(FAILURES_DIR);
+    }
+    fs.mkdirSync(FAILURES_DIR);
 };
 
-suite('Visual Regression Tests', () => {
-    suiteSetup(function () {
-        if (fs.existsSync(FAILURES_DIR)) {
-            rimraf.sync(FAILURES_DIR);
-        }
-        fs.mkdirSync(FAILURES_DIR);
+const suiteTeardown = () => {};
 
-        this.browser = createBrowser('chrome');
-
-        return this.browser.get(createFileUrl('index.html'));
-    });
-
-    suiteTeardown(function () {
-        return this.browser.quit();
-    });
-
-    test('Screenshot One', function () {
-        return this.browser.takeScreenshot().then(assertScreenshotMatch('shot'));
-    });
-});
+module.exports = {
+    INDEX_PAGE_URL,
+    createBrowser,
+    assertScreenshotMatch,
+    suiteSetup,
+    suiteTeardown,
+};

@@ -1,8 +1,7 @@
 /* eslint "import/no-extraneous-dependencies": ["error", {"devDependencies": true}] */
 const path = require('path');
-const postcssImport = require('postcss-import');
-const selectorNamespace = require('postcss-selector-namespace');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const sharedConfig = require('./webpack/shared-config');
 
 const extractCss = new ExtractTextPlugin('visualization.css');
 
@@ -23,16 +22,7 @@ module.exports = {
     ],
     module: {
         loaders: [
-            {
-                test: /.js$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/,
-                query: {
-                    cacheDirectory: true,
-                    presets: ['babel-preset-es2015', 'babel-preset-react'],
-                    plugins: ['babel-plugin-add-module-exports'],
-                },
-            },
+            sharedConfig.BABEL_LOADER,
             {
                 test: /\.css$/,
                 loader: extractCss.extract(['css', 'postcss']),
@@ -40,7 +30,5 @@ module.exports = {
         ],
     },
     plugins: [extractCss],
-    postcss() {
-        return [postcssImport, selectorNamespace({ namespace: '.custom-timewrap-visualization' })];
-    },
+    postcss: sharedConfig.postcss,
 };
