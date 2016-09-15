@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const vrtUtils = require('./vrt-utils');
 
-suite('Visual Regression Tests', () => {
+suite('Visual Regression Tests - Basic Rendering', () => {
     suiteSetup(function () {
         vrtUtils.suiteSetup.call(this);
         this.browser = vrtUtils.createBrowser('chrome');
@@ -23,6 +23,67 @@ suite('Visual Regression Tests', () => {
         `);
         return this.browser.takeScreenshot().then(
             vrtUtils.assertScreenshotMatch('five-series-15-min')
+        );
+    });
+
+    test('Rendering seven series, 8 hours between points', function () {
+        this.browser.executeScript(`
+            window.harness.setProperties({
+                timeSeries: window.Harness.generateTimeSeries(
+                    '1981-08-18 00:00:00',
+                    21,
+                    8 * 60 * 60
+                ),
+                dataSeries: ${JSON.stringify([_.range(21)])},
+                dataFields: ['count']
+            })
+        `);
+        return this.browser.takeScreenshot().then(
+            vrtUtils.assertScreenshotMatch('seven-series-8-hours')
+        );
+    });
+
+    test('Rendering four series, 1 day between points', function () {
+        this.browser.executeScript(`
+            window.harness.setProperties({
+                timeSeries: window.Harness.generateTimeSeries('1981-08-16 00:00:00', 25, 1, 'day'),
+                dataSeries: ${JSON.stringify([_.range(25)])},
+                dataFields: ['count']
+            })
+        `);
+        return this.browser.takeScreenshot().then(
+            vrtUtils.assertScreenshotMatch('four-series-1-day')
+        );
+    });
+
+    test('Rendering six series, 7 days between points', function () {
+        this.browser.executeScript(`
+            window.harness.setProperties({
+                timeSeries: window.Harness.generateTimeSeries('1981-08-18 00:00:00', 24, 7, 'day'),
+                dataSeries: ${JSON.stringify([_.range(24)])},
+                dataFields: ['count']
+            })
+        `);
+        return this.browser.takeScreenshot().then(
+            vrtUtils.assertScreenshotMatch('six-series-7-day')
+        );
+    });
+
+    test('Rendering six series, 4 months between points', function () {
+        this.browser.executeScript(`
+            window.harness.setProperties({
+                timeSeries: window.Harness.generateTimeSeries(
+                    '1981-01-01 00:00:00',
+                    15,
+                    4,
+                    'month'
+                ),
+                dataSeries: ${JSON.stringify([_.range(15)])},
+                dataFields: ['count']
+            })
+        `);
+        return this.browser.takeScreenshot().then(
+            vrtUtils.assertScreenshotMatch('six-series-4-months')
         );
     });
 });

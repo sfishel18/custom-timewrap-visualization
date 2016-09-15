@@ -453,6 +453,19 @@ suite('The format-data utility package', () => {
             ];
             assertPartitionLabelsEqual(partitions, expected);
         });
+        test('5 years of data, 4 month increments, year granularity', () => {
+            const timeSeries = generateTimeSeries('1981-09-01 00:00:00', 15, 4, 'month');
+            const partitions = createLabeledPartitions(timeSeries, YEAR);
+            const expected = [
+                ['January', 'May', 'September'],
+                ['January', 'May', 'September'],
+                ['January', 'May', 'September'],
+                ['January', 'May', 'September'],
+                ['January', 'May', 'September'],
+                ['January', 'May', 'September'],
+            ];
+            assertPartitionLabelsEqual(partitions, expected);
+        });
     });
 
     suite('#computeSeriesNames', () => {
