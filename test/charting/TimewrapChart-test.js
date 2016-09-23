@@ -181,4 +181,38 @@ suite('TimewrapChart', () => {
             'date of selection is correct'
         );
     });
+    test('includes zero when all points are positive', () => {
+        const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+        const wrapper = shallow(
+            <TimewrapChart
+                timeSeries={timeSeries}
+                dataSeries={[range(timeSeries.length).map(y => y + 100)]}
+                dataFields={['count']}
+                colors={colors}
+                width={600}
+                height={400}
+            />
+        );
+        const xyPlot = wrapper.find(XYPlot);
+        assert.deepEqual(xyPlot.prop('yDomain'), [0, 115],
+            'y domain extended to include 0 as min');
+    });
+    test('includes zero when all points are negative', () => {
+        const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+        const wrapper = shallow(
+            <TimewrapChart
+                timeSeries={timeSeries}
+                dataSeries={[range(timeSeries.length).map(y => y - 100)]}
+                dataFields={['count']}
+                colors={colors}
+                width={600}
+                height={400}
+            />
+        );
+        const xyPlot = wrapper.find(XYPlot);
+        assert.deepEqual(xyPlot.prop('yDomain'), [-100, 0],
+            'y domain extended to include 0 as max');
+    });
 });
