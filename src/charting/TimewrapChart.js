@@ -105,6 +105,7 @@ class TimewrapChart extends Component {
                     xType="ordinal"
                     xDomain={xAxisLabels}
                     yDomain={[yAxisMin, yAxisMax]}
+                    margin={{ left: 80 }}
                 >
                     <HorizontalGridLines />
                     <XAxis />

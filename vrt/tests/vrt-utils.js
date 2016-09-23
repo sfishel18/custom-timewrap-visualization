@@ -4,6 +4,7 @@ const assert = require('chai').assert;
 const resemble = require('node-resemble-js');
 const fs = require('fs');
 const rimraf = require('rimraf');
+const _ = require('lodash');
 
 const BASELINES_DIR = path.resolve(__dirname, '..', 'baselines');
 const FAILURES_DIR = path.resolve(__dirname, '..', 'failures');
@@ -11,6 +12,13 @@ const FAILURES_DIR = path.resolve(__dirname, '..', 'failures');
 const INDEX_PAGE_URL = 'file:///vrt/index.html';
 
 const DIFF_THRESHOLD = 0;
+
+const cleanFailuresDirectory = _.once(() => {
+    if (fs.existsSync(FAILURES_DIR)) {
+        rimraf.sync(FAILURES_DIR);
+    }
+    fs.mkdirSync(FAILURES_DIR);
+});
 
 const createBrowser = browserName =>
     new webdriver.Builder()
@@ -58,10 +66,7 @@ const assertScreenshotMatch = filename =>
     };
 
 const suiteSetup = () => {
-    if (fs.existsSync(FAILURES_DIR)) {
-        rimraf.sync(FAILURES_DIR);
-    }
-    fs.mkdirSync(FAILURES_DIR);
+    cleanFailuresDirectory();
 };
 
 const suiteTeardown = () => {};

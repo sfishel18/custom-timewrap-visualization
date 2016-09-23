@@ -86,4 +86,22 @@ suite('Visual Regression Tests - Basic Rendering', () => {
             vrtUtils.assertScreenshotMatch('six-series-4-months')
         );
     });
+
+    test('Rendering long y-axis labels', function () {
+        this.browser.executeScript(`
+            window.harness.setProperties({
+                timeSeries: window.Harness.generateTimeSeries(
+                    '1981-01-01 00:00:00',
+                    15,
+                    4,
+                    'month'
+                ),
+                dataSeries: ${JSON.stringify([_.range(15).map(y => y * 10000)])},
+                dataFields: ['count']
+            })
+        `);
+        return this.browser.takeScreenshot().then(
+            vrtUtils.assertScreenshotMatch('long-y-axis-labels')
+        );
+    });
 });
