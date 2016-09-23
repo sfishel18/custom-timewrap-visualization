@@ -14,6 +14,7 @@ module.exports = {
     },
     output: {
         filename: 'visualization.js',
+        path: path.join(__dirname, 'appserver', 'static', 'visualizations', 'timewrap'),
         libraryTarget: 'amd',
     },
     externals: [
