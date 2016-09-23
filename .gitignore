@@ -1,15 +1,3 @@
-# Built visualization files
-visualization.js
-visualization.css
-
-# Source maps
-*.js.map
-*.css.map
-
-# Visual regression testing output
-**/vrt/build/
-**/vrt/failures/
-
 # Logs
 logs
 *.log
