@@ -6,11 +6,6 @@ notifications:
 sudo: required
 services:
     - docker
-env:
-    global:
-        - VIZ_HOME="appserver/static/visualizations/timewrap"
-before_install:
-    - cd $VIZ_HOME
 install:
     - npm install
 script:
