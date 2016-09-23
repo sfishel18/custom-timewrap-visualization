@@ -134,10 +134,15 @@ class TimewrapChart extends Component {
 }
 
 TimewrapChart.propTypes = {
-    timeSeries: PropTypes.array,
-    dataSeries: PropTypes.array,
-    dataFields: PropTypes.array,
-    colors: PropTypes.array,
+    // Eslint is confused by the way props are passed to a helper function.
+    /* eslint-disable react/no-unused-prop-types */
+    timeSeries: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+    dataSeries: PropTypes.arrayOf(
+        PropTypes.arrayOf(PropTypes.number)
+    ),
+    dataFields: PropTypes.arrayOf(PropTypes.string),
+    /* eslint-enable react/no-unused-prop-types */
+    colors: PropTypes.arrayOf(PropTypes.string),
     width: PropTypes.number,
     height: PropTypes.number,
     onPointSelect: PropTypes.func,

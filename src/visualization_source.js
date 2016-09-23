@@ -57,7 +57,7 @@ export default SplunkVisualizationBase.extend({
     updateView(data, rawConfig) {
         const config = {};
         const { propertyNamespace } = this.getPropertyNamespaceInfo();
-        Object.keys(rawConfig).forEach(key => {
+        Object.keys(rawConfig).forEach((key) => {
             config[key.replace(propertyNamespace, '')] = rawConfig[key];
         });
         ReactDom.render(

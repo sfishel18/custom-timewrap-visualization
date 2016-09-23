@@ -40,13 +40,13 @@ export const computePointSpan = memoize(timeSeries =>
 );
 
 // exported for testing only
-export const computeTotalSpan = memoize(timeSeries => {
+export const computeTotalSpan = memoize((timeSeries) => {
     const pointSpan = computePointSpan(timeSeries);
     return last(timeSeries).clone().add(pointSpan.amount, pointSpan.unit)
         .diff(timeSeries[0], 'seconds');
 });
 
-const computeGranularity = totalSpan => {
+const computeGranularity = (totalSpan) => {
     if (totalSpan < MIN_SECONDS_PER_DAY) {
         return HOUR;
     }
@@ -73,11 +73,11 @@ const computeGranularity = totalSpan => {
 
 const GROUP_BYS = {
     [HOUR]: date => date.format('YYYY-DDDD-HH'),
-    [SIX_HOUR]: date => {
+    [SIX_HOUR]: (date) => {
         const hour = date.hour();
         return date.format(`YYYY-DDDD-${Math.floor(hour / 6)}`);
     },
-    [TWELVE_HOUR]: date => {
+    [TWELVE_HOUR]: (date) => {
         const hour = date.hour();
         return date.format(`YYYY-DDDD-${Math.floor(hour / 12)}`);
     },
@@ -99,13 +99,13 @@ export const partitionTimeSeries = (timeSeries, granularity) => {
 export const decorateWithData = (partitions, dataSeries, dataFieldName) => {
     let counter = 0;
     return partitions.map(group =>
-        group.map(date => {
+        group.map((date) => {
             const decorated = {
                 fieldName: dataFieldName,
                 fieldValue: dataSeries[counter],
                 date,
             };
-            counter++;
+            counter += 1;
             return decorated;
         })
     );
@@ -192,7 +192,7 @@ export const processData = (rawTimeSeries, dataSeries, dataFieldName) => {
     return partitions;
 };
 
-const computeGranularityFromPartitions = partitions => {
+const computeGranularityFromPartitions = (partitions) => {
     const firstPartition = partitions[0];
     const firstDate = firstPartition[0].date;
     const secondDate = firstPartition[1].date;
@@ -225,7 +225,7 @@ const computeGranularityFromPartitions = partitions => {
     return HOUR;
 };
 
-export const computeSeriesNames = partitions => {
+export const computeSeriesNames = (partitions) => {
     const granularity = computeGranularityFromPartitions(partitions);
     let nameFn;
     switch (granularity) {
@@ -252,7 +252,7 @@ export const computeSeriesNames = partitions => {
     default:
         nameFn = start => start.format('YYYY');
     }
-    return partitions.map(partition => {
+    return partitions.map((partition) => {
         const pointSpan = spanBetweenDates(partition[0].date, partition[1].date);
         return nameFn(
             partition[0].date,

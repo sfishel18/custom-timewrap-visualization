@@ -54,7 +54,7 @@ const createNullFilledPartitions = (timeSeries, granularity) => {
 
 const assertNullFilledPartitionsEqual = (actual, expected, message) => {
     assert.deepEqual(
-        actual.map(p => p.map(d => {
+        actual.map(p => p.map((d) => {
             if ({}.hasOwnProperty.call(d, 'fieldValue')) {
                 return normalizeDateToString(d.date);
             }
