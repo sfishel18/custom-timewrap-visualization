@@ -10,6 +10,7 @@ import {
 } from 'react-vis';
 import property from 'lodash/property';
 import isUndefined from 'lodash/isUndefined';
+import flatten from 'lodash/flatten';
 import Tooltip from './Tooltip';
 import { processData, computeSeriesNames } from '../format-data';
 import './TimewrapChart.css';
@@ -82,6 +83,9 @@ class TimewrapChart extends Component {
             partition.map((point, j) => dataPointToVizValue(point, i, j))
             .filter(point => !isUndefined(point.y))
         );
+        const flattenedData = flatten(seriesData).map(property('y'));
+        const yAxisMin = Math.min(...(flattenedData.concat(0)));
+        const yAxisMax = Math.max(...(flattenedData.concat(0)));
         const legendItems = seriesNames.map((name, i) => ({
             title: name,
             color: colors[i % colors.length],
@@ -100,6 +104,7 @@ class TimewrapChart extends Component {
                     height={height}
                     xType="ordinal"
                     xDomain={xAxisLabels}
+                    yDomain={[yAxisMin, yAxisMax]}
                 >
                     <HorizontalGridLines />
                     <XAxis />
