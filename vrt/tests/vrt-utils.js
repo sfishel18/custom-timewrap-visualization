@@ -18,7 +18,7 @@ const createBrowser = browserName =>
         .withCapabilities({ browserName }).build();
 
 const assertScreenshotMatch = filename =>
-    screenshotData => {
+    (screenshotData) => {
         const baselinePath = path.resolve(BASELINES_DIR, `${filename}.png`);
         if (!fs.existsSync(baselinePath)) {
             fs.writeFileSync(
@@ -29,11 +29,11 @@ const assertScreenshotMatch = filename =>
             assert.ok(true, `created new baseline: ${filename}.png`);
             return Promise.resolve();
         }
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             resemble(fs.readFileSync(baselinePath))
                 .compareTo(new Buffer(screenshotData, 'base64'))
                 .ignoreAntialiasing()
-                .onComplete(data => {
+                .onComplete((data) => {
                     const misMatchPercentage = Number(data.misMatchPercentage);
                     if (misMatchPercentage <= DIFF_THRESHOLD) {
                         assert.ok(true);
