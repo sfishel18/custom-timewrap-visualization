@@ -8,7 +8,8 @@ module.exports = {
         'eol-last': 'off',
         'react/jsx-indent': ['error', 4],
         'react/jsx-indent-props': ['error', 4],
-        'react/jsx-filename-extension': 'off'
+        'react/jsx-filename-extension': 'off',
+        'react/require-extension': 'off'
     },
     env: {
         browser: true

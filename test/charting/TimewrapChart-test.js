@@ -20,7 +20,7 @@ suite('TimewrapChart', () => {
         const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
         const wrapper = shallow(
             <TimewrapChart
-                timeSeries={timeSeries}
+                timeSeries={timeSeries.map(m => m.toDate())}
                 dataSeries={[range(timeSeries.length)]}
                 dataFields={['count']}
                 colors={colors}
@@ -90,7 +90,7 @@ suite('TimewrapChart', () => {
         const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
         const wrapper = shallow(
             <TimewrapChart
-                timeSeries={timeSeries}
+                timeSeries={timeSeries.map(m => m.toDate())}
                 dataSeries={[range(timeSeries.length)]}
                 dataFields={['count']}
                 colors={colors}
@@ -128,7 +128,7 @@ suite('TimewrapChart', () => {
         const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
         const wrapper = shallow(
             <TimewrapChart
-                timeSeries={timeSeries}
+                timeSeries={timeSeries.map(m => m.toDate())}
                 dataSeries={[range(timeSeries.length)]}
                 dataFields={['count']}
                 colors={colors}
@@ -159,7 +159,7 @@ suite('TimewrapChart', () => {
         };
         const wrapper = shallow(
             <TimewrapChart
-                timeSeries={timeSeries}
+                timeSeries={timeSeries.map(m => m.toDate())}
                 dataSeries={[range(timeSeries.length)]}
                 dataFields={['count']}
                 colors={colors}
@@ -186,7 +186,7 @@ suite('TimewrapChart', () => {
         const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
         const wrapper = shallow(
             <TimewrapChart
-                timeSeries={timeSeries}
+                timeSeries={timeSeries.map(m => m.toDate())}
                 dataSeries={[range(timeSeries.length).map(y => y + 100)]}
                 dataFields={['count']}
                 colors={colors}
@@ -203,7 +203,7 @@ suite('TimewrapChart', () => {
         const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
         const wrapper = shallow(
             <TimewrapChart
-                timeSeries={timeSeries}
+                timeSeries={timeSeries.map(m => m.toDate())}
                 dataSeries={[range(timeSeries.length).map(y => y - 100)]}
                 dataFields={['count']}
                 colors={colors}
