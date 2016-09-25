@@ -1,3 +1,7 @@
+# Packager output directory
+build
+viz_timewrap.spl
+
 # Logs
 logs
 *.log
