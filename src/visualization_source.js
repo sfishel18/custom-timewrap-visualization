@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
-import SplunkVisualizationBase from 'vizapi/SplunkVisualizationBase';
+import SplunkVisualizationBase from 'api/SplunkVisualizationBase';
+import SplunkVisualizationUtils from 'api/SplunkVisualizationUtils';
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 
 import moment from 'moment';
@@ -9,14 +10,6 @@ import findIndex from 'lodash/findIndex';
 import TimewrapChart from './charting/TimewrapChart';
 
 const parseTimestamp = timestamp => moment(timestamp).toDate();
-
-const COLORS = [
-    '#0000ff',
-    '#ffff00',
-    '#ff0000',
-    '#00ff00',
-    '#ff00ff',
-];
 
 export default SplunkVisualizationBase.extend({
 
@@ -66,7 +59,7 @@ export default SplunkVisualizationBase.extend({
                 height={this.el.clientHeight}
                 {...config}
                 {...data}
-                colors={COLORS}
+                colors={SplunkVisualizationUtils.getColorPalette('splunkCategorical')}
                 onPointSelect={this.onPointSelect}
             />,
             this.el
