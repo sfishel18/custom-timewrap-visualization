@@ -32,8 +32,8 @@ module.exports = {
         libraryTarget: 'amd',
     },
     externals: [
-        'vizapi/SplunkVisualizationBase',
-        'vizapi/SplunkVisualizationUtils',
+        'api/SplunkVisualizationBase',
+        'api/SplunkVisualizationUtils',
     ],
     module: {
         loaders: [
