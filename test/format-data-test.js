@@ -278,6 +278,43 @@ suite('The format-data utility package', () => {
     });
 
     suite('#fillNulls', () => {
+        test('~4 hours of data, 7 minute increments, hour granularity', () => {
+            const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 35, 7 * 60);
+            const partitions = createNullFilledPartitions(timeSeries, HOUR);
+            const expected = [
+                [null, null, null, null, null, null, null, null, null, null,
+                    null, null, null, null, null, '1981-08-18 23:15:00', null, null, null, null,
+                    null, null, '1981-08-18 23:22:00', null, null, null, null, null, null, '1981-08-18 23:29:00',
+                    null, null, null, null, null, null, '1981-08-18 23:36:00', null, null, null,
+                    null, null, null, '1981-08-18 23:43:00', null, null, null, null, null, null,
+                    '1981-08-18 23:50:00', null, null, null, null, null, null, '1981-08-18 23:57:00', null, null],
+                [null, null, null, null, '1981-08-19 00:04:00', null, null, null, null, null,
+                    null, '1981-08-19 00:11:00', null, null, null, null, null, null, '1981-08-19 00:18:00', null,
+                    null, null, null, null, null, '1981-08-19 00:25:00', null, null, null, null,
+                    null, null, '1981-08-19 00:32:00', null, null, null, null, null, null, '1981-08-19 00:39:00',
+                    null, null, null, null, null, null, '1981-08-19 00:46:00', null, null, null,
+                    null, null, null, '1981-08-19 00:53:00', null, null, null, null, null, null],
+                ['1981-08-19 01:00:00', null, null, null, null, null, null, '1981-08-19 01:07:00', null, null,
+                    null, null, null, null, '1981-08-19 01:14:00', null, null, null, null, null,
+                    null, '1981-08-19 01:21:00', null, null, null, null, null, null, '1981-08-19 01:28:00', null,
+                    null, null, null, null, null, '1981-08-19 01:35:00', null, null, null, null,
+                    null, null, '1981-08-19 01:42:00', null, null, null, null, null, null, '1981-08-19 01:49:00',
+                    null, null, null, null, null, null, '1981-08-19 01:56:00', null, null, null],
+                [null, null, null, '1981-08-19 02:03:00', null, null, null, null, null, null,
+                    '1981-08-19 02:10:00', null, null, null, null, null, null, '1981-08-19 02:17:00', null, null,
+                    null, null, null, null, '1981-08-19 02:24:00', null, null, null, null, null,
+                    null, '1981-08-19 02:31:00', null, null, null, null, null, null, '1981-08-19 02:38:00', null,
+                    null, null, null, null, null, '1981-08-19 02:45:00', null, null, null, null,
+                    null, null, '1981-08-19 02:52:00', null, null, null, null, null, null, '1981-08-19 02:59:00'],
+                [null, null, null, null, null, null, '1981-08-19 03:06:00', null, null, null,
+                    null, null, null, '1981-08-19 03:13:00', null, null, null, null, null, null,
+                    null, null, null, null, null, null, null, null, null, null,
+                    null, null, null, null, null, null, null, null, null, null,
+                    null, null, null, null, null, null, null, null, null, null,
+                    null, null, null, null, null, null, null, null, null, null],
+            ];
+            assertNullFilledPartitionsEqual(partitions, expected);
+        });
         test('4 hours of data, 15 minute increments, hour granularity', () => {
             const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
             const partitions = createNullFilledPartitions(timeSeries, HOUR);
@@ -318,14 +355,20 @@ suite('The format-data utility package', () => {
             const timeSeries = generateTimeSeries('1981-08-17 20:00:00', 20, 4 * 60 * 60);
             const partitions = createNullFilledPartitions(timeSeries, TWELVE_HOUR);
             const expected = [
-                [null, null, '1981-08-17 20:00:00'],
-                ['1981-08-18 00:00:00', '1981-08-18 04:00:00', '1981-08-18 08:00:00'],
-                ['1981-08-18 12:00:00', '1981-08-18 16:00:00', '1981-08-18 20:00:00'],
-                ['1981-08-19 00:00:00', '1981-08-19 04:00:00', '1981-08-19 08:00:00'],
-                ['1981-08-19 12:00:00', '1981-08-19 16:00:00', '1981-08-19 20:00:00'],
-                ['1981-08-20 00:00:00', '1981-08-20 04:00:00', '1981-08-20 08:00:00'],
-                ['1981-08-20 12:00:00', '1981-08-20 16:00:00', '1981-08-20 20:00:00'],
-                ['1981-08-21 00:00:00', null, null],
+                [null, null, null, null, null, null, null, null, '1981-08-17 20:00:00', null, null, null],
+                ['1981-08-18 00:00:00', null, null, null, '1981-08-18 04:00:00', null, null, null,
+                    '1981-08-18 08:00:00', null, null, null],
+                ['1981-08-18 12:00:00', null, null, null, '1981-08-18 16:00:00', null, null, null,
+                    '1981-08-18 20:00:00', null, null, null],
+                ['1981-08-19 00:00:00', null, null, null, '1981-08-19 04:00:00', null, null, null,
+                    '1981-08-19 08:00:00', null, null, null],
+                ['1981-08-19 12:00:00', null, null, null, '1981-08-19 16:00:00', null, null, null,
+                    '1981-08-19 20:00:00', null, null, null],
+                ['1981-08-20 00:00:00', null, null, null, '1981-08-20 04:00:00', null, null, null,
+                    '1981-08-20 08:00:00', null, null, null],
+                ['1981-08-20 12:00:00', null, null, null, '1981-08-20 16:00:00', null, null, null,
+                    '1981-08-20 20:00:00', null, null, null],
+                ['1981-08-21 00:00:00', null, null, null, null, null, null, null, null, null, null, null],
             ];
             assertNullFilledPartitionsEqual(partitions, expected);
         });
@@ -333,14 +376,30 @@ suite('The format-data utility package', () => {
             const timeSeries = generateTimeSeries('1981-08-17 08:00:00', 21, 8 * 60 * 60);
             const partitions = createNullFilledPartitions(timeSeries, DAY);
             const expected = [
-                [null, '1981-08-17 08:00:00', '1981-08-17 16:00:00'],
-                ['1981-08-18 00:00:00', '1981-08-18 08:00:00', '1981-08-18 16:00:00'],
-                ['1981-08-19 00:00:00', '1981-08-19 08:00:00', '1981-08-19 16:00:00'],
-                ['1981-08-20 00:00:00', '1981-08-20 08:00:00', '1981-08-20 16:00:00'],
-                ['1981-08-21 00:00:00', '1981-08-21 08:00:00', '1981-08-21 16:00:00'],
-                ['1981-08-22 00:00:00', '1981-08-22 08:00:00', '1981-08-22 16:00:00'],
-                ['1981-08-23 00:00:00', '1981-08-23 08:00:00', '1981-08-23 16:00:00'],
-                ['1981-08-24 00:00:00', null, null],
+                [null, null, null, null, null, null, null, null,
+                    '1981-08-17 08:00:00', null, null, null, null, null, null, null,
+                    '1981-08-17 16:00:00', null, null, null, null, null, null, null],
+                ['1981-08-18 00:00:00', null, null, null, null, null, null, null,
+                    '1981-08-18 08:00:00', null, null, null, null, null, null, null,
+                    '1981-08-18 16:00:00', null, null, null, null, null, null, null],
+                ['1981-08-19 00:00:00', null, null, null, null, null, null, null,
+                    '1981-08-19 08:00:00', null, null, null, null, null, null, null,
+                    '1981-08-19 16:00:00', null, null, null, null, null, null, null],
+                ['1981-08-20 00:00:00', null, null, null, null, null, null, null,
+                    '1981-08-20 08:00:00', null, null, null, null, null, null, null,
+                    '1981-08-20 16:00:00', null, null, null, null, null, null, null],
+                ['1981-08-21 00:00:00', null, null, null, null, null, null, null,
+                    '1981-08-21 08:00:00', null, null, null, null, null, null, null,
+                    '1981-08-21 16:00:00', null, null, null, null, null, null, null],
+                ['1981-08-22 00:00:00', null, null, null, null, null, null, null,
+                    '1981-08-22 08:00:00', null, null, null, null, null, null, null,
+                    '1981-08-22 16:00:00', null, null, null, null, null, null, null],
+                ['1981-08-23 00:00:00', null, null, null, null, null, null, null,
+                    '1981-08-23 08:00:00', null, null, null, null, null, null, null,
+                    '1981-08-23 16:00:00', null, null, null, null, null, null, null],
+                ['1981-08-24 00:00:00', null, null, null, null, null, null, null,
+                    null, null, null, null, null, null, null, null,
+                    null, null, null, null, null, null, null, null],
             ];
             assertNullFilledPartitionsEqual(partitions, expected);
         });
@@ -429,12 +488,18 @@ suite('The format-data utility package', () => {
             const timeSeries = generateTimeSeries('1981-09-01 00:00:00', 15, 4, 'month');
             const partitions = createNullFilledPartitions(timeSeries, YEAR);
             const expected = [
-                [null, null, '1981-09-01 00:00:00'],
-                ['1982-01-01 00:00:00', '1982-05-01 00:00:00', '1982-09-01 00:00:00'],
-                ['1983-01-01 00:00:00', '1983-05-01 00:00:00', '1983-09-01 00:00:00'],
-                ['1984-01-01 00:00:00', '1984-05-01 00:00:00', '1984-09-01 00:00:00'],
-                ['1985-01-01 00:00:00', '1985-05-01 00:00:00', '1985-09-01 00:00:00'],
-                ['1986-01-01 00:00:00', '1986-05-01 00:00:00', null],
+                [null, null, null, null, null, null, null, null,
+                    '1981-09-01 00:00:00', null, null, null],
+                ['1982-01-01 00:00:00', null, null, null, '1982-05-01 00:00:00', null, null, null,
+                    '1982-09-01 00:00:00', null, null, null],
+                ['1983-01-01 00:00:00', null, null, null, '1983-05-01 00:00:00', null, null, null,
+                    '1983-09-01 00:00:00', null, null, null],
+                ['1984-01-01 00:00:00', null, null, null, '1984-05-01 00:00:00', null, null, null,
+                    '1984-09-01 00:00:00', null, null, null],
+                ['1985-01-01 00:00:00', null, null, null, '1985-05-01 00:00:00', null, null, null,
+                    '1985-09-01 00:00:00', null, null, null],
+                ['1986-01-01 00:00:00', null, null, null, '1986-05-01 00:00:00', null, null, null,
+                    null, null, null, null],
             ];
             assertNullFilledPartitionsEqual(partitions, expected);
         });
@@ -457,12 +522,18 @@ suite('The format-data utility package', () => {
             const timeSeries = generateTimeSeries('1981-09-01 00:00:00', 15, 4, 'month');
             const partitions = createLabeledPartitions(timeSeries, YEAR);
             const expected = [
-                ['January', 'May', 'September'],
-                ['January', 'May', 'September'],
-                ['January', 'May', 'September'],
-                ['January', 'May', 'September'],
-                ['January', 'May', 'September'],
-                ['January', 'May', 'September'],
+                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                    'September', 'October', 'November', 'December'],
+                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                    'September', 'October', 'November', 'December'],
+                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                    'September', 'October', 'November', 'December'],
+                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                    'September', 'October', 'November', 'December'],
+                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                    'September', 'October', 'November', 'December'],
+                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                    'September', 'October', 'November', 'December'],
             ];
             assertPartitionLabelsEqual(partitions, expected);
         });
