@@ -1,0 +1,4 @@
+<nav>
+    <view name="gallery" default="true" />
+    <view name="search" />
+</nav>
