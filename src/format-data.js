@@ -141,7 +141,28 @@ const fillPartition = (partition, granularity, pointSpan) => {
 
 // exported for testing only
 export const fillNulls = (partitions, granularity, pointSpan) => {
-    const partitionSpan = granularity === 'month' ? { amount: 1, unit: 'day' } : pointSpan;
+    let partitionSpan;
+    switch (granularity) {
+    case HOUR: {
+        const pointSpanMinutes = moment.duration(pointSpan.amount, pointSpan.unit).minutes();
+        const partitionSpanMinutes = (60 % pointSpanMinutes === 0) ? pointSpanMinutes : 1;
+        partitionSpan = { amount: partitionSpanMinutes, unit: 'minutes' };
+        break;
+    }
+    case SIX_HOUR:
+    case TWELVE_HOUR:
+    case DAY:
+        partitionSpan = { amount: 1, unit: 'hour' };
+        break;
+    case WEEK:
+    case MONTH:
+        partitionSpan = { amount: 1, unit: 'day' };
+        break;
+    case THREE_MONTH:
+    case YEAR:
+    default:
+        partitionSpan = { amount: 1, unit: 'month' };
+    }
     return partitions.map(p => fillPartition(p, granularity, partitionSpan));
 };
 
@@ -159,7 +180,7 @@ export const decorateWithLabels = (partitions, granularity) => {
         nameFn = date => `Hour ${(date.hour() % 12) + 1}`;
         break;
     case DAY:
-        nameFn = date => date.format('h:mm A');
+        nameFn = date => date.format('hA');
         break;
     case WEEK:
         nameFn = date => date.format('ddd');
