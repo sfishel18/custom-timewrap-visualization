@@ -1,0 +1,43 @@
+<dashboard>
+    <label>Timewrap Chart Gallery</label>
+    <row>
+        <panel>
+            <title>NYC Uber rides, month over month, July - September 2014</title>
+            <viz type="viz_timewrap.timewrap">
+                <search>
+                    <query>| inputlookup rides-by-day.csv | eval _time = strptime(Date, "%d-%b-%y") | timechart sum(Uber) as "Uber Rides"</query>
+                </search>
+            </viz>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>NYC Uber rides, week over week, September 2014</title>
+            <viz type="viz_timewrap.timewrap">
+                <search>
+                    <query>| inputlookup rides-by-day.csv | where match(Date, "Sep") | eval _time = strptime(Date, "%d-%b-%y") | timechart sum(Uber) as "Uber Rides"</query>
+                </search>
+            </viz>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>NYC Uber rides, day over day, September 1-7 2014</title>
+            <viz type="viz_timewrap.timewrap">
+                <search>
+                    <query>| inputlookup rides-by-hour.csv | eval _time=strptime(Date_Time, "%D %R") | timechart span=1h sum(Rides) as "Uber Rides"</query>
+                </search>
+            </viz>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>NYC Uber rides, hour over hour, 6:00 - 11:00 September 1 2014</title>
+            <viz type="viz_timewrap.timewrap">
+                <search>
+                    <query>| inputlookup rides-by-minute.csv | eval _time=strptime(Date_Time, "%D %R") | timechart span=5m sum(Rides) as "Uber Rides"</query>
+                </search>
+            </viz>
+        </panel>
+    </row>
+</dashboard>
