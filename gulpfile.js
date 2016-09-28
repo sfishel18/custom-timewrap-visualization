@@ -10,9 +10,10 @@ const exec = require('child_process').exec;
 const rimraf = require('rimraf');
 
 const packageInfo = JSON.parse(fs.readFileSync('./package.json'));
+const destName = packageInfo.name;
 
 gulp.task('clean', () => {
-    rimraf.sync('build');
+    rimraf.sync(destName);
 });
 
 gulp.task('npm build', (cb) => {
@@ -34,7 +35,7 @@ gulp.task('process config', ['clean'], () => {
                 { json: { buildNumber: parseInt(gitRev.short(), 16) } },
             ],
         }))
-        .pipe(gulp.dest('build'));
+        .pipe(gulp.dest(destName));
 });
 
 const vizFiles = [
@@ -48,13 +49,13 @@ const staticSrc = [
 ];
 gulp.task('process static', ['clean', 'npm build'], () => {
     gulp.src(staticSrc, { base: '.' })
-        .pipe(gulp.dest('build'));
+        .pipe(gulp.dest(destName));
 });
 
 gulp.task('default', ['process config', 'process static'], () => {
-    gulp.src('build/**/*.*')
-        .pipe(tar('build.tar'))
+    gulp.src(`${destName}/**/*.*`, { base: '.' })
+        .pipe(tar(`${destName}.tar`))
         .pipe(gzip())
-        .pipe(rename(`${packageInfo.name}.spl`))
+        .pipe(rename(`${destName}.spl`))
         .pipe(gulp.dest('.'));
 });

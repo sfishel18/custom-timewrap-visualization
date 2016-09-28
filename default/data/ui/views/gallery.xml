@@ -40,4 +40,16 @@
             </viz>
         </panel>
     </row>
+    <row>
+        <panel>
+            <html>
+                <p>
+                    Attribution: raw data obtained from
+                    <a href="https://github.com/fivethirtyeight/uber-tlc-foil-response">
+                        https://github.com/fivethirtyeight/uber-tlc-foil-response
+                    </a>
+                </p>
+            </html>
+        </panel>
+    </row>
 </dashboard>
