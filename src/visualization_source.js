@@ -1,15 +1,13 @@
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 import SplunkVisualizationBase from 'api/SplunkVisualizationBase';
 import SplunkVisualizationUtils from 'api/SplunkVisualizationUtils';
-/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
+/* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
 import moment from 'moment';
 import React from 'react';
 import ReactDom from 'react-dom';
 import findIndex from 'lodash/findIndex';
 import TimewrapChart from './charting/TimewrapChart';
-
-const parseTimestamp = timestamp => moment(timestamp).toDate();
 
 export default SplunkVisualizationBase.extend({
 
@@ -26,7 +24,7 @@ export default SplunkVisualizationBase.extend({
 
     formatData(rawData) {
         const data = {
-            timeSeries: (rawData.columns[0] || []).map(parseTimestamp),
+            timeSeries: (rawData.columns[0] || []).map(SplunkVisualizationUtils.parseTimestamp),
             dataFields: [],
             dataSeries: [],
         };
