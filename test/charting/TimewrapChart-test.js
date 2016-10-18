@@ -32,43 +32,43 @@ suite('TimewrapChart', () => {
         assert.equal(xyPlot.length, 1, 'one XYPlot node');
         assert.deepEqual(
             xyPlot.prop('xDomain'),
-            [':00', ':15', ':30', ':45'],
+            [0, 1, 2, 3],
             'x-axis domain is correct'
         );
 
         const expectedData = [
             [
-                { x: ':15', y: 0 },
-                { x: ':30', y: 1 },
-                { x: ':45', y: 2 },
+                { label: ':15', y: 0, x: 1 },
+                { label: ':30', y: 1, x: 2 },
+                { label: ':45', y: 2, x: 3 },
             ],
             [
-                { x: ':00', y: 3 },
-                { x: ':15', y: 4 },
-                { x: ':30', y: 5 },
-                { x: ':45', y: 6 },
+                { label: ':00', y: 3, x: 0 },
+                { label: ':15', y: 4, x: 1 },
+                { label: ':30', y: 5, x: 2 },
+                { label: ':45', y: 6, x: 3 },
             ],
             [
-                { x: ':00', y: 7 },
-                { x: ':15', y: 8 },
-                { x: ':30', y: 9 },
-                { x: ':45', y: 10 },
+                { label: ':00', y: 7, x: 0 },
+                { label: ':15', y: 8, x: 1 },
+                { label: ':30', y: 9, x: 2 },
+                { label: ':45', y: 10, x: 3 },
             ],
             [
-                { x: ':00', y: 11 },
-                { x: ':15', y: 12 },
-                { x: ':30', y: 13 },
-                { x: ':45', y: 14 },
+                { label: ':00', y: 11, x: 0 },
+                { label: ':15', y: 12, x: 1 },
+                { label: ':30', y: 13, x: 2 },
+                { label: ':45', y: 14, x: 3 },
             ],
             [
-                { x: ':00', y: 15 },
+                { label: ':00', y: 15, x: 0 },
             ],
         ];
         const lines = xyPlot.find(LineMarkSeries);
         assert.equal(lines.length, expectedData.length, 'correct number of Line nodes');
         expectedData.forEach((name, i) => {
             assert.deepEqual(
-                lines.at(i).prop('data').map(point => pick(point, 'x', 'y')),
+                lines.at(i).prop('data').map(point => pick(point, 'x', 'y', 'label')),
                 expectedData[i],
                 `line #${i + 1} has correct data`
             );
@@ -111,8 +111,8 @@ suite('TimewrapChart', () => {
         const hint = wrapper.find(Hint);
         assert.equal(hint.length, 1, 'one hint present');
         assert.deepEqual(
-            pick(hint.at(0).prop('value'), 'x', 'y'),
-            { x: ':30', y: 5 },
+            pick(hint.at(0).prop('value'), 'x', 'y', 'label'),
+            { label: ':30', y: 5, x: 2 },
             'correct value passed to hint'
         );
 
@@ -145,8 +145,8 @@ suite('TimewrapChart', () => {
         const hint = wrapper.find(Hint);
         assert.equal(hint.length, 1, 'one hint present');
         assert.deepEqual(
-            pick(hint.at(0).prop('value'), 'x', 'y'),
-            { x: ':00', y: 15 },
+            pick(hint.at(0).prop('value'), 'x', 'y', 'label'),
+            { label: ':00', y: 15, x: 0 },
             'correct value passed to hint'
         );
     });

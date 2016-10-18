@@ -65,8 +65,12 @@ const assertNullFilledPartitionsEqual = (actual, expected, message) => {
     );
 };
 
-const createLabeledPartitions = (timeSeries, granularity) =>
-    decorateWithLabels(createNullFilledPartitions(timeSeries, granularity), granularity);
+const createLabeledPartitions = (timeSeries, granularity, customFormat = null) =>
+    decorateWithLabels(
+        createNullFilledPartitions(timeSeries, granularity),
+        granularity,
+        customFormat
+    );
 
 const assertPartitionLabelsEqual = (actual, expected, message) => {
     assert.deepEqual(
@@ -518,6 +522,18 @@ suite('The format-data utility package', () => {
             ];
             assertPartitionLabelsEqual(partitions, expected);
         });
+        test('4 hours of data, 15 minute increments, hour granularity, custom label format', () => {
+            const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+            const partitions = createLabeledPartitions(timeSeries, HOUR, ':mm:ss');
+            const expected = [
+                [':00:00', ':15:00', ':30:00', ':45:00'],
+                [':00:00', ':15:00', ':30:00', ':45:00'],
+                [':00:00', ':15:00', ':30:00', ':45:00'],
+                [':00:00', ':15:00', ':30:00', ':45:00'],
+                [':00:00', ':15:00', ':30:00', ':45:00'],
+            ];
+            assertPartitionLabelsEqual(partitions, expected);
+        });
         test('5 years of data, 4 month increments, year granularity', () => {
             const timeSeries = generateTimeSeries('1981-09-01 00:00:00', 15, 4, 'month');
             const partitions = createLabeledPartitions(timeSeries, YEAR);
@@ -549,6 +565,14 @@ suite('The format-data utility package', () => {
                     '2:00 AM - 3:00 AM', '3:00 AM - 4:00 AM']
             );
         });
+        test('4 hours of data, 15 minute increments, hour granularity, custom label format', () => {
+            const timeSeries = generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60);
+            const partitions = processData(timeSeries, range(timeSeries.length), 'count');
+            assert.deepEqual(
+                computeSeriesNames(partitions, 'h A'),
+                ['11 PM - 12 AM', '12 AM - 1 AM', '1 AM - 2 AM', '2 AM - 3 AM', '3 AM - 4 AM']
+            );
+        });
         test('1 week of data, 8 hour increments, day granularity', () => {
             const timeSeries = generateTimeSeries('1981-08-17 08:00:00', 21, 8 * 60 * 60);
             const partitions = processData(timeSeries, range(timeSeries.length), 'count');
@@ -556,6 +580,14 @@ suite('The format-data utility package', () => {
                 computeSeriesNames(partitions),
                 ['Aug 17th', 'Aug 18th', 'Aug 19th', 'Aug 20th', 'Aug 21st', 'Aug 22nd',
                     'Aug 23rd', 'Aug 24th']
+            );
+        });
+        test('1 week of data, 8 hour increments, day granularity, custom label format', () => {
+            const timeSeries = generateTimeSeries('1981-08-17 08:00:00', 21, 8 * 60 * 60);
+            const partitions = processData(timeSeries, range(timeSeries.length), 'count');
+            assert.deepEqual(
+                computeSeriesNames(partitions, 'M/D'),
+                ['8/17', '8/18', '8/19', '8/20', '8/21', '8/22', '8/23', '8/24']
             );
         });
         test('3 weeks 4 days of data, 1 day increments, week granularity', () => {

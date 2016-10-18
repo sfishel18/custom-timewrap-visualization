@@ -3,12 +3,13 @@ import moment from 'moment';
 import './Tooltip.css';
 
 const Tooltip = (props) => {
+    const { format } = props;
     const { date, fieldName, y } = props.value;
     return (<div className="timewrap-tooltip">
-        <div>{date.format('MMM Do, YYYY h:mm A') }</div>
+        <div>{date.format(format || 'MMM Do, YYYY h:mm A') }</div>
         <div>
-            <span>{fieldName}: </span>
-            <span style={{ float: 'right' }}>{y}</span>
+            <span className="tooltip-cell">{fieldName}: </span>
+            <span className="tooltip-cell" style={{ float: 'right' }}>{y}</span>
         </div>
     </div>);
 };
@@ -32,6 +33,7 @@ Tooltip.propTypes = {
         y: PropTypes.number,
         /* eslint-enable react/no-unused-prop-types */
     }),
+    format: PropTypes.string,
 };
 
 export default Tooltip;

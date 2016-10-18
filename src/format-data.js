@@ -167,33 +167,37 @@ export const fillNulls = (partitions, granularity, pointSpan) => {
 };
 
 // exported for testing only
-export const decorateWithLabels = (partitions, granularity) => {
+export const decorateWithLabels = (partitions, granularity, customFormat = null) => {
     let nameFn;
-    switch (granularity) {
-    case HOUR:
-        nameFn = date => date.format(':mm');
-        break;
-    case SIX_HOUR:
-        nameFn = date => `Hour ${(date.hour() % 6) + 1}`;
-        break;
-    case TWELVE_HOUR:
-        nameFn = date => `Hour ${(date.hour() % 12) + 1}`;
-        break;
-    case DAY:
-        nameFn = date => date.format('hA');
-        break;
-    case WEEK:
-        nameFn = date => date.format('ddd');
-        break;
-    case MONTH:
-        nameFn = date => date.format('Do');
-        break;
-    case THREE_MONTH:
-        nameFn = date => `Month ${(date.month() % 3) + 1}`;
-        break;
-    case YEAR:
-    default:
-        nameFn = date => date.format('MMMM');
+    if (customFormat) {
+        nameFn = date => date.format(customFormat);
+    } else {
+        switch (granularity) {
+        case HOUR:
+            nameFn = date => date.format(':mm');
+            break;
+        case SIX_HOUR:
+            nameFn = date => `Hour ${(date.hour() % 6) + 1}`;
+            break;
+        case TWELVE_HOUR:
+            nameFn = date => `Hour ${(date.hour() % 12) + 1}`;
+            break;
+        case DAY:
+            nameFn = date => date.format('hA');
+            break;
+        case WEEK:
+            nameFn = date => date.format('ddd');
+            break;
+        case MONTH:
+            nameFn = date => date.format('Do');
+            break;
+        case THREE_MONTH:
+            nameFn = date => `Month ${(date.month() % 3) + 1}`;
+            break;
+        case YEAR:
+        default:
+            nameFn = date => date.format('MMMM');
+        }
     }
 
     return partitions.map(group =>
@@ -201,7 +205,7 @@ export const decorateWithLabels = (partitions, granularity) => {
     );
 };
 
-export const processData = (rawTimeSeries, dataSeries, dataFieldName) => {
+export const processData = (rawTimeSeries, dataSeries, dataFieldName, axisLabelFormat = null) => {
     const timeSeries = rawTimeSeries.map(date => moment(date));
     const pointSpan = computePointSpan(timeSeries);
     const totalSpan = computeTotalSpan(timeSeries);
@@ -209,7 +213,7 @@ export const processData = (rawTimeSeries, dataSeries, dataFieldName) => {
     let partitions = partitionTimeSeries(timeSeries, granularity, pointSpan);
     partitions = decorateWithData(partitions, dataSeries, dataFieldName);
     partitions = fillNulls(partitions, granularity, pointSpan);
-    partitions = decorateWithLabels(partitions, granularity);
+    partitions = decorateWithLabels(partitions, granularity, axisLabelFormat);
     return partitions;
 };
 
@@ -246,32 +250,49 @@ const computeGranularityFromPartitions = (partitions) => {
     return HOUR;
 };
 
-export const computeSeriesNames = (partitions) => {
+export const computeSeriesNames = (partitions, customFormat = null) => {
     const granularity = computeGranularityFromPartitions(partitions);
     let nameFn;
-    switch (granularity) {
-    case HOUR:
-    case SIX_HOUR:
-    case TWELVE_HOUR:
-        nameFn = (start, end) => `${start.format('h:mm A')} - ${end.format('h:mm A')}`;
-        break;
-    case DAY:
-        nameFn = start => start.format('MMM Do');
-        break;
-    case WEEK:
-        nameFn = (start, end) => (start.month() === end.month() ?
-            `${start.format('MMM Do')} - ${end.format('Do')}` :
-            `${start.format('MMM Do')} - ${end.format('MMM Do')}`);
-        break;
-    case MONTH:
-        nameFn = start => start.format('MMM');
-        break;
-    case THREE_MONTH:
-        nameFn = (start, end) => `${start.format('MMM')} - ${end.format('MMM')}`;
-        break;
-    case YEAR:
-    default:
-        nameFn = start => start.format('YYYY');
+    if (customFormat) {
+        switch (granularity) {
+        case HOUR:
+        case SIX_HOUR:
+        case TWELVE_HOUR:
+        case WEEK:
+        case THREE_MONTH:
+            nameFn = (start, end) => `${start.format(customFormat)} - ${end.format(customFormat)}`;
+            break;
+        case DAY:
+        case MONTH:
+        case YEAR:
+        default:
+            nameFn = start => start.format(customFormat);
+        }
+    } else {
+        switch (granularity) {
+        case HOUR:
+        case SIX_HOUR:
+        case TWELVE_HOUR:
+            nameFn = (start, end) => `${start.format('h:mm A')} - ${end.format('h:mm A')}`;
+            break;
+        case DAY:
+            nameFn = start => start.format('MMM Do');
+            break;
+        case WEEK:
+            nameFn = (start, end) => (start.month() === end.month() ?
+                `${start.format('MMM Do')} - ${end.format('Do')}` :
+                `${start.format('MMM Do')} - ${end.format('MMM Do')}`);
+            break;
+        case MONTH:
+            nameFn = start => start.format('MMM');
+            break;
+        case THREE_MONTH:
+            nameFn = (start, end) => `${start.format('MMM')} - ${end.format('MMM')}`;
+            break;
+        case YEAR:
+        default:
+            nameFn = start => start.format('YYYY');
+        }
     }
     return partitions.map((partition) => {
         const pointSpan = spanBetweenDates(partition[0].date, partition[1].date);

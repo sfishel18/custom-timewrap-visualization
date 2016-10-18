@@ -25,6 +25,9 @@ export default class TimewrapChartHarness {
         colors = DEFAULT_COLORS,
         width = DEFAULT_WIDTH,
         height = DEFAULT_HEIGHT,
+        axisLabelFormat = null,
+        legendFormat = null,
+        tooltipFormat = null,
     }) {
         this.reactTree = ReactDom.render(
             <TimewrapChart
@@ -34,6 +37,9 @@ export default class TimewrapChartHarness {
                 colors={colors}
                 width={width}
                 height={height}
+                axisLabelFormat={axisLabelFormat}
+                legendFormat={legendFormat}
+                tooltipFormat={tooltipFormat}
             />,
             this.el
         );
