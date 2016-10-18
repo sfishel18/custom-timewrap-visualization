@@ -4,3 +4,7 @@
     padding: 10px;
     border-radius: 5px;
 }
+
+.timewrap-tooltip .tooltip-cell:last-child {
+    margin-left: 10px;
+}

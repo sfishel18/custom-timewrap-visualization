@@ -18,8 +18,9 @@ import './TimewrapChart.css';
 const LEGEND_WIDTH = 150;
 
 const dataPointToVizValue = (point, seriesIndex, pointIndex) => ({
-    x: point.label,
+    x: pointIndex,
     y: point.fieldValue,
+    label: point.label,
     date: point.date,
     fieldName: point.fieldName,
     seriesIndex,
@@ -63,26 +64,29 @@ class TimewrapChart extends Component {
 
     setStateFromProps(props) {
         const { timeSeries, dataSeries, dataFields } = props;
+        const axisLabelFormat = props.axisLabelFormat || null;
+        const legendFormat = props.legendFormat || null;
         if (!timeSeries || timeSeries.length === 0) {
             this.setState({ data: [], seriesNames: [] });
             return;
         }
-        const data = processData(timeSeries, dataSeries[0], dataFields[0]);
-        const seriesNames = computeSeriesNames(data);
+        const data = processData(timeSeries, dataSeries[0], dataFields[0], axisLabelFormat);
+        const seriesNames = computeSeriesNames(data, legendFormat);
         this.setState({ data, seriesNames });
     }
 
     render() {
-        const { colors, width, height } = this.props;
+        const { colors, width, height, tooltipFormat } = this.props;
         const { data, seriesNames, hintCoordinates } = this.state;
         if (data.length === 0) {
             return null;
         }
-        const xAxisLabels = data[0].map(property('label'));
+        const xAxisLabels = data[0].map((point, i) => i);
         const seriesData = data.map((partition, i) =>
             partition.map((point, j) => dataPointToVizValue(point, i, j))
-            .filter(point => !isUndefined(point.y))
+                .filter(point => !isUndefined(point.y))
         );
+        const tickFormat = i => data[0][i].label;
         const flattenedData = flatten(seriesData).map(property('y'));
         const yAxisMin = Math.min(...(flattenedData.concat(0)));
         const yAxisMax = Math.max(...(flattenedData.concat(0)));
@@ -108,7 +112,7 @@ class TimewrapChart extends Component {
                     margin={{ left: 80 }}
                 >
                     <HorizontalGridLines />
-                    <XAxis />
+                    <XAxis tickFormat={tickFormat} />
                     <YAxis />
                     {seriesData.map((points, i) =>
                         <LineMarkSeries
@@ -123,7 +127,7 @@ class TimewrapChart extends Component {
                     )}
                     {hintValue ?
                         <Hint value={hintValue}>
-                            <Tooltip value={hintValue} />
+                            <Tooltip value={hintValue} format={tooltipFormat || null} />
                         </Hint> :
                         null
                     }
@@ -142,7 +146,10 @@ TimewrapChart.propTypes = {
         PropTypes.arrayOf(PropTypes.number)
     ),
     dataFields: PropTypes.arrayOf(PropTypes.string),
+    axisLabelFormat: PropTypes.string,
+    legendFormat: PropTypes.string,
     /* eslint-enable react/no-unused-prop-types */
+    tooltipFormat: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
     width: PropTypes.number,
     height: PropTypes.number,

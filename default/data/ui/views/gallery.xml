@@ -12,6 +12,19 @@
     </row>
     <row>
         <panel>
+            <title>NYC Uber rides, month over month, July - September 2014, with custom labels</title>
+            <viz type="viz_timewrap.timewrap">
+                <search>
+                    <query>| inputlookup rides-by-day.csv | eval _time = strptime(Date, "%d-%b-%y") | timechart sum(Uber) as "Uber Rides"</query>
+                </search>
+                <option name="viz_timewrap.timewrap.axisLabelFormat">dd</option>
+                <option name="viz_timewrap.timewrap.legendFormat">MMMM YYYY</option>
+                <option name="viz_timewrap.timewrap.tooltipFormat">MMMM Do, YYYY</option>
+            </viz>
+        </panel>
+    </row>
+    <row>
+        <panel>
             <title>NYC Uber rides, week over week, September 2014</title>
             <viz type="viz_timewrap.timewrap">
                 <search>
