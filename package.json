@@ -12,10 +12,10 @@
     "prevrt:docker": "docker pull selenium/standalone-chrome:2.53.0",
     "vrt:docker": "docker run -d --name selenium -p 4444:4444 -v $(pwd)/vrt:/vrt selenium/standalone-chrome",
     "vrt:build": "webpack --config vrt/webpack.config.js",
-    "prevrt": "npm run postvrt && npm run vrt:docker && npm run vrt:build",
+    "prevrt": "yarn run postvrt && yarn run vrt:docker && yarn run vrt:build",
     "vrt": "mocha --timeout 30000 -u tdd vrt/tests/**/*-test.js",
     "postvrt": "docker stop selenium && docker rm selenium || true",
-    "test": "npm run lint -s && npm run karma -s -- --single-run && npm run vrt -s"
+    "test": "yarn run lint && yarn run karma -- --single-run && yarn run vrt"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "author": "Simon Fishel",
   "license": "MIT",
+  "readme": "README.md",
   "bugs": {
     "url": "https://github.com/sfishel18/custom-timewrap-visualization/issues"
   },

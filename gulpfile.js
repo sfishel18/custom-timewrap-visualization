@@ -16,8 +16,8 @@ gulp.task('clean', () => {
     rimraf.sync(destName);
 });
 
-gulp.task('npm build', (cb) => {
-    exec('npm run build', cb);
+gulp.task('yarn build', (cb) => {
+    exec('yarn run build', cb);
 });
 
 const configSrc = [
@@ -47,7 +47,7 @@ const vizFiles = [
 const staticSrc = [
     `appserver/static/visualizations/timewrap/{${vizFiles.join(',')}}`,
 ];
-gulp.task('process static', ['clean', 'npm build'], () => {
+gulp.task('process static', ['clean', 'yarn build'], () => {
     gulp.src(staticSrc, { base: '.' })
         .pipe(gulp.dest(destName));
 });
