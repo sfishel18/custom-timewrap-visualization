@@ -16,7 +16,7 @@ before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -y -qq yarn
 install:
-    - npm install
+    - yarn install
 script:
-    - npm test
-    - npm run package
+    - yarn test
+    - yart run package
