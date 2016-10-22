@@ -52,10 +52,15 @@ gulp.task('process static', ['clean', 'yarn build'], () => {
         .pipe(gulp.dest(destName));
 });
 
-gulp.task('default', ['process config', 'process static'], () => {
-    gulp.src(`${destName}/**/*.*`, { base: '.' })
-        .pipe(tar(`${destName}.tar`))
-        .pipe(gzip())
-        .pipe(rename(`${destName}.spl`))
-        .pipe(gulp.dest('.'));
+gulp.task('default', ['process config', 'process static'], (cb) => {
+    // Work-around for a bug where the files from the `process static` task
+    // are not in place immediately.
+    setTimeout(() => {
+        gulp.src(`${destName}/**/*.*`, { base: '.' })
+            .pipe(tar(`${destName}.tar`))
+            .pipe(gzip())
+            .pipe(rename(`${destName}.spl`))
+            .pipe(gulp.dest('.'));
+        cb();
+    }, 100);
 });
