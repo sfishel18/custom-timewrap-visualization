@@ -1,4 +1,4 @@
-/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
+/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies, import/extensions */
 import SplunkVisualizationBase from 'api/SplunkVisualizationBase';
 import SplunkVisualizationUtils from 'api/SplunkVisualizationUtils';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
