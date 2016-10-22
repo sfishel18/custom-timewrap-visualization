@@ -1,6 +1,6 @@
 {
   "name": "viz_timewrap",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This app adds a custom time-wrap visualization to your Splunk instance. It can be used to compare a single metric over multiple time periods.",
   "scripts": {
     "package": "gulp",
@@ -67,8 +67,11 @@
     "webpack": "^1.13.2"
   },
   "dependencies": {
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^2.0.1",
     "lodash": "^4.16.1",
     "moment": "^2.15.1",
+    "postcss-loader": "^1.0.0",
     "react": "^15.3.2",
     "react-addons-shallow-compare": "^15.3.2",
     "react-addons-transition-group": "^15.3.2",
