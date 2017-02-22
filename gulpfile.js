@@ -26,6 +26,7 @@ const configSrc = [
     'README/**/*.*',
     'static/**/*.*',
     'lookups/**/*.*',
+    'README.md',
 ];
 gulp.task('process config', ['clean'], () => {
     gulp.src(configSrc, { base: '.' })
