@@ -69,10 +69,6 @@
   "dependencies": {
     "lodash": "^4.16.1",
     "moment": "^2.15.1",
-    "react": "^15.3.2",
-    "react-addons-shallow-compare": "^15.3.2",
-    "react-addons-transition-group": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-vis": "^0.6.3"
+    "plottable": "^3.0.0-beta.1"
   }
 }
