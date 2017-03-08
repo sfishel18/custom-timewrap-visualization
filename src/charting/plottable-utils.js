@@ -32,6 +32,7 @@ export const createColorScale = (seriesNames, colors) => {
 export const createXAxis = (scale, data) => {
     const axis = new Axes.Category(scale, 'bottom');
     axis.tickLabelPadding(5);
+    axis.margin(5);
     axis.formatter((str) => {
         const index = parseInt(str, 10);
         const series = find(data, s => s.length > index);
@@ -54,6 +55,7 @@ export const createYAxis = (scale) => {
     const axis = new YAxis(scale, 'left');
     axis.formatter(d => d.toLocaleString());
     axis.showEndTickLabels(true);
+    axis.margin(10);
     return axis;
 };
 
