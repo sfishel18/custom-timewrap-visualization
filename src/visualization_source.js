@@ -13,6 +13,7 @@ export default SplunkVisualizationBase.extend({
     initialize() {
         this.chart = new TimewrapChart(this.el, SplunkVisualizationUtils.getColorPalette('splunkCategorical'));
         this.onPointSelect = this.onPointSelect.bind(this);
+        this.chart.onClick(this.onPointSelect);
     },
 
     getInitialDataParams() {
@@ -46,6 +47,7 @@ export default SplunkVisualizationBase.extend({
 
         return {
             vizData: processData(timeSeries, dataSeries, dataField),
+            timeSeries,
             spanSeries,
         };
     },
@@ -63,7 +65,7 @@ export default SplunkVisualizationBase.extend({
         let { vizData } = data;
         vizData = decorateWithLabels(vizData, config.axisLabelFormat || null);
         const seriesNames = computeSeriesNames(vizData, config.legendFormat || null);
-        this.chart.update(vizData, seriesNames);
+        this.chart.update(vizData, config, seriesNames);
     },
 
     onPointSelect(pointInfo, event) {

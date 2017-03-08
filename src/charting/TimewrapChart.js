@@ -1,6 +1,9 @@
 import RealPlotabble from 'plottable';
 import debounce from 'lodash/debounce';
 import sortBy from 'lodash/sortBy';
+import find from 'lodash/find';
+import $ from 'jquery';
+import 'jquery-powertip';
 import './TimewrapChart.css';
 
 let Plottable = RealPlotabble;
@@ -12,6 +15,25 @@ export const lineSymbolFactory = (size) => {
     return `M ${-halfSize},1 L ${halfSize},1, ${halfSize},-1 ${-halfSize},-1 Z`;
 };
 
+const generateTooltipHtml = (point, seriesColor, timeFormat) =>
+    `<table>
+        <tr>
+            <th colspan="2" style="text-align: left; color: ${seriesColor};">
+                ${point.datum.date.format(timeFormat)}
+            </th>
+        </tr>
+        <tr>
+            <td style="text-align: left;">
+                ${point.datum.fieldName}:
+            </td>
+            <td style="text-align: right;">
+                ${parseFloat(point.datum.fieldValue).toLocaleString()}
+            </td>
+        </tr>
+    </table>`;
+
+$.fn.powerTip.smartPlacementLists.e = ['e', 'w'];
+
 export default class {
 
     constructor(el, colorPalette) {
@@ -21,10 +43,11 @@ export default class {
         this.colorPalette = colorPalette;
         this.tooltip = null;
         this.selectedPoint = null;
+        this.clickHandler = null;
         this.update = debounce(this.update, 10);
     }
 
-    update(data, seriesNames) {
+    update(data, config, seriesNames) {
         if (this.chart) {
             this.chart.destroy();
         }
@@ -41,6 +64,11 @@ export default class {
 
         const xAxis = new Axes.Category(xScale, 'bottom');
         xAxis.tickLabelPadding(5);
+        xAxis.formatter((str) => {
+            const index = parseInt(str, 10);
+            const series = find(data, s => s.length > index);
+            return series[index].label;
+        });
         const yAxis = new Axes.Numeric(yScale, 'left');
         yAxis.formatter(d => d.toLocaleString());
 
@@ -48,8 +76,8 @@ export default class {
 
         const plots = data.map((dataSeries, i) => {
             const plot = new Plots.Line();
-            plot.x(d => d.label, xScale);
-            plot.y(d => d.fieldValue, yScale);
+            plot.x((d, index) => String(index), xScale);
+            plot.y(d => parseFloat(d.fieldValue), yScale);
             plot.attr('stroke', seriesNames[i], colorScale);
             plot.attr('stroke-width', '1px');
 
@@ -71,9 +99,19 @@ export default class {
         ]);
         this.chart.renderTo(this.el.querySelector('svg'));
 
+        this.tooltipDateFormat = config.tooltipFormat || 'MMM Do, YYYY h:mm A';
         const tooltipAnchor = plotGroup.foreground().append('circle').attr({
             r: 5,
             opacity: 0,
+        });
+        $(tooltipAnchor.node()).powerTip({
+            placement: 'e',
+            smartPlacement: true,
+            fadeInTime: 0,
+            fadeOutTime: 0,
+            manual: true,
+            offset: 5,
+            popupId: 'custom-timewrap-visualization-tooltip',
         });
 
         const pointer = new Interactions.Pointer();
@@ -101,6 +139,24 @@ export default class {
             this.clearSelectedPoint(tooltipAnchor);
         });
         pointer.attachTo(plotGroup);
+
+        const clickHandler = new Interactions.Click();
+        clickHandler.onClick((point, e) => {
+            if (!this.selectedPoint || !this.clickHandler) {
+                return;
+            }
+            const { date, fieldName, fieldValue } = this.selectedPoint.datum;
+            const clickInfo = {
+                date: date.toDate(),
+                [fieldName]: fieldValue,
+            };
+            this.clickHandler(clickInfo, e);
+        });
+        clickHandler.attachTo(plotGroup);
+    }
+
+    onClick(handler) {
+        this.clickHandler = handler;
     }
 
     setSelectedPoint(point, seriesColor, anchor) {
@@ -111,12 +167,18 @@ export default class {
             cx: point.position.x,
             cy: point.position.y,
         });
+        const $anchor = $(anchor.node());
+        $.powerTip.hide($anchor, true);
+        $anchor.data('powertip', generateTooltipHtml(point, seriesColor, this.tooltipDateFormat));
+        $.powerTip.reposition($anchor);
+        $.powerTip.show($anchor);
         this.el.style.cursor = 'pointer';
     }
 
     clearSelectedPoint(anchor) {
         this.selectedPoint = null;
         anchor.attr({ opacity: 0 });
+        $.powerTip.hide(anchor.node(), true);
         this.el.style.cursor = '';
     }
 
