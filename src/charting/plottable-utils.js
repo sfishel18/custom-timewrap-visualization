@@ -9,6 +9,13 @@ export const createXScale = () => {
 
 export const createYScale = () => {
     const scale = new Scales.Linear();
+    scale.tickGenerator((scl) => {
+        let ticks = scl.defaultTicks();
+        if (ticks.length >= 6) {
+            ticks = ticks.filter((tick, i) => i % 2 === 0);
+        }
+        return ticks;
+    });
     scale.addIncludedValuesProvider(() => [0]);
     scale.addPaddingExceptionsProvider(() => [0]);
     scale.snappingDomainEnabled(true);
@@ -33,9 +40,20 @@ export const createXAxis = (scale, data) => {
     return axis;
 };
 
+class YAxis extends Axes.Numeric {
+    _hideOverflowingTickLabels() {
+        // eslint-disable-next-line no-underscore-dangle
+        super._hideOverflowingTickLabels();
+        // eslint-disable-next-line no-underscore-dangle
+        const tickLabels = this._tickLabelContainer.selectAll(`.${Axes.Numeric.TICK_LABEL_CLASS}`);
+        tickLabels[0][0].style.visibility = 'visible';
+    }
+}
+
 export const createYAxis = (scale) => {
-    const axis = new Axes.Numeric(scale, 'left');
+    const axis = new YAxis(scale, 'left');
     axis.formatter(d => d.toLocaleString());
+    axis.showEndTickLabels(true);
     return axis;
 };
 
