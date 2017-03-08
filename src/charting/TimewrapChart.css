@@ -23,14 +23,3 @@
 .legend text {
     font-weight: normal !important;
 }
-
-:root #custom-timewrap-visualization-tooltip {
-    pointer-events: none;
-    position: absolute;
-    display: none;
-    border-radius: 3px;
-    background-color: #000;
-    color: #fff;
-    padding: 5px 10px;
-    white-space: nowrap;
-}

@@ -1,38 +1,17 @@
-import RealPlotabble from 'plottable';
+import { Components, Interactions } from 'plottable';
 import debounce from 'lodash/debounce';
-import sortBy from 'lodash/sortBy';
-import find from 'lodash/find';
-import $ from 'jquery';
-import 'jquery-powertip';
+import flatten from 'lodash/flatten';
+import {
+    createXScale,
+    createYScale,
+    createColorScale,
+    createXAxis,
+    createYAxis,
+    createLegend,
+    createSeriesPlot,
+} from './plottable-utils';
+import Tooltip from './Tooltip';
 import './TimewrapChart.css';
-
-let Plottable = RealPlotabble;
-
-export const setPlottable = (p) => { Plottable = p; };
-
-export const lineSymbolFactory = (size) => {
-    const halfSize = size / 2;
-    return `M ${-halfSize},1 L ${halfSize},1, ${halfSize},-1 ${-halfSize},-1 Z`;
-};
-
-const generateTooltipHtml = (point, seriesColor, timeFormat) =>
-    `<table>
-        <tr>
-            <th colspan="2" style="text-align: left; color: ${seriesColor};">
-                ${point.datum.date.format(timeFormat)}
-            </th>
-        </tr>
-        <tr>
-            <td style="text-align: left;">
-                ${point.datum.fieldName}:
-            </td>
-            <td style="text-align: right;">
-                ${parseFloat(point.datum.fieldValue).toLocaleString()}
-            </td>
-        </tr>
-    </table>`;
-
-$.fn.powerTip.smartPlacementLists.e = ['e', 'w'];
 
 export default class {
 
@@ -51,46 +30,19 @@ export default class {
         if (this.chart) {
             this.chart.destroy();
         }
-        const { Scales, Axes, Plots, Dataset, Components, Interactions, Utils } = Plottable;
-        const xScale = new Scales.Category();
-        xScale.outerPadding(0);
-        const yScale = new Scales.Linear();
-        yScale.addIncludedValuesProvider(() => [0]);
-        yScale.addPaddingExceptionsProvider(() => [0]);
-        yScale.snappingDomainEnabled(true);
-        const colorScale = new Scales.Color();
-        colorScale.range(this.colorPalette);
-        colorScale.domain(seriesNames);
-
-        const xAxis = new Axes.Category(xScale, 'bottom');
-        xAxis.tickLabelPadding(5);
-        xAxis.formatter((str) => {
-            const index = parseInt(str, 10);
-            const series = find(data, s => s.length > index);
-            return series[index].label;
-        });
-        const yAxis = new Axes.Numeric(yScale, 'left');
-        yAxis.formatter(d => d.toLocaleString());
-
-        const gridlines = new Components.Gridlines(null, yScale);
-
-        const plots = data.map((dataSeries, i) => {
-            const plot = new Plots.Line();
-            plot.x((d, index) => String(index), xScale);
-            plot.y(d => parseFloat(d.fieldValue), yScale);
-            plot.attr('stroke', seriesNames[i], colorScale);
-            plot.attr('stroke-width', '1px');
-
-            const dataset = new Dataset(dataSeries);
-            plot.addDataset(dataset);
-            return plot;
-        });
-
-        const legend = new Components.Legend(colorScale);
-        legend.yAlignment('center');
-        legend.maxEntriesPerRow(1);
-        legend.symbol(() => lineSymbolFactory);
-
+        const scales = {
+            x: createXScale(),
+            y: createYScale(),
+            color: createColorScale(seriesNames, this.colorPalette),
+        };
+        const xAxis = createXAxis(scales.x, data);
+        const yAxis = createYAxis(scales.y);
+        const gridlines = new Components.Gridlines(null, scales.y);
+        const legend = createLegend(scales.color);
+        const plots = flatten(data.map((dataSeries, i) => {
+            const seriesName = seriesNames[i];
+            return createSeriesPlot(dataSeries, seriesName, scales);
+        }));
         const plotGroup = new Components.Group([gridlines, ...plots]);
 
         this.chart = new Components.Table([
@@ -99,49 +51,29 @@ export default class {
         ]);
         this.chart.renderTo(this.el.querySelector('svg'));
 
-        this.tooltipDateFormat = config.tooltipFormat || 'MMM Do, YYYY h:mm A';
-        const tooltipAnchor = plotGroup.foreground().append('circle').attr({
-            r: 5,
-            opacity: 0,
-        });
-        $(tooltipAnchor.node()).powerTip({
-            placement: 'e',
-            smartPlacement: true,
-            fadeInTime: 0,
-            fadeOutTime: 0,
-            manual: true,
-            offset: 5,
-            popupId: 'custom-timewrap-visualization-tooltip',
-        });
+        const tooltipDateFormat = config.tooltipFormat || 'MMM Do, YYYY h:mm A';
+        this.tooltip = new Tooltip(scales.color, tooltipDateFormat);
+        this.tooltip.onShow(this.onTooltipShow.bind(this));
+        this.tooltip.onHide(this.onTooltipHide.bind(this));
+        this.tooltip.attachTo(plotGroup);
 
-        const pointer = new Interactions.Pointer();
-        pointer.onPointerMove((queryPoint) => {
-            const candidates = plotGroup.components()
-                .filter(component => component instanceof Plots.Line)
-                .map(component => component.entityNearestByXThenY(queryPoint))
-                .filter(point => !!point)
-                .map(point => ({
-                    point,
-                    distance: Utils.Math.distanceSquared(point.position, queryPoint),
-                }));
+        const clickInteraction = this.createClickInteraction();
+        clickInteraction.attachTo(plotGroup);
+    }
 
-            const sortedCandidates = sortBy(candidates, candidate => candidate.distance);
-            if (sortedCandidates.length > 0 && sortedCandidates[0].distance <= 900) {
-                const point = sortedCandidates[0].point;
-                const colorName = point.component.attr('stroke').accessor();
-                this.setSelectedPoint(point, colorScale.scale(colorName), tooltipAnchor);
-            } else {
-                this.clearSelectedPoint(tooltipAnchor);
-            }
-        });
+    onTooltipShow(point) {
+        this.selectedPoint = point;
+        this.el.style.cursor = 'pointer';
+    }
 
-        pointer.onPointerExit(() => {
-            this.clearSelectedPoint(tooltipAnchor);
-        });
-        pointer.attachTo(plotGroup);
+    onTooltipHide() {
+        this.selectedPoint = null;
+        this.el.style.cursor = '';
+    }
 
-        const clickHandler = new Interactions.Click();
-        clickHandler.onClick((point, e) => {
+    createClickInteraction() {
+        const clickInteraction = new Interactions.Click();
+        clickInteraction.onClick((point, e) => {
             if (!this.selectedPoint || !this.clickHandler) {
                 return;
             }
@@ -152,34 +84,11 @@ export default class {
             };
             this.clickHandler(clickInfo, e);
         });
-        clickHandler.attachTo(plotGroup);
+        return clickInteraction;
     }
 
     onClick(handler) {
         this.clickHandler = handler;
-    }
-
-    setSelectedPoint(point, seriesColor, anchor) {
-        this.selectedPoint = point;
-        anchor.attr({
-            fill: seriesColor,
-            opacity: 1,
-            cx: point.position.x,
-            cy: point.position.y,
-        });
-        const $anchor = $(anchor.node());
-        $.powerTip.hide($anchor, true);
-        $anchor.data('powertip', generateTooltipHtml(point, seriesColor, this.tooltipDateFormat));
-        $.powerTip.reposition($anchor);
-        $.powerTip.show($anchor);
-        this.el.style.cursor = 'pointer';
-    }
-
-    clearSelectedPoint(anchor) {
-        this.selectedPoint = null;
-        anchor.attr({ opacity: 0 });
-        $.powerTip.hide(anchor.node(), true);
-        this.el.style.cursor = '';
     }
 
 }
