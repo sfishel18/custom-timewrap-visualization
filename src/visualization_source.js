@@ -3,11 +3,10 @@ import SplunkVisualizationBase from 'api/SplunkVisualizationBase';
 import SplunkVisualizationUtils from 'api/SplunkVisualizationUtils';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
-import moment from 'moment';
 import some from 'lodash/some';
-import findIndex from 'lodash/findIndex';
 import TimewrapChart from './charting/TimewrapChart';
 import { processData, decorateWithLabels, computeSeriesNames } from './format-data';
+import findSpanForDate from './find-span-for-date';
 
 export default SplunkVisualizationBase.extend({
 
@@ -74,11 +73,8 @@ export default SplunkVisualizationBase.extend({
 
     onPointSelect(pointInfo, event) {
         const data = this.getCurrentData();
-        const matchingIndex = findIndex(data.timeSeries, date =>
-            moment(date).isSame(pointInfo.date)
-        );
         const epochDateSeconds = pointInfo.date.getTime() / 1000;
-        const span = data.spanSeries[matchingIndex];
+        const span = findSpanForDate(pointInfo.date, data.timeSeries, data.spanSeries);
         this.drilldown({
             earliest: epochDateSeconds,
             latest: epochDateSeconds + span,
