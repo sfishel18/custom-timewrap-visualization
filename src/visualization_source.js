@@ -4,6 +4,7 @@ import SplunkVisualizationUtils from 'api/SplunkVisualizationUtils';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
 import moment from 'moment';
+import some from 'lodash/some';
 import findIndex from 'lodash/findIndex';
 import TimewrapChart from './charting/TimewrapChart';
 import { processData, decorateWithLabels, computeSeriesNames } from './format-data';
@@ -28,6 +29,9 @@ export default SplunkVisualizationBase.extend({
             return null;
         }
         const timeSeries = (rawData.columns[0] || []).map(SplunkVisualizationUtils.parseTimestamp);
+        if (some(timeSeries, date => !isFinite(date))) {
+            throw new SplunkVisualizationBase.VisualizationError('First column of results must contain timestamps');
+        }
         let dataField = null;
         let dataSeries = null;
         for (let i = 1; i < rawData.fields.length; i += 1) {

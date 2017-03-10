@@ -75,6 +75,9 @@ export default class Tooltip {
             this.pointer.offPointerMove(this.pointerMoveCallback);
             this.pointer.offPointerExit(this.pointerExitCallback);
         }
+        if (this.tooltipAnchor) {
+            $.powerTip.hide(this.tooltipAnchor.node(), true);
+        }
         this.showHandler = null;
         this.hideHandler = null;
     }
