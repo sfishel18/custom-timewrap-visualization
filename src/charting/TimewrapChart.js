@@ -52,16 +52,16 @@ export default class {
                 [yAxis, plotGroup],
                 [null, xAxis],
             ]);
-        } else if (config.legendPlacement === 'right') {
-            this.chart = new Components.Table([
-                [yAxis, plotGroup, legend],
-                [null, xAxis, null],
-            ]);
-        } else {
+        } else if (config.legendPlacement === 'bottom') {
             this.chart = new Components.Table([
                 [yAxis, plotGroup],
                 [null, xAxis],
                 [null, legend],
+            ]);
+        } else {
+            this.chart = new Components.Table([
+                [yAxis, plotGroup, legend],
+                [null, xAxis, null],
             ]);
         }
         this.chart.renderTo(this.el.querySelector('svg'));

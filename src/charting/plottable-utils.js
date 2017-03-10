@@ -79,13 +79,13 @@ export const createLegend = (scale, placement = 'right') => {
     }
     const legend = new Components.Legend(scale);
     legend.symbol(() => lineSymbolFactory);
-    if (placement === 'right') {
-        legend.yAlignment('center');
-        legend.maxEntriesPerRow(1);
-    } else {
+    if (placement === 'bottom') {
         legend.xAlignment('center');
         legend.yAlignment('bottom');
         legend.maxEntriesPerRow(Infinity);
+    } else {
+        legend.yAlignment('center');
+        legend.maxEntriesPerRow(1);
     }
     return legend;
 };
