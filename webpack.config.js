@@ -26,6 +26,9 @@ module.exports = {
             path.join(__dirname, 'src'),
         ],
     },
+    resolveLoader: {
+        modulesDirectories: [path.join(__dirname, 'webpack'), 'node_modules'],
+    },
     output: {
         filename: 'visualization.js',
         path: path.join(__dirname, 'appserver', 'static', 'visualizations', 'timewrap'),
@@ -41,6 +44,10 @@ module.exports = {
             {
                 test: /\.css$/,
                 loader: extractCss.extract(['css', 'postcss']),
+            },
+            {
+                test: /d3/,
+                loader: 'd3-no-global-loader',
             },
         ],
     },
