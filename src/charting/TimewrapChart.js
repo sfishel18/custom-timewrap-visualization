@@ -24,6 +24,7 @@ export default class {
         this.selectedPoint = null;
         this.clickHandler = null;
         this.update = debounce(this.update, 10);
+        this.clickInteractionCallback = this.clickInteractionCallback.bind(this);
     }
 
     update(data, config, seriesNames) {
@@ -38,17 +39,31 @@ export default class {
         const xAxis = createXAxis(scales.x, data);
         const yAxis = createYAxis(scales.y);
         const gridlines = new Components.Gridlines(null, scales.y);
-        const legend = createLegend(scales.color);
+        const legend = createLegend(scales.color, config.legendPlacement);
+        const showMarkers = config.pointMarkers === 'on';
         const plots = flatten(data.map((dataSeries, i) => {
             const seriesName = seriesNames[i];
-            return createSeriesPlot(dataSeries, seriesName, scales);
+            return createSeriesPlot(dataSeries, seriesName, scales, showMarkers);
         }));
         const plotGroup = new Components.Group([gridlines, ...plots]);
 
-        this.chart = new Components.Table([
-            [yAxis, plotGroup, legend],
-            [null, xAxis, null],
-        ]);
+        if (!legend) {
+            this.chart = new Components.Table([
+                [yAxis, plotGroup],
+                [null, xAxis],
+            ]);
+        } else if (config.legendPlacement === 'right') {
+            this.chart = new Components.Table([
+                [yAxis, plotGroup, legend],
+                [null, xAxis, null],
+            ]);
+        } else {
+            this.chart = new Components.Table([
+                [yAxis, plotGroup],
+                [null, xAxis],
+                [null, legend],
+            ]);
+        }
         this.chart.renderTo(this.el.querySelector('svg'));
 
         const tooltipDateFormat = config.tooltipFormat || 'MMM Do, YYYY h:mm A';
@@ -57,8 +72,9 @@ export default class {
         this.tooltip.onHide(this.onTooltipHide.bind(this));
         this.tooltip.attachTo(plotGroup);
 
-        const clickInteraction = this.createClickInteraction();
-        clickInteraction.attachTo(plotGroup);
+        this.clickInteraction = new Interactions.Click();
+        this.clickInteraction.onClick(this.clickInteractionCallback);
+        this.clickInteraction.attachTo(plotGroup);
     }
 
     onTooltipShow(point) {
@@ -71,20 +87,29 @@ export default class {
         this.el.style.cursor = '';
     }
 
-    createClickInteraction() {
-        const clickInteraction = new Interactions.Click();
-        clickInteraction.onClick((point, e) => {
-            if (!this.selectedPoint || !this.clickHandler) {
-                return;
-            }
-            const { date, fieldName, fieldValue } = this.selectedPoint.datum;
-            const clickInfo = {
-                date: date.toDate(),
-                [fieldName]: fieldValue,
-            };
-            this.clickHandler(clickInfo, e);
-        });
-        return clickInteraction;
+    remove() {
+        if (this.chart) {
+            this.chart.destroy();
+        }
+        if (this.tooltip) {
+            this.tooltip.destroy();
+        }
+        if (this.clickInteraction) {
+            this.clickInteraction.offClick(this.clickInteractionCallback);
+        }
+        this.clickHandler = null;
+    }
+
+    clickInteractionCallback(point, e) {
+        if (!this.selectedPoint || !this.clickHandler) {
+            return;
+        }
+        const { date, fieldName, fieldValue } = this.selectedPoint.datum;
+        const clickInfo = {
+            date: date.toDate(),
+            [fieldName]: fieldValue,
+        };
+        this.clickHandler(clickInfo, e);
     }
 
     onClick(handler) {

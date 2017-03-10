@@ -86,6 +86,6 @@ export default SplunkVisualizationBase.extend({
     },
 
     remove() {
-
+        this.chart.remove();
     },
 });

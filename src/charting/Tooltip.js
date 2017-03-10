@@ -47,34 +47,18 @@ export default class Tooltip {
         this.showHandler = null;
         this.hideHandler = null;
         this.pointer = null;
+        this.group = null;
+        this.tooltipAnchor = null;
+        this.pointerMoveCallback = this.pointerMoveCallback.bind(this);
+        this.pointerExitCallback = this.pointerExitCallback.bind(this);
     }
 
     attachTo(group) {
-        const tooltipAnchor = createTooltipAnchor(group);
+        this.group = group;
+        this.tooltipAnchor = createTooltipAnchor(group);
         this.pointer = new Interactions.Pointer();
-        this.pointer.onPointerMove((queryPoint) => {
-            const candidates = group.components()
-                .filter(component => component instanceof Plots.Line)
-                .map(component => component.entityNearestByXThenY(queryPoint))
-                .filter(point => !!point)
-                .map(point => ({
-                    point,
-                    distance: Utils.Math.distanceSquared(point.position, queryPoint),
-                }));
-
-            const sortedCandidates = sortBy(candidates, candidate => candidate.distance);
-            if (sortedCandidates.length > 0 && sortedCandidates[0].distance <= 900) {
-                const point = sortedCandidates[0].point;
-                const colorName = point.component.attr('stroke').accessor();
-                this.setSelectedPoint(point, this.colorScale.scale(colorName), tooltipAnchor);
-            } else {
-                this.clearSelectedPoint(tooltipAnchor);
-            }
-        });
-
-        this.pointer.onPointerExit(() => {
-            this.clearSelectedPoint(tooltipAnchor);
-        });
+        this.pointer.onPointerMove(this.pointerMoveCallback);
+        this.pointer.onPointerExit(this.pointerExitCallback);
         this.pointer.attachTo(group);
     }
 
@@ -84,6 +68,42 @@ export default class Tooltip {
 
     onHide(handler) {
         this.hideHandler = handler;
+    }
+
+    destroy() {
+        if (this.pointer) {
+            this.pointer.offPointerMove(this.pointerMoveCallback);
+            this.pointer.offPointerExit(this.pointerExitCallback);
+        }
+        this.showHandler = null;
+        this.hideHandler = null;
+    }
+
+    pointerMoveCallback(queryPoint) {
+        if (!this.group || !this.tooltipAnchor) {
+            return;
+        }
+        const candidates = this.group.components()
+            .filter(component => component instanceof Plots.Line)
+            .map(component => component.entityNearestByXThenY(queryPoint))
+            .filter(point => !!point)
+            .map(point => ({
+                point,
+                distance: Utils.Math.distanceSquared(point.position, queryPoint),
+            }));
+
+        const sortedCandidates = sortBy(candidates, candidate => candidate.distance);
+        if (sortedCandidates.length > 0 && sortedCandidates[0].distance <= 900) {
+            const point = sortedCandidates[0].point;
+            const colorName = point.component.attr('stroke').accessor();
+            this.setSelectedPoint(point, this.colorScale.scale(colorName), this.tooltipAnchor);
+        } else {
+            this.clearSelectedPoint(this.tooltipAnchor);
+        }
+    }
+
+    pointerExitCallback() {
+        this.clearSelectedPoint(this.tooltipAnchor);
     }
 
     setSelectedPoint(point, seriesColor, anchor) {

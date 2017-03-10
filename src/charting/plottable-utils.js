@@ -31,7 +31,7 @@ export const createColorScale = (seriesNames, colors) => {
 
 export const createXAxis = (scale, data) => {
     const axis = new Axes.Category(scale, 'bottom');
-    axis.tickLabelPadding(5);
+    axis.tickLabelPadding(3);
     axis.margin(5);
     axis.formatter((str) => {
         const index = parseInt(str, 10);
@@ -47,7 +47,15 @@ class YAxis extends Axes.Numeric {
         super._hideOverflowingTickLabels();
         // eslint-disable-next-line no-underscore-dangle
         const tickLabels = this._tickLabelContainer.selectAll(`.${Axes.Numeric.TICK_LABEL_CLASS}`);
-        tickLabels[0][0].style.visibility = 'visible';
+        tickLabels[0][tickLabels[0].length - 1].style.visibility = 'visible';
+    }
+
+    renderImmediately(...args) {
+        super.renderImmediately(...args);
+        // eslint-disable-next-line no-underscore-dangle
+        const tickLabels = this._tickLabelContainer.selectAll(`.${Axes.Numeric.TICK_LABEL_CLASS}`);
+        tickLabels[0].forEach(label => label.setAttribute('y', parseFloat(label.getAttribute('y')) + 6));
+        window.label = tickLabels[0][1];
     }
 }
 
@@ -55,6 +63,7 @@ export const createYAxis = (scale) => {
     const axis = new YAxis(scale, 'left');
     axis.formatter(d => d.toLocaleString());
     axis.showEndTickLabels(true);
+    axis.tickLabelPadding(5);
     axis.margin(10);
     return axis;
 };
@@ -64,22 +73,40 @@ const lineSymbolFactory = (size) => {
     return `M ${-halfSize},1 L ${halfSize},1, ${halfSize},-1 ${-halfSize},-1 Z`;
 };
 
-export const createLegend = (scale) => {
+export const createLegend = (scale, placement = 'right') => {
+    if (placement === 'none') {
+        return null;
+    }
     const legend = new Components.Legend(scale);
-    legend.yAlignment('center');
-    legend.maxEntriesPerRow(1);
     legend.symbol(() => lineSymbolFactory);
+    if (placement === 'right') {
+        legend.yAlignment('center');
+        legend.maxEntriesPerRow(1);
+    } else {
+        legend.xAlignment('center');
+        legend.yAlignment('bottom');
+        legend.maxEntriesPerRow(Infinity);
+    }
     return legend;
 };
 
-export const createSeriesPlot = (series, name, scales) => {
-    const plot = new Plots.Line();
-    plot.x((d, index) => String(index), scales.x);
-    plot.y(d => parseFloat(d.fieldValue), scales.y);
-    plot.attr('stroke', name, scales.color);
-    plot.attr('stroke-width', '1px');
-
+export const createSeriesPlot = (series, name, scales, showMarkers = false) => {
     const dataset = new Dataset(series);
-    plot.addDataset(dataset);
-    return plot;
+    const linePlot = new Plots.Line();
+    linePlot.x((d, index) => String(index), scales.x);
+    linePlot.y(d => parseFloat(d.fieldValue), scales.y);
+    linePlot.attr('stroke', name, scales.color);
+    linePlot.attr('stroke-width', '1px');
+    linePlot.addDataset(dataset);
+    if (!showMarkers) {
+        return linePlot;
+    }
+    const markerPlot = new Plots.Scatter();
+    markerPlot.x((d, index) => String(index), scales.x);
+    markerPlot.y(d => parseFloat(d.fieldValue), scales.y);
+    markerPlot.attr('fill', name, scales.color);
+    markerPlot.size(7);
+    markerPlot.attr('opacity', 1);
+    markerPlot.addDataset(dataset);
+    return [linePlot, markerPlot];
 };
