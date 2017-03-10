@@ -29,10 +29,13 @@ export const createColorScale = (seriesNames, colors) => {
     return scale;
 };
 
-export const createXAxis = (scale, data) => {
+export const createXAxis = (scale, data, rotateLabels) => {
     const axis = new Axes.Category(scale, 'bottom');
     axis.tickLabelPadding(3);
     axis.margin(5);
+    if (rotateLabels) {
+        axis.tickLabelAngle(90);
+    }
     axis.formatter((str) => {
         const index = parseInt(str, 10);
         const series = find(data, s => s.length > index);
@@ -55,7 +58,6 @@ class YAxis extends Axes.Numeric {
         // eslint-disable-next-line no-underscore-dangle
         const tickLabels = this._tickLabelContainer.selectAll(`.${Axes.Numeric.TICK_LABEL_CLASS}`);
         tickLabels[0].forEach(label => label.setAttribute('y', parseFloat(label.getAttribute('y')) + 6));
-        window.label = tickLabels[0][1];
     }
 }
 

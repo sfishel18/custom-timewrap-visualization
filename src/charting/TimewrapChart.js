@@ -36,7 +36,8 @@ export default class {
             y: createYScale(),
             color: createColorScale(seriesNames, this.colorPalette),
         };
-        const xAxis = createXAxis(scales.x, data);
+        const rotateXLabels = config.xLabelRotation === 'on';
+        const xAxis = createXAxis(scales.x, data, rotateXLabels);
         const yAxis = createYAxis(scales.y);
         const gridlines = new Components.Gridlines(null, scales.y);
         const legend = createLegend(scales.color, config.legendPlacement);
