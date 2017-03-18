@@ -3,6 +3,9 @@ import findIndex from 'lodash/findIndex';
 
 export default (date, dateSeries, spanSeries) => {
     const matchingIndex = findIndex(dateSeries, d => moment(d).isSame(date));
+    if (matchingIndex === -1) {
+        return 1;
+    }
     if (spanSeries && spanSeries[matchingIndex]) {
         return spanSeries[matchingIndex];
     }

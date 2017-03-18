@@ -1,12 +1,12 @@
 /* eslint "import/no-extraneous-dependencies": ["error", {"devDependencies": true}] */
-import React from 'react';
-import ReactDom from 'react-dom';
+import { Plots } from 'plottable';
 import TimewrapChart from '../../src/charting/TimewrapChart';
+import { processData, decorateWithLabels, computeSeriesNames } from '../../src/format-data';
 import generateTimeSeries from '../../test/generate-time-series';
 
 const DEFAULT_COLORS = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
-const DEFAULT_WIDTH = 1000;
-const DEFAULT_HEIGHT = 500;
+
+TimewrapChart.useSynchronousUpdates();
 
 export default class TimewrapChartHarness {
 
@@ -16,41 +16,37 @@ export default class TimewrapChartHarness {
 
     constructor(el) {
         this.el = el;
+        this.chart = new TimewrapChart(this.el, DEFAULT_COLORS);
     }
 
     setProperties({
         timeSeries,
         dataSeries,
-        dataFields,
-        colors = DEFAULT_COLORS,
-        width = DEFAULT_WIDTH,
-        height = DEFAULT_HEIGHT,
+        dataField,
         axisLabelFormat = null,
         legendFormat = null,
         tooltipFormat = null,
     }) {
-        this.reactTree = ReactDom.render(
-            <TimewrapChart
-                timeSeries={timeSeries}
-                dataSeries={dataSeries}
-                dataFields={dataFields}
-                colors={colors}
-                width={width}
-                height={height}
-                axisLabelFormat={axisLabelFormat}
-                legendFormat={legendFormat}
-                tooltipFormat={tooltipFormat}
-            />,
-            this.el
-        );
+        let vizData = processData(timeSeries, dataSeries, dataField);
+        vizData = decorateWithLabels(vizData, axisLabelFormat);
+        const seriesNames = computeSeriesNames(vizData, legendFormat);
+        this.chart.update(vizData, { tooltipFormat }, seriesNames);
+    }
+
+    reset() {
+        this.chart.remove();
+        this.chart = new TimewrapChart(this.el, DEFAULT_COLORS);
     }
 
     simulateHover(seriesIndex, pointIndex) {
-        this.reactTree.onValueMouseOver({ seriesIndex, pointIndex });
+        const group = this.chart.chart.componentAt(0, 1);
+        const lines = group.components().filter(c => c instanceof Plots.Line);
+        const point = lines[seriesIndex].entities()[pointIndex];
+        this.chart.tooltip.pointerMoveCallback(point.position);
     }
 
     simulateHoverEnd() {
-        this.reactTree.onValueMouseOut();
+        this.chart.tooltip.pointerExitCallback();
     }
 
 }

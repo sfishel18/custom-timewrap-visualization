@@ -41,6 +41,9 @@ export default SplunkVisualizationBase.extend({
                 break;
             }
         }
+        if (!dataSeries) {
+            throw new SplunkVisualizationBase.VisualizationError('The results must contain two columns');
+        }
 
         let spanSeries = null;
         const spanFieldIndex = rawData.fields.findIndex(field => field.name === '_span');

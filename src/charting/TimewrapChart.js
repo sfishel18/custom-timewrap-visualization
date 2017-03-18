@@ -13,7 +13,14 @@ import {
 import Tooltip from './Tooltip';
 import './TimewrapChart.css';
 
+let synchronousUpdates = false;
+
 export default class {
+
+    // For testing only
+    static useSynchronousUpdates() {
+        synchronousUpdates = true;
+    }
 
     constructor(el, colorPalette) {
         this.el = el;
@@ -23,7 +30,9 @@ export default class {
         this.tooltip = null;
         this.selectedPoint = null;
         this.clickHandler = null;
-        this.update = debounce(this.update, 10);
+        if (!synchronousUpdates) {
+            this.update = debounce(this.update, 10);
+        }
         this.clickInteractionCallback = this.clickInteractionCallback.bind(this);
     }
 
@@ -32,7 +41,7 @@ export default class {
             this.chart.destroy();
         }
         const scales = {
-            x: createXScale(),
+            x: createXScale(data),
             y: createYScale(),
             color: createColorScale(seriesNames, this.colorPalette),
         };

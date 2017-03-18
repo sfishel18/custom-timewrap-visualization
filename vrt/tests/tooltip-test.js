@@ -13,12 +13,16 @@ suite('Visual Regression Tests - Tooltips', () => {
         return this.browser.quit();
     });
 
+    teardown(function () {
+        return this.browser.executeScript('window.harness.reset()');
+    });
+
     test('Showing the tooltip', function () {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify([_.range(16)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(16))},
+                dataField: 'count'
             })
         `);
         this.browser.executeScript(`
@@ -33,8 +37,8 @@ suite('Visual Regression Tests - Tooltips', () => {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify([_.range(16)])},
-                dataFields: ['count'],
+                dataSeries: ${JSON.stringify(_.range(16))},
+                dataField: 'count',
                 tooltipFormat: 'MM/DD/YY h:mm:ss'
             })
         `);
@@ -50,8 +54,8 @@ suite('Visual Regression Tests - Tooltips', () => {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify([_.range(16)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(16))},
+                dataField: 'count'
             })
         `);
         this.browser.executeScript(`
@@ -69,8 +73,8 @@ suite('Visual Regression Tests - Tooltips', () => {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify([_.range(16)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(16))},
+                dataField: 'count'
             })
         `);
         this.browser.executeScript(`

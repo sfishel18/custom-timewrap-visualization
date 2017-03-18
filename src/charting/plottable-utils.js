@@ -1,8 +1,12 @@
 import { Scales, Axes, Components, Plots, Dataset } from 'plottable';
 import find from 'lodash/find';
+import has from 'lodash/has';
+import every from 'lodash/every';
 
-export const createXScale = () => {
+export const createXScale = (data) => {
     const scale = new Scales.Category();
+    const longestSeries = find(data, test => every(data, s => s.length <= test.length));
+    scale.domain(longestSeries.map((d, i) => String(i)));
     scale.outerPadding(0);
     return scale;
 };
@@ -93,9 +97,11 @@ export const createLegend = (scale, placement = 'right') => {
 };
 
 export const createSeriesPlot = (series, name, scales, showMarkers = false) => {
-    const dataset = new Dataset(series);
+    const seriesWithIndices = series.map((s, i) => Object.assign({ index: i }, s));
+    const seriesWithoutNulls = seriesWithIndices.filter(s => has(s, 'fieldValue'));
+    const dataset = new Dataset(seriesWithoutNulls);
     const linePlot = new Plots.Line();
-    linePlot.x((d, index) => String(index), scales.x);
+    linePlot.x(d => String(d.index), scales.x);
     linePlot.y(d => parseFloat(d.fieldValue), scales.y);
     linePlot.attr('stroke', name, scales.color);
     linePlot.attr('stroke-width', '1px');
