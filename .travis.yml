@@ -6,6 +6,9 @@ notifications:
 sudo: required
 services:
     - docker
+addons:
+    artifacts:
+        paths: ./vrt/failures
 cache:
     directories:
         - $HOME/.yarn-cache

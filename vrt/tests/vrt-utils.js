@@ -11,7 +11,7 @@ const FAILURES_DIR = path.resolve(__dirname, '..', 'failures');
 
 const INDEX_PAGE_URL = 'file:///vrt/index.html';
 
-const DIFF_THRESHOLD = 0;
+const DIFF_THRESHOLD = 0.05;
 
 const cleanFailuresDirectory = _.once(() => {
     if (fs.existsSync(FAILURES_DIR)) {
