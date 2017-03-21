@@ -110,7 +110,7 @@ export const createSeriesPlot = (series, name, scales, showMarkers = false) => {
         return linePlot;
     }
     const markerPlot = new Plots.Scatter();
-    markerPlot.x((d, index) => String(index), scales.x);
+    markerPlot.x(d => String(d.index), scales.x);
     markerPlot.y(d => parseFloat(d.fieldValue), scales.y);
     markerPlot.attr('fill', name, scales.color);
     markerPlot.size(7);

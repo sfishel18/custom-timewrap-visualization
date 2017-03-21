@@ -33,23 +33,6 @@ suite('Visual Regression Tests - Tooltips', () => {
         );
     });
 
-    test('Showing the tooltip, custom label format', function () {
-        this.browser.executeScript(`
-            window.harness.setProperties({
-                timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify(_.range(16))},
-                dataField: 'count',
-                tooltipFormat: 'MM/DD/YY h:mm:ss'
-            })
-        `);
-        this.browser.executeScript(`
-            window.harness.simulateHover(1, 3)
-        `);
-        return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('tooltip-showing-custom-format')
-        );
-    });
-
     test('Showing the tooltip, then hiding it', function () {
         this.browser.executeScript(`
             window.harness.setProperties({
@@ -88,6 +71,23 @@ suite('Visual Regression Tests - Tooltips', () => {
         `);
         return this.browser.takeScreenshot().then(
             vrtUtils.assertScreenshotMatch('tooltip-shown-hidden-showing')
+        );
+    });
+
+    test('Tooltip pops left when there\'s no room to the right', function () {
+        this.browser.executeScript(`
+            window.harness.setProperties({
+                timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
+                dataSeries: ${JSON.stringify(_.range(16))},
+                dataField: 'count',
+                legendPlacement: 'none'
+            })
+        `);
+        this.browser.executeScript(`
+            window.harness.simulateHover(1, 3)
+        `);
+        return this.browser.takeScreenshot().then(
+            vrtUtils.assertScreenshotMatch('tooltip-popping-left')
         );
     });
 });

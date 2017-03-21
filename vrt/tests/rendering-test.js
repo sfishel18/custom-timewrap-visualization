@@ -73,21 +73,6 @@ suite('Visual Regression Tests - Basic Rendering', () => {
         );
     });
 
-    test('Rendering six series, 7 days between points, custom label formats', function () {
-        this.browser.executeScript(`
-            window.harness.setProperties({
-                timeSeries: window.Harness.generateTimeSeries('1981-08-18 00:00:00', 24, 7, 'day'),
-                dataSeries: ${JSON.stringify(_.range(24))},
-                dataField: 'count',
-                axisLabelFormat: 'dd',
-                legendFormat: 'MMMM'
-            })
-        `);
-        return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-7-day-custom-label')
-        );
-    });
-
     test('Rendering six series, 4 months between points', function () {
         this.browser.executeScript(`
             window.harness.setProperties({
