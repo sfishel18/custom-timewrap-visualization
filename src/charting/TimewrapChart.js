@@ -1,163 +1,129 @@
-import React, { Component, PropTypes } from 'react';
-import {
-    XYPlot,
-    HorizontalGridLines,
-    LineMarkSeries,
-    XAxis,
-    YAxis,
-    DiscreteColorLegend,
-    Hint,
-} from 'react-vis';
-import property from 'lodash/property';
-import isUndefined from 'lodash/isUndefined';
+import { Components, Interactions } from 'plottable';
+import debounce from 'lodash/debounce';
 import flatten from 'lodash/flatten';
+import {
+    createXScale,
+    createYScale,
+    createColorScale,
+    createXAxis,
+    createYAxis,
+    createLegend,
+    createSeriesPlot,
+} from './plottable-utils';
 import Tooltip from './Tooltip';
-import { processData, computeSeriesNames } from '../format-data';
 import './TimewrapChart.css';
 
-const LEGEND_WIDTH = 150;
+let synchronousUpdates = false;
 
-const dataPointToVizValue = (point, seriesIndex, pointIndex) => ({
-    x: pointIndex,
-    y: point.fieldValue,
-    label: point.label,
-    date: point.date,
-    fieldName: point.fieldName,
-    seriesIndex,
-    pointIndex,
-});
+export default class {
 
-class TimewrapChart extends Component {
-
-    constructor() {
-        super();
-        this.onValueMouseOver = this.onValueMouseOver.bind(this);
-        this.onValueMouseOut = this.onValueMouseOut.bind(this);
-        this.onValueClick = this.onValueClick.bind(this);
-        this.state = { data: [], seriesNames: [], hintCoordinates: null };
+    // For testing only
+    static useSynchronousUpdates() {
+        synchronousUpdates = true;
     }
 
-    componentWillMount() {
-        this.setStateFromProps(this.props);
+    constructor(el, colorPalette) {
+        this.el = el;
+        this.el.classList.add('custom-timewrap-visualization');
+        this.el.innerHTML = '<svg width="100%" height="100%"></svg>';
+        this.colorPalette = colorPalette;
+        this.tooltip = null;
+        this.selectedPoint = null;
+        this.clickHandler = null;
+        if (!synchronousUpdates) {
+            this.update = debounce(this.update, 10);
+        }
+        this.clickInteractionCallback = this.clickInteractionCallback.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setStateFromProps(nextProps);
+    update(data, config, seriesNames) {
+        if (this.chart) {
+            this.chart.destroy();
+        }
+        const scales = {
+            x: createXScale(data),
+            y: createYScale(),
+            color: createColorScale(seriesNames, this.colorPalette),
+        };
+        const rotateXLabels = config.xLabelRotation === 'on';
+        const xAxis = createXAxis(scales.x, data, rotateXLabels);
+        const yAxis = createYAxis(scales.y);
+        const gridlines = new Components.Gridlines(null, scales.y);
+        const legend = createLegend(scales.color, config.legendPlacement);
+        const showMarkers = config.pointMarkers === 'on';
+        const plots = flatten(data.map((dataSeries, i) => {
+            const seriesName = seriesNames[i];
+            return createSeriesPlot(dataSeries, seriesName, scales, showMarkers);
+        }));
+        const plotGroup = new Components.Group([gridlines, ...plots]);
+
+        if (!legend) {
+            this.chart = new Components.Table([
+                [yAxis, plotGroup],
+                [null, xAxis],
+            ]);
+        } else if (config.legendPlacement === 'bottom') {
+            this.chart = new Components.Table([
+                [yAxis, plotGroup],
+                [null, xAxis],
+                [null, legend],
+            ]);
+        } else {
+            this.chart = new Components.Table([
+                [yAxis, plotGroup, legend],
+                [null, xAxis, null],
+            ]);
+        }
+        this.chart.renderTo(this.el.querySelector('svg'));
+
+        const tooltipDateFormat = config.tooltipFormat || 'MMM Do, YYYY h:mm A';
+        this.tooltip = new Tooltip(scales.color, tooltipDateFormat);
+        this.tooltip.onShow(this.onTooltipShow.bind(this));
+        this.tooltip.onHide(this.onTooltipHide.bind(this));
+        this.tooltip.attachTo(plotGroup);
+
+        this.clickInteraction = new Interactions.Click();
+        this.clickInteraction.onClick(this.clickInteractionCallback);
+        this.clickInteraction.attachTo(plotGroup);
     }
 
-    onValueMouseOver(value) {
-        this.setState({ hintCoordinates: [value.seriesIndex, value.pointIndex] });
+    onTooltipShow(point) {
+        this.selectedPoint = point;
+        this.el.style.cursor = 'pointer';
     }
 
-    onValueMouseOut() {
-        this.setState({ hintCoordinates: null });
+    onTooltipHide() {
+        this.selectedPoint = null;
+        this.el.style.cursor = '';
     }
 
-    onValueClick(value, info) {
-        const { seriesIndex, pointIndex } = value;
-        const { date, fieldName, fieldValue } = this.state.data[seriesIndex][pointIndex];
-        this.props.onPointSelect(
-            { date: date.toDate(), [fieldName]: fieldValue },
-            info.event
-        );
+    remove() {
+        if (this.chart) {
+            this.chart.destroy();
+        }
+        if (this.tooltip) {
+            this.tooltip.destroy();
+        }
+        if (this.clickInteraction) {
+            this.clickInteraction.offClick(this.clickInteractionCallback);
+        }
+        this.clickHandler = null;
     }
 
-    setStateFromProps(props) {
-        const { timeSeries, dataSeries, dataFields } = props;
-        const axisLabelFormat = props.axisLabelFormat || null;
-        const legendFormat = props.legendFormat || null;
-        if (!timeSeries || timeSeries.length === 0) {
-            this.setState({ data: [], seriesNames: [] });
+    clickInteractionCallback(point, e) {
+        if (!this.selectedPoint || !this.clickHandler) {
             return;
         }
-        const data = processData(timeSeries, dataSeries[0], dataFields[0], axisLabelFormat);
-        const seriesNames = computeSeriesNames(data, legendFormat);
-        this.setState({ data, seriesNames });
+        const { date, fieldName, fieldValue } = this.selectedPoint.datum;
+        const clickInfo = {
+            date: date.toDate(),
+            [fieldName]: fieldValue,
+        };
+        this.clickHandler(clickInfo, e);
     }
 
-    render() {
-        const { colors, width, height, tooltipFormat } = this.props;
-        const { data, seriesNames, hintCoordinates } = this.state;
-        if (data.length === 0) {
-            return null;
-        }
-        const xAxisLabels = data[0].map((point, i) => i);
-        const seriesData = data.map((partition, i) =>
-            partition.map((point, j) => dataPointToVizValue(point, i, j))
-                .filter(point => !isUndefined(point.y))
-        );
-        const tickFormat = i => data[0][i].label;
-        const flattenedData = flatten(seriesData).map(property('y'));
-        const yAxisMin = Math.min(...(flattenedData.concat(0)));
-        const yAxisMax = Math.max(...(flattenedData.concat(0)));
-        const legendItems = seriesNames.map((name, i) => ({
-            title: name,
-            color: colors[i % colors.length],
-        }));
-        let hintValue = null;
-        if (hintCoordinates) {
-            const [hintSeriesIndex, hintPointIndex] = hintCoordinates;
-            const hintDataPoint = data[hintSeriesIndex][hintPointIndex];
-            hintValue = dataPointToVizValue(hintDataPoint, hintSeriesIndex, hintPointIndex);
-        }
-
-        return (<div className="custom-timewrap-visualization">
-            <div style={{ float: 'left' }}>
-                <XYPlot
-                    width={width - LEGEND_WIDTH}
-                    height={height}
-                    xType="ordinal"
-                    xDomain={xAxisLabels}
-                    yDomain={[yAxisMin, yAxisMax]}
-                    margin={{ left: 80 }}
-                >
-                    <HorizontalGridLines />
-                    <XAxis tickFormat={tickFormat} />
-                    <YAxis />
-                    {seriesData.map((points, i) =>
-                        <LineMarkSeries
-                            key={i}
-                            data={points}
-                            color={colors[i % colors.length]}
-                            size={3}
-                            onValueMouseOver={this.onValueMouseOver}
-                            onValueMouseOut={this.onValueMouseOut}
-                            onValueClick={this.onValueClick}
-                        />
-                    )}
-                    {hintValue ?
-                        <Hint value={hintValue}>
-                            <Tooltip value={hintValue} format={tooltipFormat || null} />
-                        </Hint> :
-                        null
-                    }
-                </XYPlot>
-            </div>
-            <DiscreteColorLegend items={legendItems} width={LEGEND_WIDTH} />
-        </div>);
+    onClick(handler) {
+        this.clickHandler = handler;
     }
+
 }
-
-TimewrapChart.propTypes = {
-    // Eslint is confused by the way props are passed to a helper function.
-    /* eslint-disable react/no-unused-prop-types */
-    timeSeries: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-    dataSeries: PropTypes.arrayOf(
-        PropTypes.arrayOf(PropTypes.number)
-    ),
-    dataFields: PropTypes.arrayOf(PropTypes.string),
-    axisLabelFormat: PropTypes.string,
-    legendFormat: PropTypes.string,
-    /* eslint-enable react/no-unused-prop-types */
-    tooltipFormat: PropTypes.string,
-    colors: PropTypes.arrayOf(PropTypes.string),
-    width: PropTypes.number,
-    height: PropTypes.number,
-    onPointSelect: PropTypes.func,
-};
-
-TimewrapChart.defaultProps = {
-    onPointSelect: () => {},
-};
-
-export default TimewrapChart;

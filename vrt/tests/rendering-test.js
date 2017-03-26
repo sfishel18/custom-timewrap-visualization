@@ -1,7 +1,9 @@
 const _ = require('lodash');
 const vrtUtils = require('./vrt-utils');
 
-suite('Visual Regression Tests - Basic Rendering', () => {
+suite('Visual Regression Tests - Basic Rendering', function () {
+    this.retries(2);
+
     suiteSetup(function () {
         vrtUtils.suiteSetup.call(this);
         this.browser = vrtUtils.createBrowser('chrome');
@@ -13,12 +15,16 @@ suite('Visual Regression Tests - Basic Rendering', () => {
         return this.browser.quit();
     });
 
+    teardown(function () {
+        return this.browser.executeScript('window.harness.reset()');
+    });
+
     test('Rendering five series, 15 minutes between points', function () {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify([_.range(16)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(16))},
+                dataField: 'count'
             })
         `);
         return this.browser.takeScreenshot().then(
@@ -34,8 +40,8 @@ suite('Visual Regression Tests - Basic Rendering', () => {
                     21,
                     8 * 60 * 60
                 ),
-                dataSeries: ${JSON.stringify([_.range(21)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(21))},
+                dataField: 'count'
             })
         `);
         return this.browser.takeScreenshot().then(
@@ -47,8 +53,8 @@ suite('Visual Regression Tests - Basic Rendering', () => {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-16 00:00:00', 25, 1, 'day'),
-                dataSeries: ${JSON.stringify([_.range(25)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(25))},
+                dataField: 'count'
             })
         `);
         return this.browser.takeScreenshot().then(
@@ -60,27 +66,12 @@ suite('Visual Regression Tests - Basic Rendering', () => {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 00:00:00', 24, 7, 'day'),
-                dataSeries: ${JSON.stringify([_.range(24)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(24))},
+                dataField: 'count'
             })
         `);
         return this.browser.takeScreenshot().then(
             vrtUtils.assertScreenshotMatch('six-series-7-day')
-        );
-    });
-
-    test('Rendering six series, 7 days between points, custom label formats', function () {
-        this.browser.executeScript(`
-            window.harness.setProperties({
-                timeSeries: window.Harness.generateTimeSeries('1981-08-18 00:00:00', 24, 7, 'day'),
-                dataSeries: ${JSON.stringify([_.range(24)])},
-                dataFields: ['count'],
-                axisLabelFormat: 'dd',
-                legendFormat: 'MMMM'
-            })
-        `);
-        return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-7-day-custom-label')
         );
     });
 
@@ -93,8 +84,8 @@ suite('Visual Regression Tests - Basic Rendering', () => {
                     4,
                     'month'
                 ),
-                dataSeries: ${JSON.stringify([_.range(15)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(15))},
+                dataFields: 'count'
             })
         `);
         return this.browser.takeScreenshot().then(
@@ -111,8 +102,8 @@ suite('Visual Regression Tests - Basic Rendering', () => {
                     4,
                     'month'
                 ),
-                dataSeries: ${JSON.stringify([_.range(15).map(y => y * 10000)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(15).map(y => y * 10000))},
+                dataFields: 'count'
             })
         `);
         return this.browser.takeScreenshot().then(

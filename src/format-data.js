@@ -166,8 +166,41 @@ export const fillNulls = (partitions, granularity, pointSpan) => {
     return partitions.map(p => fillPartition(p, granularity, partitionSpan));
 };
 
-// exported for testing only
-export const decorateWithLabels = (partitions, granularity, customFormat = null) => {
+const computeGranularityFromPartitions = (partitions) => {
+    const firstPartition = partitions[0];
+    const firstDate = firstPartition[0].date;
+    const secondDate = firstPartition[1].date;
+    const lastDate = last(firstPartition).date;
+    const pointSpan = spanBetweenDates(firstDate, secondDate);
+    const partitionSpan = lastDate.clone().add(pointSpan.amount, pointSpan.unit)
+        .diff(firstDate, 'seconds');
+
+    if (partitionSpan >= MIN_SECONDS_PER_YEAR) {
+        return YEAR;
+    }
+    if (partitionSpan >= 3 * MIN_SECONDS_PER_MONTH) {
+        return THREE_MONTH;
+    }
+    if (partitionSpan >= MIN_SECONDS_PER_MONTH) {
+        return MONTH;
+    }
+    if (partitionSpan >= 7 * MIN_SECONDS_PER_DAY) {
+        return WEEK;
+    }
+    if (partitionSpan >= MIN_SECONDS_PER_DAY) {
+        return DAY;
+    }
+    if (partitionSpan >= 12 * SECONDS_PER_HOUR) {
+        return TWELVE_HOUR;
+    }
+    if (partitionSpan >= 6 * SECONDS_PER_HOUR) {
+        return SIX_HOUR;
+    }
+    return HOUR;
+};
+
+export const decorateWithLabels = (partitions, customFormat = null) => {
+    const granularity = computeGranularityFromPartitions(partitions);
     let nameFn;
     if (customFormat) {
         nameFn = date => date.format(customFormat);
@@ -205,7 +238,7 @@ export const decorateWithLabels = (partitions, granularity, customFormat = null)
     );
 };
 
-export const processData = (rawTimeSeries, dataSeries, dataFieldName, axisLabelFormat = null) => {
+export const processData = (rawTimeSeries, dataSeries, dataFieldName) => {
     const timeSeries = rawTimeSeries.map(date => moment(date));
     const pointSpan = computePointSpan(timeSeries);
     const totalSpan = computeTotalSpan(timeSeries);
@@ -213,41 +246,7 @@ export const processData = (rawTimeSeries, dataSeries, dataFieldName, axisLabelF
     let partitions = partitionTimeSeries(timeSeries, granularity, pointSpan);
     partitions = decorateWithData(partitions, dataSeries, dataFieldName);
     partitions = fillNulls(partitions, granularity, pointSpan);
-    partitions = decorateWithLabels(partitions, granularity, axisLabelFormat);
     return partitions;
-};
-
-const computeGranularityFromPartitions = (partitions) => {
-    const firstPartition = partitions[0];
-    const firstDate = firstPartition[0].date;
-    const secondDate = firstPartition[1].date;
-    const lastDate = last(firstPartition).date;
-    const pointSpan = spanBetweenDates(firstDate, secondDate);
-    const partitionSpan = lastDate.clone().add(pointSpan.amount, pointSpan.unit)
-        .diff(firstDate, 'seconds');
-
-    if (partitionSpan >= MIN_SECONDS_PER_YEAR) {
-        return YEAR;
-    }
-    if (partitionSpan >= 3 * MIN_SECONDS_PER_MONTH) {
-        return THREE_MONTH;
-    }
-    if (partitionSpan >= MIN_SECONDS_PER_MONTH) {
-        return MONTH;
-    }
-    if (partitionSpan >= 7 * MIN_SECONDS_PER_DAY) {
-        return WEEK;
-    }
-    if (partitionSpan >= MIN_SECONDS_PER_DAY) {
-        return DAY;
-    }
-    if (partitionSpan >= 12 * SECONDS_PER_HOUR) {
-        return TWELVE_HOUR;
-    }
-    if (partitionSpan >= 6 * SECONDS_PER_HOUR) {
-        return SIX_HOUR;
-    }
-    return HOUR;
 };
 
 export const computeSeriesNames = (partitions, customFormat = null) => {

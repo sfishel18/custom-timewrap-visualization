@@ -1,7 +1,9 @@
 const _ = require('lodash');
 const vrtUtils = require('./vrt-utils');
 
-suite('Visual Regression Tests - Updating In Place', () => {
+suite('Visual Regression Tests - Updating In Place', function () {
+    this.retries(2);
+
     suiteSetup(function () {
         vrtUtils.suiteSetup.call(this);
         this.browser = vrtUtils.createBrowser('chrome');
@@ -13,13 +15,17 @@ suite('Visual Regression Tests - Updating In Place', () => {
         return this.browser.quit();
     });
 
+    teardown(function () {
+        return this.browser.executeScript('window.harness.reset()');
+    });
+
     test('Minor updates to individual data points', function () {
         const dataSeries = _.range(16);
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify([dataSeries])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(dataSeries)},
+                dataField: 'count'
             })
         `);
         // Changing points in the first and third series
@@ -28,8 +34,8 @@ suite('Visual Regression Tests - Updating In Place', () => {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify([dataSeries])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(dataSeries)},
+                dataField: 'count'
             })
         `);
         return this.browser.takeScreenshot().then(
@@ -41,8 +47,8 @@ suite('Visual Regression Tests - Updating In Place', () => {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
-                dataSeries: ${JSON.stringify([_.range(0, 16, 10)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(0, 16, 10))},
+                dataField: 'count'
             })
         `);
         this.browser.executeScript(`
@@ -53,8 +59,8 @@ suite('Visual Regression Tests - Updating In Place', () => {
                     4,
                     'month'
                 ),
-                dataSeries: ${JSON.stringify([_.range(15)])},
-                dataFields: ['count']
+                dataSeries: ${JSON.stringify(_.range(15))},
+                dataField: 'count'
             })
         `);
         return this.browser.takeScreenshot().then(

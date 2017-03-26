@@ -1,11 +1,25 @@
-@import 'react-vis/main.css';
+@import 'plottable/plottable.css';
 
-:--namespace { height: 100%; }
-
-.rv-discrete-color-legend-item { padding: 0; }
-
-.rv-discrete-color-legend.vertical {
+:--namespace {
+    width: auto !important;
+    margin-right: 10px !important;
+    font-family: "Helvetica Neue", Helvetica, sans-serif !important;
     position: relative;
-    transform: translateY(-50%);
-    top: 50%;
+}
+
+.axis .tick-label, .axis .tick-label text {
+    font-size: 11px !important;
+    fill: #6b6b76 !important;
+    color: #6b6b76 !important;
+    font-weight: inherit !important;
+}
+
+.axis .tick-mark, .axis .baseline, .gridlines line {
+    stroke-width: 1px !important;
+    stroke: #e6e6e9 !important;
+    opacity: 1 !important;
+}
+
+.legend text {
+    font-weight: normal !important;
 }

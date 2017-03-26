@@ -68,7 +68,6 @@ const assertNullFilledPartitionsEqual = (actual, expected, message) => {
 const createLabeledPartitions = (timeSeries, granularity, customFormat = null) =>
     decorateWithLabels(
         createNullFilledPartitions(timeSeries, granularity),
-        granularity,
         customFormat
     );
 

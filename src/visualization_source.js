@@ -3,16 +3,17 @@ import SplunkVisualizationBase from 'api/SplunkVisualizationBase';
 import SplunkVisualizationUtils from 'api/SplunkVisualizationUtils';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
-import moment from 'moment';
-import React from 'react';
-import ReactDom from 'react-dom';
-import findIndex from 'lodash/findIndex';
+import some from 'lodash/some';
 import TimewrapChart from './charting/TimewrapChart';
+import { processData, decorateWithLabels, computeSeriesNames } from './format-data';
+import findSpanForDate from './find-span-for-date';
 
 export default SplunkVisualizationBase.extend({
 
     initialize() {
+        this.chart = new TimewrapChart(this.el, SplunkVisualizationUtils.getColorPalette('splunkCategorical'));
         this.onPointSelect = this.onPointSelect.bind(this);
+        this.chart.onClick(this.onPointSelect);
     },
 
     getInitialDataParams() {
@@ -23,54 +24,60 @@ export default SplunkVisualizationBase.extend({
     },
 
     formatData(rawData) {
-        const data = {
-            timeSeries: (rawData.columns[0] || []).map(SplunkVisualizationUtils.parseTimestamp),
-            dataFields: [],
-            dataSeries: [],
-        };
-
-        rawData.fields.slice(1).forEach((field, i) => {
-            if (field.name[0] === '_') {
-                return;
+        if (!rawData || rawData.fields.length === 0) {
+            return null;
+        }
+        const timeSeries = (rawData.columns[0] || []).map(SplunkVisualizationUtils.parseTimestamp);
+        if (some(timeSeries, date => !isFinite(date))) {
+            throw new SplunkVisualizationBase.VisualizationError('First column of results must contain timestamps');
+        }
+        let dataField = null;
+        let dataSeries = null;
+        for (let i = 1; i < rawData.fields.length; i += 1) {
+            const field = rawData.fields[i];
+            if (field.name[0] !== '_') {
+                dataField = field.name;
+                dataSeries = rawData.columns[i];
+                break;
             }
-            data.dataFields.push(field.name);
-            data.dataSeries.push(rawData.columns[i + 1].map(parseFloat));
-        });
-
-        const spanFieldIndex = rawData.fields.findIndex(field => field.name === '_span');
-        if (spanFieldIndex > -1) {
-            data.spanSeries = rawData.columns[spanFieldIndex].map(parseFloat);
+        }
+        if (!dataSeries) {
+            throw new SplunkVisualizationBase.VisualizationError('The results must contain two columns');
         }
 
-        return data;
+        let spanSeries = null;
+        const spanFieldIndex = rawData.fields.findIndex(field => field.name === '_span');
+        if (spanFieldIndex > -1) {
+            spanSeries = rawData.columns[spanFieldIndex].map(parseFloat);
+        }
+
+        return {
+            vizData: processData(timeSeries, dataSeries, dataField),
+            timeSeries,
+            spanSeries,
+        };
     },
 
     updateView(data, rawConfig) {
+        if (data === null) {
+            return;
+        }
         const config = {};
         const { propertyNamespace } = this.getPropertyNamespaceInfo();
         Object.keys(rawConfig).forEach((key) => {
             config[key.replace(propertyNamespace, '')] = rawConfig[key];
         });
-        ReactDom.render(
-            <TimewrapChart
-                width={this.el.clientWidth}
-                height={this.el.clientHeight}
-                {...config}
-                {...data}
-                colors={SplunkVisualizationUtils.getColorPalette('splunkCategorical')}
-                onPointSelect={this.onPointSelect}
-            />,
-            this.el
-        );
+
+        let { vizData } = data;
+        vizData = decorateWithLabels(vizData, config.axisLabelFormat || null);
+        const seriesNames = computeSeriesNames(vizData, config.legendFormat || null);
+        this.chart.update(vizData, config, seriesNames);
     },
 
     onPointSelect(pointInfo, event) {
         const data = this.getCurrentData();
-        const matchingIndex = findIndex(data.timeSeries, date =>
-            moment(date).isSame(pointInfo.date)
-        );
         const epochDateSeconds = pointInfo.date.getTime() / 1000;
-        const span = data.spanSeries[matchingIndex];
+        const span = findSpanForDate(pointInfo.date, data.timeSeries, data.spanSeries);
         this.drilldown({
             earliest: epochDateSeconds,
             latest: epochDateSeconds + span,
@@ -82,6 +89,6 @@ export default SplunkVisualizationBase.extend({
     },
 
     remove() {
-        ReactDom.unmountComponentAtNode(this.el);
+        this.chart.remove();
     },
 });
