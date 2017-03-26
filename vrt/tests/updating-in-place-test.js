@@ -1,7 +1,9 @@
 const _ = require('lodash');
 const vrtUtils = require('./vrt-utils');
 
-suite('Visual Regression Tests - Updating In Place', () => {
+suite('Visual Regression Tests - Updating In Place', function () {
+    this.retries(2);
+
     suiteSetup(function () {
         vrtUtils.suiteSetup.call(this);
         this.browser = vrtUtils.createBrowser('chrome');
