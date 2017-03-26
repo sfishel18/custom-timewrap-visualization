@@ -9,7 +9,7 @@
     "watch": "webpack -d --watch --progress",
     "lint": "eslint .",
     "karma": "karma start",
-    "prevrt:docker": "docker pull selenium/standalone-chrome:2.53.0",
+    "prevrt:docker": "docker pull selenium/standalone-chrome@sha256:205d2031412acc399e705ff38ab716323490cdf89967794630b3c3fd654b02c3",
     "vrt:docker": "docker run -d --name selenium -p 4444:4444 -v $(pwd)/vrt:/vrt selenium/standalone-chrome",
     "vrt:build": "webpack --config vrt/webpack.config.js",
     "prevrt": "yarn run postvrt && yarn run vrt:docker && yarn run vrt:build",
