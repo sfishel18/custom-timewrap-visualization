@@ -15,3 +15,6 @@ install:
 script:
     - yarn test
     - yarn run package
+env:
+    global:
+        IS_CI: true
