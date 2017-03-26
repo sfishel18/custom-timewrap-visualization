@@ -91,7 +91,7 @@ suite('Visual Regression Tests - Tooltips', () => {
         );
     });
 
-    test('Tooltip on single-point series', function () {
+    test.skip('Tooltip on single-point series', function () {
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
