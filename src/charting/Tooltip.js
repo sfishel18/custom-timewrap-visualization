@@ -1,8 +1,28 @@
 import { Interactions, Utils, Plots } from 'plottable';
 import $ from 'jquery';
 import sortBy from 'lodash/sortBy';
+import uniqBy from 'lodash/uniqBy';
+import isFunction from 'lodash/isFunction';
 import 'jquery-powertip';
 import './Tooltip.css';
+
+const isPlotComponent = component =>
+    (component instanceof Plots.Line) || (component instanceof Plots.Scatter);
+
+const nearestPlotEntity = (queryPoint, component) => {
+    if (isFunction(component.entityNearestByXThenY)) {
+        return component.entityNearestByXThenY(queryPoint);
+    }
+    return component.entityNearest(queryPoint);
+};
+
+const getPointColorName = (point) => {
+    const component = point.component;
+    if (component instanceof Plots.Line) {
+        return component.attr('stroke').accessor();
+    }
+    return component.attr('fill').accessor();
+};
 
 const createTooltipAnchor = (group) => {
     const tooltipAnchor = group.foreground().append('circle').attr({
@@ -86,9 +106,13 @@ export default class Tooltip {
         if (!this.group || !this.tooltipAnchor) {
             return;
         }
-        const candidates = this.group.components()
-            .filter(component => component instanceof Plots.Line)
-            .map(component => component.entityNearestByXThenY(queryPoint))
+        const plotComponents = this.group.components()
+            .filter(isPlotComponent);
+        const dedupedComponents = uniqBy(plotComponents, component =>
+            component.datasets()[0]
+        );
+        const candidates = dedupedComponents
+            .map(nearestPlotEntity.bind(null, queryPoint))
             .filter(point => !!point)
             .map(point => ({
                 point,
@@ -98,7 +122,7 @@ export default class Tooltip {
         const sortedCandidates = sortBy(candidates, candidate => candidate.distance);
         if (sortedCandidates.length > 0 && sortedCandidates[0].distance <= 900) {
             const point = sortedCandidates[0].point;
-            const colorName = point.component.attr('stroke').accessor();
+            const colorName = getPointColorName(point);
             this.setSelectedPoint(point, this.colorScale.scale(colorName), this.tooltipAnchor);
         } else {
             this.clearSelectedPoint(this.tooltipAnchor);
