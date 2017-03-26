@@ -96,19 +96,7 @@ export const createLegend = (scale, placement = 'right') => {
     return legend;
 };
 
-export const createSeriesPlot = (series, name, scales, showMarkers = false) => {
-    const seriesWithIndices = series.map((s, i) => Object.assign({ index: i }, s));
-    const seriesWithoutNulls = seriesWithIndices.filter(s => has(s, 'fieldValue'));
-    const dataset = new Dataset(seriesWithoutNulls);
-    const linePlot = new Plots.Line();
-    linePlot.x(d => String(d.index), scales.x);
-    linePlot.y(d => parseFloat(d.fieldValue), scales.y);
-    linePlot.attr('stroke', name, scales.color);
-    linePlot.attr('stroke-width', '1px');
-    linePlot.addDataset(dataset);
-    if (!showMarkers) {
-        return linePlot;
-    }
+const createMarkerPlot = (name, scales, dataset) => {
     const markerPlot = new Plots.Scatter();
     markerPlot.x(d => String(d.index), scales.x);
     markerPlot.y(d => parseFloat(d.fieldValue), scales.y);
@@ -116,5 +104,30 @@ export const createSeriesPlot = (series, name, scales, showMarkers = false) => {
     markerPlot.size(7);
     markerPlot.attr('opacity', 1);
     markerPlot.addDataset(dataset);
+    return markerPlot;
+};
+
+const createLinePlot = (name, scales, dataset) => {
+    const linePlot = new Plots.Line();
+    linePlot.x(d => String(d.index), scales.x);
+    linePlot.y(d => parseFloat(d.fieldValue), scales.y);
+    linePlot.attr('stroke', name, scales.color);
+    linePlot.attr('stroke-width', '1px');
+    linePlot.addDataset(dataset);
+    return linePlot;
+};
+
+export const createSeriesPlot = (series, name, scales, showMarkers = false) => {
+    const seriesWithIndices = series.map((s, i) => Object.assign({ index: i }, s));
+    const seriesWithoutNulls = seriesWithIndices.filter(s => has(s, 'fieldValue'));
+    const dataset = new Dataset(seriesWithoutNulls);
+    if (seriesWithoutNulls.length === 1 && !showMarkers) {
+        return createMarkerPlot(name, scales, dataset);
+    }
+    const linePlot = createLinePlot(name, scales, dataset);
+    if (!showMarkers) {
+        return linePlot;
+    }
+    const markerPlot = createMarkerPlot(name, scales, dataset);
     return [linePlot, markerPlot];
 };
