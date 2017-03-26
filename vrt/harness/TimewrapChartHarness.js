@@ -26,11 +26,15 @@ export default class TimewrapChartHarness {
         axisLabelFormat = null,
         legendFormat = null,
         tooltipFormat = null,
+        pointMarkers = 'off',
+        legendPlacement = 'right',
+        xLabelRotation = 'off',
     }) {
         let vizData = processData(timeSeries, dataSeries, dataField);
         vizData = decorateWithLabels(vizData, axisLabelFormat);
         const seriesNames = computeSeriesNames(vizData, legendFormat);
-        this.chart.update(vizData, { tooltipFormat }, seriesNames);
+        const config = { tooltipFormat, pointMarkers, legendPlacement, xLabelRotation };
+        this.chart.update(vizData, config, seriesNames);
     }
 
     reset() {
