@@ -8,7 +8,7 @@ const BABEL_LOADER = {
     exclude: /node_modules/,
     query: {
         cacheDirectory: true,
-        presets: ['babel-preset-es2015', 'babel-preset-react'],
+        presets: ['babel-preset-es2015'],
         plugins: ['babel-plugin-add-module-exports'],
     },
 };
