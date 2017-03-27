@@ -55,9 +55,6 @@ suite('Visual Regression Tests - Tooltips', function () {
     });
 
     test('Showing the tooltip, then hiding it, then showing it on a different point', function () {
-        if (process.env.IS_CI) {
-            return this.skip();
-        }
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
@@ -80,9 +77,6 @@ suite('Visual Regression Tests - Tooltips', function () {
     });
 
     test('Tooltip pops left when there\'s no room to the right', function () {
-        if (process.env.IS_CI) {
-            return this.skip();
-        }
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
@@ -100,9 +94,6 @@ suite('Visual Regression Tests - Tooltips', function () {
     });
 
     test('Tooltip on single-point series', function () {
-        if (process.env.IS_CI) {
-            return this.skip();
-        }
         this.browser.executeScript(`
             window.harness.setProperties({
                 timeSeries: window.Harness.generateTimeSeries('1981-08-18 23:15:00', 16, 15 * 60),
