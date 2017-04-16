@@ -5,7 +5,7 @@ const DefinePlugin = require('webpack').DefinePlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const sharedConfig = require('./webpack/shared-config');
 
-const extractCss = new ExtractTextPlugin('visualization.css');
+const extractCss = new ExtractTextPlugin({ filename: 'visualization.css' });
 const plugins = [
     extractCss,
     new DefinePlugin({
@@ -19,15 +19,15 @@ if (process.env.NODE_ENV === 'production') {
     plugins.push(new UglifyJsPlugin({ compress: { warnings: false } }));
 }
 
+process.traceDeprecation = true;
+
 module.exports = {
     entry: 'visualization_source',
     resolve: {
-        root: [
-            path.join(__dirname, 'src'),
-        ],
+        modules: [path.join(__dirname, 'src'), 'node_modules'],
     },
     resolveLoader: {
-        modulesDirectories: [path.join(__dirname, 'webpack'), 'node_modules'],
+        modules: [path.join(__dirname, 'webpack'), 'node_modules'],
     },
     output: {
         filename: 'visualization.js',
@@ -39,18 +39,19 @@ module.exports = {
         'api/SplunkVisualizationUtils',
     ],
     module: {
-        loaders: [
+        rules: [
             sharedConfig.BABEL_LOADER,
             {
                 test: /\.css$/,
-                loader: extractCss.extract(['css', 'postcss']),
+                use: extractCss.extract({ use: ['css-loader', 'postcss-loader'] }),
             },
             {
-                test: /d3/,
-                loader: 'd3-no-global-loader',
+                test: /^d3$/,
+                use: {
+                    loader: 'd3-no-global-loader',
+                },
             },
         ],
     },
     plugins,
-    postcss: sharedConfig.postcss,
 };
