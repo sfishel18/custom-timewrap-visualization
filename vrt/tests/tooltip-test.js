@@ -31,7 +31,7 @@ suite('Visual Regression Tests - Tooltips', function () {
             window.harness.simulateHover(1, 3)
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('tooltip-showing')
+            vrtUtils.assertScreenshotMatch('tooltip-showing'),
         );
     });
 
@@ -50,7 +50,7 @@ suite('Visual Regression Tests - Tooltips', function () {
             window.harness.simulateHoverEnd()
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('tooltip-shown-hidden')
+            vrtUtils.assertScreenshotMatch('tooltip-shown-hidden'),
         );
     });
 
@@ -72,7 +72,7 @@ suite('Visual Regression Tests - Tooltips', function () {
             window.harness.simulateHover(3, 0)
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('tooltip-shown-hidden-showing')
+            vrtUtils.assertScreenshotMatch('tooltip-shown-hidden-showing'),
         );
     });
 
@@ -89,7 +89,7 @@ suite('Visual Regression Tests - Tooltips', function () {
             window.harness.simulateHover(1, 3)
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('tooltip-popping-left')
+            vrtUtils.assertScreenshotMatch('tooltip-popping-left'),
         );
     });
 
@@ -105,7 +105,7 @@ suite('Visual Regression Tests - Tooltips', function () {
             window.harness.simulateHover(4, 0)
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('tooltip-single-point-series')
+            vrtUtils.assertScreenshotMatch('tooltip-single-point-series'),
         );
     });
 });

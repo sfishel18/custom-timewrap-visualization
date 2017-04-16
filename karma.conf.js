@@ -23,7 +23,7 @@ module.exports = function karmaConfig(config) {
                     'react/lib/ExecutionEnvironment': true,
                     'react/lib/ReactContext': true,
                 },
-            }
+            },
         ),
         webpackMiddleware: { stats: 'errors-only' },
         reporters: ['mocha'],

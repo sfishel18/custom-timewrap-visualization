@@ -28,7 +28,7 @@ suite('Visual Regression Tests - Basic Rendering', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('five-series-15-min')
+            vrtUtils.assertScreenshotMatch('five-series-15-min'),
         );
     });
 
@@ -45,7 +45,7 @@ suite('Visual Regression Tests - Basic Rendering', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('seven-series-8-hours')
+            vrtUtils.assertScreenshotMatch('seven-series-8-hours'),
         );
     });
 
@@ -58,7 +58,7 @@ suite('Visual Regression Tests - Basic Rendering', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('four-series-1-day')
+            vrtUtils.assertScreenshotMatch('four-series-1-day'),
         );
     });
 
@@ -71,7 +71,7 @@ suite('Visual Regression Tests - Basic Rendering', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-7-day')
+            vrtUtils.assertScreenshotMatch('six-series-7-day'),
         );
     });
 
@@ -89,7 +89,7 @@ suite('Visual Regression Tests - Basic Rendering', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-4-months')
+            vrtUtils.assertScreenshotMatch('six-series-4-months'),
         );
     });
 
@@ -107,7 +107,7 @@ suite('Visual Regression Tests - Basic Rendering', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('long-y-axis-labels')
+            vrtUtils.assertScreenshotMatch('long-y-axis-labels'),
         );
     });
 });

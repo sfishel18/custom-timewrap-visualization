@@ -30,7 +30,7 @@ suite('Visual Regression Tests - Custom Configuration Options', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-7-day-custom-label')
+            vrtUtils.assertScreenshotMatch('six-series-7-day-custom-label'),
         );
     });
 
@@ -44,7 +44,7 @@ suite('Visual Regression Tests - Custom Configuration Options', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-7-day-with-markers')
+            vrtUtils.assertScreenshotMatch('six-series-7-day-with-markers'),
         );
     });
 
@@ -58,7 +58,7 @@ suite('Visual Regression Tests - Custom Configuration Options', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-7-day-legend-bottom')
+            vrtUtils.assertScreenshotMatch('six-series-7-day-legend-bottom'),
         );
     });
 
@@ -72,7 +72,7 @@ suite('Visual Regression Tests - Custom Configuration Options', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-7-day-legend-hidden')
+            vrtUtils.assertScreenshotMatch('six-series-7-day-legend-hidden'),
         );
     });
 
@@ -86,7 +86,7 @@ suite('Visual Regression Tests - Custom Configuration Options', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('six-series-7-day-label-rotation')
+            vrtUtils.assertScreenshotMatch('six-series-7-day-label-rotation'),
         );
     });
 
@@ -103,7 +103,7 @@ suite('Visual Regression Tests - Custom Configuration Options', function () {
             window.harness.simulateHover(1, 3)
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('tooltip-showing-custom-format')
+            vrtUtils.assertScreenshotMatch('tooltip-showing-custom-format'),
         );
     });
 });

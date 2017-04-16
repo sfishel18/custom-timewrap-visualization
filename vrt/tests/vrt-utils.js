@@ -32,7 +32,7 @@ const assertScreenshotMatch = filename =>
             fs.writeFileSync(
                 baselinePath,
                 screenshotData.replace(/^data:image\/png;base64,/, ''),
-                'base64'
+                'base64',
             );
             assert.ok(true, `created new baseline: ${filename}.png`);
             return Promise.resolve();
@@ -49,15 +49,15 @@ const assertScreenshotMatch = filename =>
                         fs.writeFileSync(
                             path.resolve(FAILURES_DIR, `${filename}.png`),
                             screenshotData.replace(/^data:image\/png;base64,/, ''),
-                            'base64'
+                            'base64',
                         );
                         data.getDiffImage().pack().pipe(
-                            fs.createWriteStream(path.resolve(FAILURES_DIR, `${filename}.diff.png`))
+                            fs.createWriteStream(path.resolve(FAILURES_DIR, `${filename}.diff.png`)),
                         );
                         assert.isAtMost(
                             misMatchPercentage,
                             DIFF_THRESHOLD,
-                            'screenshot mismatch above threshold'
+                            'screenshot mismatch above threshold',
                         );
                     }
                     resolve();

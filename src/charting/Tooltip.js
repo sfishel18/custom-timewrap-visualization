@@ -109,7 +109,7 @@ export default class Tooltip {
         const plotComponents = this.group.components()
             .filter(isPlotComponent);
         const dedupedComponents = uniqBy(plotComponents, component =>
-            component.datasets()[0]
+            component.datasets()[0],
         );
         const candidates = dedupedComponents
             .map(nearestPlotEntity.bind(null, queryPoint))
