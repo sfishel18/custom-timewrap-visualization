@@ -26,10 +26,8 @@ const getPointColorName = (point) => {
 
 const createTooltipAnchor = (group) => {
     const tooltipAnchor = group.foreground().append('circle');
-    tooltipAnchor.attr({
-        r: 5,
-        opacity: 0,
-    });
+    tooltipAnchor.attr('r', 5);
+    tooltipAnchor.attr('opacity', 0);
     $(tooltipAnchor.node()).powerTip({
         placement: 'e',
         smartPlacement: true,
@@ -135,12 +133,10 @@ export default class Tooltip {
     }
 
     setSelectedPoint(point, seriesColor, anchor) {
-        anchor.attr({
-            fill: seriesColor,
-            opacity: 1,
-            cx: point.position.x,
-            cy: point.position.y,
-        });
+        anchor.attr('fill', seriesColor);
+        anchor.attr('opacity', 1);
+        anchor.attr('cx', point.position.x);
+        anchor.attr('cy', point.position.y);
         const $anchor = $(anchor.node());
         $.powerTip.hide($anchor, true);
         $anchor.data('powertip', generateTooltipHtml(point, seriesColor, this.dateFormat));
@@ -152,7 +148,7 @@ export default class Tooltip {
     }
 
     clearSelectedPoint(anchor) {
-        anchor.attr({ opacity: 0 });
+        anchor.attr('opacity', 0);
         $.powerTip.hide(anchor.node(), true);
         if (this.hideHandler) {
             this.hideHandler();
