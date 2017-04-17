@@ -68,6 +68,6 @@
     "jquery-powertip": "^1.3.0",
     "lodash": "4.17.4",
     "moment": "2.18.1",
-    "plottable": "3.0.0-beta.1"
+    "plottable": "3.0.0"
   }
 }

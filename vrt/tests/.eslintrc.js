@@ -7,6 +7,6 @@ module.exports = {
             { devDependencies: true }
         ],
         'mocha/no-exclusive-tests': 'error',
-        'func-names': 'off'
+        'func-names': 'off',
     }
 }

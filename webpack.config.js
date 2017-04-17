@@ -45,12 +45,12 @@ module.exports = {
                 test: /\.css$/,
                 use: extractCss.extract({ use: ['css-loader', 'postcss-loader'] }),
             },
-            {
-                test: /^d3$/,
-                use: {
-                    loader: 'd3-no-global-loader',
-                },
-            },
+            // {
+            //     test: /^d3$/,
+            //     use: {
+            //         loader: 'd3-no-global-loader',
+            //     },
+            // },
         ],
     },
     plugins,

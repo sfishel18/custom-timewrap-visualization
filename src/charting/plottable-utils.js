@@ -1,4 +1,4 @@
-import { Scales, Axes, Components, Plots, Dataset } from 'plottable';
+import { Scales, Axes, Components, Plots, Dataset, Axis } from 'plottable';
 import find from 'lodash/find';
 import has from 'lodash/has';
 import every from 'lodash/every';
@@ -53,15 +53,15 @@ class YAxis extends Axes.Numeric {
         // eslint-disable-next-line no-underscore-dangle
         super._hideOverflowingTickLabels();
         // eslint-disable-next-line no-underscore-dangle
-        const tickLabels = this._tickLabelContainer.selectAll(`.${Axes.Numeric.TICK_LABEL_CLASS}`);
-        tickLabels[0][tickLabels[0].length - 1].style.visibility = 'visible';
+        const tickLabels = this._tickLabelContainer.selectAll(`.${Axis.TICK_LABEL_CLASS}`).nodes();
+        tickLabels[tickLabels.length - 1].style.visibility = 'visible';
     }
 
     renderImmediately(...args) {
         super.renderImmediately(...args);
         // eslint-disable-next-line no-underscore-dangle
-        const tickLabels = this._tickLabelContainer.selectAll(`.${Axes.Numeric.TICK_LABEL_CLASS}`);
-        tickLabels[0].forEach(label => label.setAttribute('y', parseFloat(label.getAttribute('y')) + 6));
+        const tickLabels = this._tickLabelContainer.selectAll(`.${Axis.TICK_LABEL_CLASS}`).nodes();
+        tickLabels.forEach(label => label.setAttribute('y', parseFloat(label.getAttribute('y')) + 6));
     }
 }
 

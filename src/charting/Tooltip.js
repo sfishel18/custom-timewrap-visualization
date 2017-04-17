@@ -25,7 +25,8 @@ const getPointColorName = (point) => {
 };
 
 const createTooltipAnchor = (group) => {
-    const tooltipAnchor = group.foreground().append('circle').attr({
+    const tooltipAnchor = group.foreground().append('circle');
+    tooltipAnchor.attr({
         r: 5,
         opacity: 0,
     });

@@ -25,7 +25,7 @@ export default class {
     constructor(el, colorPalette) {
         this.el = el;
         this.el.classList.add('custom-timewrap-visualization');
-        this.el.innerHTML = '<svg width="100%" height="100%"></svg>';
+        this.el.innerHTML = '<div class="render-to" width="100%" height="100%"></svg>';
         this.colorPalette = colorPalette;
         this.tooltip = null;
         this.selectedPoint = null;
@@ -74,7 +74,7 @@ export default class {
                 [null, xAxis, null],
             ]);
         }
-        this.chart.renderTo(this.el.querySelector('svg'));
+        this.chart.renderTo(this.el.querySelector('div.render-to'));
 
         const tooltipDateFormat = config.tooltipFormat || 'MMM Do, YYYY h:mm A';
         this.tooltip = new Tooltip(scales.color, tooltipDateFormat);

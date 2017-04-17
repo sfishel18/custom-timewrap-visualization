@@ -39,7 +39,7 @@ suite('Visual Regression Tests - Updating In Place', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('minor-update-in-place'),
+            vrtUtils.assertScreenshotMatch('minor-update-in-place')
         );
     });
 
@@ -64,7 +64,7 @@ suite('Visual Regression Tests - Updating In Place', function () {
             })
         `);
         return this.browser.takeScreenshot().then(
-            vrtUtils.assertScreenshotMatch('major-update-in-place'),
+            vrtUtils.assertScreenshotMatch('major-update-in-place')
         );
     });
 });
