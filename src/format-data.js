@@ -36,7 +36,7 @@ const spanBetweenDates = (date1, date2) => {
 
 // exported for testing only
 export const computePointSpan = memoize(timeSeries =>
-    spanBetweenDates(timeSeries[0], timeSeries[1])
+    spanBetweenDates(timeSeries[0], timeSeries[1]),
 );
 
 // exported for testing only
@@ -107,7 +107,7 @@ export const decorateWithData = (partitions, dataSeries, dataFieldName) => {
             };
             counter += 1;
             return decorated;
-        })
+        }),
     );
 };
 
@@ -234,7 +234,7 @@ export const decorateWithLabels = (partitions, customFormat = null) => {
     }
 
     return partitions.map(group =>
-        group.map(point => extend({ label: nameFn(point.date) }, point))
+        group.map(point => extend({ label: nameFn(point.date) }, point)),
     );
 };
 
@@ -297,7 +297,7 @@ export const computeSeriesNames = (partitions, customFormat = null) => {
         const pointSpan = spanBetweenDates(partition[0].date, partition[1].date);
         return nameFn(
             partition[0].date,
-            last(partition).date.clone().add(pointSpan.amount, pointSpan.unit)
+            last(partition).date.clone().add(pointSpan.amount, pointSpan.unit),
         );
     });
 };

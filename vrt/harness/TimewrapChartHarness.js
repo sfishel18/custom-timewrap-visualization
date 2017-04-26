@@ -45,7 +45,7 @@ export default class TimewrapChartHarness {
     simulateHover(seriesIndex, pointIndex) {
         const group = this.chart.chart.componentAt(0, 1);
         const plots = group.components().filter(c =>
-            (c instanceof Plots.Line || c instanceof Plots.Scatter)
+            (c instanceof Plots.Line || c instanceof Plots.Scatter),
         );
         const point = plots[seriesIndex].entities()[pointIndex];
         this.chart.tooltip.pointerMoveCallback(point.position);

@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-    - "6.4.0"
+    - "6.10.1"
 notifications:
     email: false
 sudo: required

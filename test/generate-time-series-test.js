@@ -6,7 +6,7 @@ const assertTimeSeriesEqual = (actual, expected, message) => {
     assert.deepEqual(
         actual.map(d => moment(d).format('YYYY-MM-DD HH:mm:ss')),
         expected.map(d => moment(d).format('YYYY-MM-DD HH:mm:ss')),
-        message
+        message,
     );
 };
 
@@ -28,7 +28,7 @@ suite('generateTimeSeries', () => {
                 '1981-08-18 09:00:00',
                 '1981-08-18 10:00:00',
                 '1981-08-18 11:00:00',
-            ]
+            ],
         );
     });
     test('a series of 12 hours, spanning a day boundary', () => {
@@ -48,7 +48,7 @@ suite('generateTimeSeries', () => {
                 '1981-08-19 05:00:00',
                 '1981-08-19 06:00:00',
                 '1981-08-19 07:00:00',
-            ]
+            ],
         );
     });
     test('a series of 10 days', () => {
@@ -66,7 +66,7 @@ suite('generateTimeSeries', () => {
                 '1981-08-17 00:00:00',
                 '1981-08-18 00:00:00',
                 '1981-08-19 00:00:00',
-            ]
+            ],
         );
     });
     test('a series of 15 days, spanning a month boundary', () => {
@@ -89,7 +89,7 @@ suite('generateTimeSeries', () => {
                 '1981-08-30 00:00:00',
                 '1981-08-31 00:00:00',
                 '1981-09-01 00:00:00',
-            ]
+            ],
         );
     });
 });

@@ -25,7 +25,7 @@ export default class {
     constructor(el, colorPalette) {
         this.el = el;
         this.el.classList.add('custom-timewrap-visualization');
-        this.el.innerHTML = '<svg width="100%" height="100%"></svg>';
+        this.el.innerHTML = '<div class="render-to" width="100%" height="100%"></svg>';
         this.colorPalette = colorPalette;
         this.tooltip = null;
         this.selectedPoint = null;
@@ -38,7 +38,7 @@ export default class {
 
     update(data, config, seriesNames) {
         if (this.chart) {
-            this.chart.destroy();
+            this.clear();
         }
         const scales = {
             x: createXScale(data),
@@ -55,36 +55,36 @@ export default class {
             const seriesName = seriesNames[i];
             return createSeriesPlot(dataSeries, seriesName, scales, showMarkers);
         }));
-        const plotGroup = new Components.Group([gridlines, ...plots]);
+        this.plotGroup = new Components.Group([gridlines, ...plots]);
 
         if (!legend) {
             this.chart = new Components.Table([
-                [yAxis, plotGroup],
+                [yAxis, this.plotGroup],
                 [null, xAxis],
             ]);
         } else if (config.legendPlacement === 'bottom') {
             this.chart = new Components.Table([
-                [yAxis, plotGroup],
+                [yAxis, this.plotGroup],
                 [null, xAxis],
                 [null, legend],
             ]);
         } else {
             this.chart = new Components.Table([
-                [yAxis, plotGroup, legend],
+                [yAxis, this.plotGroup, legend],
                 [null, xAxis, null],
             ]);
         }
-        this.chart.renderTo(this.el.querySelector('svg'));
+        this.chart.renderTo(this.el.querySelector('div.render-to'));
 
         const tooltipDateFormat = config.tooltipFormat || 'MMM Do, YYYY h:mm A';
         this.tooltip = new Tooltip(scales.color, tooltipDateFormat);
         this.tooltip.onShow(this.onTooltipShow.bind(this));
         this.tooltip.onHide(this.onTooltipHide.bind(this));
-        this.tooltip.attachTo(plotGroup);
+        this.tooltip.attachTo(this.plotGroup);
 
         this.clickInteraction = new Interactions.Click();
         this.clickInteraction.onClick(this.clickInteractionCallback);
-        this.clickInteraction.attachTo(plotGroup);
+        this.clickInteraction.attachTo(this.plotGroup);
     }
 
     onTooltipShow(point) {
@@ -98,16 +98,21 @@ export default class {
     }
 
     remove() {
+        this.clear();
+        this.clickHandler = null;
+    }
+
+    clear() {
+        if (this.clickInteraction) {
+            this.clickInteraction.offClick(this.clickInteractionCallback);
+            this.clickInteraction.detachFrom(this.plotGroup);
+        }
         if (this.chart) {
             this.chart.destroy();
         }
         if (this.tooltip) {
             this.tooltip.destroy();
         }
-        if (this.clickInteraction) {
-            this.clickInteraction.offClick(this.clickInteractionCallback);
-        }
-        this.clickHandler = null;
     }
 
     clickInteractionCallback(point, e) {

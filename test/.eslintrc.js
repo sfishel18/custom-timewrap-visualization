@@ -6,6 +6,7 @@ module.exports = {
             'error',
             { devDependencies: true }
         ],
-        'mocha/no-exclusive-tests': 'error'
+        'mocha/no-exclusive-tests': 'error',
+        'comma-dangle': 'off'
     }
 }

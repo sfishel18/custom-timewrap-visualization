@@ -28,19 +28,19 @@ const assertPartitionsEqual = (actual, expected, message) => {
     assert.deepEqual(
         actual.map(p => p.map(normalizeDateToString)),
         expected.map(p => p.map(normalizeDateToString)),
-        message
+        message,
     );
 };
 
 const assertDecoratedPartitionsEqual = (actual, expected, message) => {
     assert.deepEqual(
         actual.map(p => p.map(d =>
-            extend({}, d, { date: normalizeDateToString(d.date) })
+            extend({}, d, { date: normalizeDateToString(d.date) }),
         )),
         expected.map(p => p.map(d =>
-            extend({}, d, { date: normalizeDateToString(d.date) })
+            extend({}, d, { date: normalizeDateToString(d.date) }),
         )),
-        message
+        message,
     );
 };
 
@@ -61,21 +61,21 @@ const assertNullFilledPartitionsEqual = (actual, expected, message) => {
             return null;
         })),
         expected,
-        message
+        message,
     );
 };
 
 const createLabeledPartitions = (timeSeries, granularity, customFormat = null) =>
     decorateWithLabels(
         createNullFilledPartitions(timeSeries, granularity),
-        customFormat
+        customFormat,
     );
 
 const assertPartitionLabelsEqual = (actual, expected, message) => {
     assert.deepEqual(
         actual.map(p => p.map(d => d.label)),
         expected,
-        message
+        message,
     );
 };
 
@@ -561,7 +561,7 @@ suite('The format-data utility package', () => {
             assert.deepEqual(
                 computeSeriesNames(partitions),
                 ['11:00 PM - 12:00 AM', '12:00 AM - 1:00 AM', '1:00 AM - 2:00 AM',
-                    '2:00 AM - 3:00 AM', '3:00 AM - 4:00 AM']
+                    '2:00 AM - 3:00 AM', '3:00 AM - 4:00 AM'],
             );
         });
         test('4 hours of data, 15 minute increments, hour granularity, custom label format', () => {
@@ -569,7 +569,7 @@ suite('The format-data utility package', () => {
             const partitions = processData(timeSeries, range(timeSeries.length), 'count');
             assert.deepEqual(
                 computeSeriesNames(partitions, 'h A'),
-                ['11 PM - 12 AM', '12 AM - 1 AM', '1 AM - 2 AM', '2 AM - 3 AM', '3 AM - 4 AM']
+                ['11 PM - 12 AM', '12 AM - 1 AM', '1 AM - 2 AM', '2 AM - 3 AM', '3 AM - 4 AM'],
             );
         });
         test('1 week of data, 8 hour increments, day granularity', () => {
@@ -578,7 +578,7 @@ suite('The format-data utility package', () => {
             assert.deepEqual(
                 computeSeriesNames(partitions),
                 ['Aug 17th', 'Aug 18th', 'Aug 19th', 'Aug 20th', 'Aug 21st', 'Aug 22nd',
-                    'Aug 23rd', 'Aug 24th']
+                    'Aug 23rd', 'Aug 24th'],
             );
         });
         test('1 week of data, 8 hour increments, day granularity, custom label format', () => {
@@ -586,7 +586,7 @@ suite('The format-data utility package', () => {
             const partitions = processData(timeSeries, range(timeSeries.length), 'count');
             assert.deepEqual(
                 computeSeriesNames(partitions, 'M/D'),
-                ['8/17', '8/18', '8/19', '8/20', '8/21', '8/22', '8/23', '8/24']
+                ['8/17', '8/18', '8/19', '8/20', '8/21', '8/22', '8/23', '8/24'],
             );
         });
         test('3 weeks 4 days of data, 1 day increments, week granularity', () => {
@@ -594,7 +594,7 @@ suite('The format-data utility package', () => {
             const partitions = processData(timeSeries, range(timeSeries.length), 'count');
             assert.deepEqual(
                 computeSeriesNames(partitions),
-                ['Aug 16th - 23rd', 'Aug 23rd - 30th', 'Aug 30th - Sep 6th', 'Sep 6th - 13th']
+                ['Aug 16th - 23rd', 'Aug 23rd - 30th', 'Aug 30th - Sep 6th', 'Sep 6th - 13th'],
             );
         });
     });
