@@ -30,7 +30,7 @@
   "homepage": "https://github.com/sfishel18/custom-timewrap-visualization#readme",
   "devDependencies": {
     "babel-core": "6.24.1",
-    "babel-loader": "^6.2.5",
+    "babel-loader": "7.0.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "6.24.1",
     "chai": "^3.5.0",
