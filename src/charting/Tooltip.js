@@ -91,6 +91,9 @@ export default class Tooltip {
 
     destroy() {
         if (this.pointer) {
+            if (this.group) {
+                this.pointer.detachFrom(this.group);
+            }
             this.pointer.offPointerMove(this.pointerMoveCallback);
             this.pointer.offPointerExit(this.pointerExitCallback);
         }
