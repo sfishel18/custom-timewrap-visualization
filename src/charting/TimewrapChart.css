@@ -23,3 +23,7 @@
 .legend text {
     font-weight: normal !important;
 }
+
+.component-group .foreground-container {
+    z-index: 2;
+}
