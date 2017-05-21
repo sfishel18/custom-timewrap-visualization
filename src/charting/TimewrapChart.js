@@ -78,13 +78,17 @@ export default class {
 
         const tooltipDateFormat = config.tooltipFormat || 'MMM Do, YYYY h:mm A';
         this.tooltip = new Tooltip(scales.color, tooltipDateFormat);
-        this.tooltip.onShow(this.onTooltipShow.bind(this));
-        this.tooltip.onHide(this.onTooltipHide.bind(this));
+        if (config.drilldown) {
+            this.tooltip.onShow(this.onTooltipShow.bind(this));
+            this.tooltip.onHide(this.onTooltipHide.bind(this));
+        }
         this.tooltip.attachTo(this.plotGroup);
 
-        this.clickInteraction = new Interactions.Click();
-        this.clickInteraction.onClick(this.clickInteractionCallback);
-        this.clickInteraction.attachTo(this.plotGroup);
+        if (config.drilldown) {
+            this.clickInteraction = new Interactions.Click();
+            this.clickInteraction.onClick(this.clickInteractionCallback);
+            this.clickInteraction.attachTo(this.plotGroup);
+        }
     }
 
     onTooltipShow(point) {

@@ -65,7 +65,11 @@ export default SplunkVisualizationBase.extend({
         const config = {};
         const { propertyNamespace } = this.getPropertyNamespaceInfo();
         Object.keys(rawConfig).forEach((key) => {
-            config[key.replace(propertyNamespace, '')] = rawConfig[key];
+            if (key === 'display.visualizations.custom.drilldown') {
+                config.drilldown = rawConfig[key] === 'all';
+            } else {
+                config[key.replace(propertyNamespace, '')] = rawConfig[key];
+            }
         });
 
         let { vizData } = data;
