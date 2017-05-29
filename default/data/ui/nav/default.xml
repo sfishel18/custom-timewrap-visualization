@@ -1,4 +1,5 @@
 <nav>
     <view name="gallery" default="true" />
+    <view name="gallery-trellis" />
     <view name="search" />
 </nav>
