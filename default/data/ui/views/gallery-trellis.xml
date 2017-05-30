@@ -1,0 +1,44 @@
+<dashboard>
+    <label>Timewrap Gallery: Trellis Examples</label>
+    <row>
+        <panel>
+            <title>NYC Ride Data, month over month, July - September 2014</title>
+            <viz type="viz_timewrap.timewrap">
+                <title>Trellised for comparison of Uber rides versus Yellow Taxi rides</title>
+                <search>
+                    <query>| `ride-data-three-months` | timechart span=1d sum(Uber) as "Uber Rides", sum(Yellow Taxis) as "Yellow Taxi Rides"</query>
+                </search>
+                <option name="height">425</option>
+                <option name="trellis.enabled">1</option>
+                <option name="trellis.size">large</option>
+                <option name="viz_timewrap.timewrap.xLabelRotation">on</option>
+            </viz>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>NYC Uber rides, hour over hour, 6:00 - 11:00 January 5 2015</title>
+            <viz type="viz_timewrap.timewrap">
+                <title>Trellised for a borough-by-borough comparison</title>
+                <search>
+                    <query>| `uber-data-four-hours-with-borough` | timechart span=5m count as "Uber Rides" by Borough</query>
+                </search>
+                <option name="height">850</option>
+                <option name="trellis.enabled">1</option>
+                <option name="trellis.size">large</option>
+            </viz>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <html>
+                <p>
+                    Attribution: raw data obtained from
+                    <a href="https://github.com/fivethirtyeight/ride-tlc-foil-response">
+                        https://github.com/fivethirtyeight/ride-tlc-foil-response
+                    </a>
+                </p>
+            </html>
+        </panel>
+    </row>
+</dashboard>
